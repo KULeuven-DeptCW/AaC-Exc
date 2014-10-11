@@ -34,10 +34,26 @@ Een \emph{all-paths}-NFA $(Q,\Sigma,\delta,q_0,F)$ verschilt van een NFA doordat
   \item voor elke mogelijke schrijfwijze $w = y_1 y_2 \ldots y_m$, $y_i \in \Sigma_{\varepsilon}$ en elke sequentie $r_0, r_1, \ldots, r_m$ van toestanden zodanig dat $r_0 = q_0$ en $r_{i+1} \in \delta(r_i,y_{i+1})$, geldt dat $r_m \in F$;
   \item er minstens \'e\'en schrijfwijze $w = y_1 y_2 \ldots y_m$, $y_i \in \Sigma_{\varepsilon}$ bestaat zodanig dat er een sequentie $r_0, \ldots, r_m$ van toestanden bestaat met $r_0 = q_0$ en $r_{i+1} \in \delta(r_i,y_{i+1})$.
 \end{itemize}
-\end{question}
-
-\begin{question}
 Toon aan dat een taal $L$ regulier is als en slechts als ze herkend wordt door een all-paths-NFA.
+\begin{answer}
+We bewijzen dit in twee stappen.
+\begin{enumerate}
+ \item Indien $L$ een reguliere taal is, wordt ze herkend door een all-paths-NFA.
+\begin{quotation}
+\begin{proof}
+
+\end{proof}
+\end{quotation}
+\item Indien $L$ herkend wordt door een all-paths-NFA, is $L$ regulier.
+\begin{quotation}
+\begin{proof}
+
+\end{proof}
+\end{quotation}
+\end{enumerate}
+
+\end{answer}
+
 \end{question}
 
 \begin{question}

@@ -1,94 +1,152 @@
 \documentclass[a4paper]{article}
 \usepackage[dutch]{babel}
 \usepackage{color}
-\usepackage{../assignment-nl,../brackets,../importsreferences-nl,tikz}
+\usepackage{tikz,../assignment-nl,../brackets,../importsreferences-nl}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,positioning,fit,petri}
 
-\title{Automaten en Berekenbaarheid\\Oplossingen \#1\\\url{http://goo.gl/1RlVG5}}
+\title{Automaten en Berekenbaarheid\\Opgave \#2\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
 \date{Oktober 2014}
 
-\topmargin -15mm 
-\textwidth 16truecm 
-\textheight 24truecm
-\oddsidemargin 5mm 
-\evensidemargin 5mm
-
-
-\newcommand{\R}{\mathcal{R}}
+\newcommand{\kolom}[1]{ \left[ \begin{array}{c} #1 \end{array} \right] }
 
 \begin{document}
 
 \maketitle
 
 \begin{question}
-Voor een string $w = w_1 w_2 \ldots w_n$ duiden we de omgekeerde string $w_n \ldots w_2  w_1$ aan met $w^{\R}$ en voor een taal $L$ schrijven we $L^{\R} = \condset{w^{\R}}{w\in L}$. Als $L$ regulier is, is $L^{\R}$ dan ook regulier?
+Als $L$ een reguliere taal is over een alfabet $\Sigma$, dan is de taal $L^c = \{ w \ | \ \mbox{$w$  is een string over $\Sigma$ en $w \not\in L$} \}$ ook regulier. Bewijs.
 \begin{answer}
-Ja. We kunnen dit bewijzen op twee manieren: (1) door een constructie voor te stellen die voor elke reguliere expressie $e$, een reguliere expressie $e^{\R}$ genereert;  (2) een constructie die gegeven een NFA $n$ een NFA $n^{\R}$ genereert.
+Vermits $L$ een reguliere taal is, bestaat er een DFA $D=\tupl{Q,\Sigma,\delta,q_s,F}$ die deze taal beslist. Beschouw de DFA $D'=\tupl{Q,\Sigma,\delta,q_s,Q\setminus F}$. Voor elke string $s$ over $\Sigma$ weten we dat er juist \'e\'en sequentie van toestanden $r_1r_2r_3\ldots r_{n+1}$ bestaat met $r_1=q_s$ en $\fun{\delta}{r_i,s_i}=r_{i+1}$. Deze sequentie is dezelfde bij $D$ als bij $D'$ (vermits ze de starttoestand en transitiefunctie delen). Een DFA aanvaard een string indien $r_{n+1}\in F$ zit. Vermits de verzameling van accepterende toestanden bij $D'$, $F'=Q\setminus F$ betekent dit dat indien $D$ accepteert, $D'$ zal verwerpen en vice versa.
+\end{answer}
+\end{question}
+
+\begin{question}
+Zij $\Sigma_3$ het alfabet 
+{\tiny
+	\[ \left\{ \kolom{ 0 \\ 0 \\ 0}, \kolom{ 0 \\ 0 \\ 1}, \kolom{ 0 \\ 1 \\ 0}, \ldots, \kolom{ 1 \\ 1 \\ 1} \right\}. \]
+}
+Beschouw een string over $\Sigma_3$ als drie rijen van $0$'en en $1$'en, en beschouw elk van die rijen als de binaire representatie van een natuurlijk getal. Zij $L$ de taal 
+\[ \{ w \ | \ \mbox{de onderste rij van $w$ is de som van de twee bovenste rijen} \} \]
+over $\Sigma_3$. {\tiny $\kolom{ 0 \\ 0 \\ 1} \kolom{ 1 \\ 0 \\ 0} \kolom{ 1 \\ 1 \\ 0}$} behoort bijvoorbeeld tot $L$, maar { \tiny $\kolom{ 0 \\0 \\ 1} \kolom{ 1 \\ 0 \\ 1}$} niet. Toon aan dat $L$ regulier is.
+\begin{answer}
+We maken volgende assumpties (later tonen we aan hoe we de NFA kunnen aanpassen zodat we een taal kunnen accepteren zonder deze assumpties):
+\begin{enumerate}
+ \item We lezen de strings uit van rechts naar links dus eerst de minst significante bits (\emph{big-endian}); en
+ \item We werken met \emph{wraparound}: wanneer het aantal bits ontoereikend is om het getal voor te stellen laten we de meest significante bits vallen tot de rest wel voor te stellen valt.
+\end{enumerate}
+\importtikzfigure{exc2-dfa1}{Een NFA die een binaire optelling beslist.}
+De NFA kent twee toestanden $q_0$ en $q_1$. De toestanden houden de overdracht ofwel \emph{carry} bij. We werken van rechts naar links, en bij de eerste bit is de overdracht $0$. Wanneer we $\tiny{\kolom{0\\0\\0}}$, $\tiny{\kolom{0\\1\\1}}$ of $\tiny{\kolom{1\\0\\1}}$ tegenkomen zijn dit geldige optellingen die geen overdracht ``genereren'' we blijven dus in toestand $q_0$. Bij $\tiny{\kolom{1\\1\\0}}$ genereren we wel overdracht, we komen dus in toestand $q_1$ terecht. In toestand $q_1$ zijn er twee mogelijke invoersymbolen die de overdracht ``propageren'': $\tiny{\kolom{0\\1\\0}}$ en $\tiny{\kolom{1\\0\\0}}$ en bovendien genereert $\tiny{\kolom{1\\1\\1}}$ opnieuw overdracht. Wanneer we $\tiny{\kolom{0\\0\\1}}$ tenslotte tegenkomen, kunnen we de overdracht wegwerken in het resultaat. De NFA accepteert geen strings die symbolen bevatten die niet bij de juiste toestand op een boog staan. Zo kan de minst significante bit nooit $\tiny{\kolom{0\\0\\1}}$ zijn.
+\paragraph{}
+We hebben in de vorige oefenzitting behandeld hoe we een DFA kunnen construeren die de omgekeerde taal beslist. In dat geval hebben we een \emph{little-endian} opteller geconstrueerd. Wanneer we $q_1$ aanpassen tot een niet-accepterende toestand vermijden we de wraparound.
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat als $L_1$ en $L_2$ reguliere talen zijn, $L_1 \cap L_2$ dan ook een reguliere taal is. Is $L_1 \setminus L_2$ ook regulier?
+\begin{answer}
+Dit kunnen we aantonen aan de hand van twee constructies.
+\begin{enumerate}
+ \item Doorsnede
 \begin{construction}
-Gegeven een NFA $n=\tupl{Q,\Sigma,\delta,q_s,F}$. We beschouwen een toestand $q'$ die niet in de originele toestandsverzameling $Q$. We beschouwen ook een nieuwe transitiefunctie $\delta'$ zodat:
-\begin{equation}
-\forall q_i\in Q,\sigma\in\Sigma_\epsilon:\fun{\delta'}{q_i,\sigma}=\condset{q_j\in Q}{q_i\in\fun{\delta}{q_j,\sigma}}
-\end{equation}
-en
-\begin{equation}
-\fun{\delta'}{q',\epsilon}=F
-\end{equation}
-De geconstrueerde NFA is dan: $n^{\R}=\tupl{Q\cup\accl{q'},\Sigma,\delta',\accl{q'},q_s}$
+ Gegeven twee DFA's $\tupl{Q_1,\Sigma,\delta_1,q_{s,1},F_1}$ en $\tupl{Q_2,\Sigma,\delta_2,q_{s,2},F_2}$, dan beschouwen we een DFA $\tupl{Q,\Sigma,\delta,q_s,F}$ die de doorsnede van de talen van de DFA's beslist met:
+ \begin{eqnarray}
+ Q&=&Q_1\times Q_2=\condset{\tupl{q_1,q_2}}{q_1\in Q_1\wedge q_2\in Q_2}\\
+ F&=&F_1\times F_2\\
+ q_s&=&\tupl{q_{s,1},q_{s_2}}\\
+ \forall q_1\in Q_2,q_2\in Q_2,\sigma\in\Sigma:\fun{\delta}{\tupl{q_1,q_2},\sigma}&=&\tupl{\fun{\delta_1}{q_1,\sigma},\fun{\delta_2}{q_2,\sigma}}
+ \end{eqnarray}
 \end{construction}
+De toestandsverzameling $Q$ bevat dus elk mogelijk koppel van de twee originele toestanden. Voor elk karakter in de string, zullen we beide toestanden ``updaten'' volgens de oude overgangsfuncties $\delta_1$ en $\delta_2$. We accepteren enkel wanneer beide toestanden van het koppel accepteren.
+ \item Verzameling-verschil
+ \begin{construction}
+ Gegeven twee DFA's $\tupl{Q_1,\Sigma,\delta_1,q_{s,1},F_1}$ en $\tupl{Q_2,\Sigma,\delta_2,q_{s,2},F_2}$, dan beschouwen we een DFA $\tupl{Q,\Sigma,\delta,q_s,F}$ die het verzamelingen verschil van de DFA's beslist met:
+ \begin{eqnarray}
+ Q&=&Q_1\times Q_2=\condset{\tupl{q_1,q_2}}{q_1\in Q_1\wedge q_2\in Q_2}\\
+ F&=&F_1\times\brak{Q\setminus F_2}\\
+ q_s&=&\tupl{q_{s,1},q_{s_2}}\\
+ \forall q_1\in Q_2,q_2\in Q_2,\sigma\in\Sigma:\fun{\delta}{\tupl{q_1,q_2},\sigma}&=&\tupl{\fun{\delta_1}{q_1,\sigma},\fun{\delta_2}{q_2,\sigma}}
+ \end{eqnarray}
+\end{construction}
+De constructie is vrijwel identiek behalve dat $F$ nu wordt samengesteld door accepterende toestanden van de ene machine en niet-accepterende toestanden van de tweede machine. Bijgevolg accepteert onze nieuwe machine als de eerste machine zou accepteren en de tweede niet.
 \end{answer}
 \end{question}
 
 \begin{question}
-Geef voor elk van de volgende talen over het alfabet $\accl{0,1}$ een reguliere expressie die die taal bepaalt. Geef ook een NFA die die taal aanvaardt.
+Een \emph{all-paths}-NFA $(Q,\Sigma,\delta,q_0,F)$ verschilt van een NFA doordat een string $w$ enkel aanvaard wordt als 
+\begin{itemize}
+  \item voor elke mogelijke schrijfwijze $w = y_1 y_2 \ldots y_m$, $y_i \in \Sigma_{\varepsilon}$ en elke sequentie $r_0, r_1, \ldots, r_m$ van toestanden zodanig dat $r_0 = q_0$ en $r_{i+1} \in \delta(r_i,y_{i+1})$, geldt dat $r_m \in F$;
+  \item er minstens \'e\'en schrijfwijze $w = y_1 y_2 \ldots y_m$, $y_i \in \Sigma_{\varepsilon}$ bestaat zodanig dat er een sequentie $r_0, \ldots, r_m$ van toestanden bestaat met $r_0 = q_0$ en $r_{i+1} \in \delta(r_i,y_{i+1})$.
+\end{itemize}
+Toon aan dat een taal $L$ regulier is als en slechts als ze herkend wordt door een all-paths-NFA.
+\begin{answer}
+We bewijzen dit in twee stappen.
 \begin{enumerate}
-  \item $\condset{w}{\mbox{op elke oneven positie van $w$ staat een $1$}}$
-  \item $\condset{w}{\mbox{$w$ bevat minstens twee $0$'en en hoogstens \'e\'en $1$}}$
-  \item Het complement van $\accl{11,111}$
-  \item $\condset{w}{\mbox{$w$ bevat evenveel maal de substring $01$ als de substring $10$}}$
+ \item Indien $L$ een reguliere taal is, wordt ze herkend door een all-paths-NFA.
+\begin{quotation}
+\begin{proof}
+Stel dat $L$ een reguliere taal is, dan bestaat er een DFA $D=\tupl{Q,\Sigma,\delta,q_s,F}$ die deze taal beslist. Een DFA is een NFA met een deterministische overgangsfunctie. Dit betekent dat voor elke string $s$, er juist \'e\'en pad bestaat (dat al dan niet naar een accepterende toestand leidt). We kunnen de DFA $D$ omzetten naar een equivalente NFA $N=\tupl{Q,\Sigma,\delta',q_s,F}$ met:
+\begin{equation}
+\forall q\in Q,\sigma\in\Sigma:\fun{\delta'}{q,\sigma}=\accl{\fun{\delta}{q,\sigma}}
+\end{equation}
+Vermits alle aspecten van de NFA $N$ equivalent zijn aan de DFA $D$, bestaat er voor elke string $s$ ook juist \'e\'en pad. Wanneer het pad voor een string $s$ naar een accepterende toestand leidt, accepteert $D$, $N$ zal ook accepteren vermits er juist \'e\'en pad is. Bijgevolg accepteren alle paden en vice versa.
+\end{proof}
+\end{quotation}
+\item Indien $L$ herkend wordt door een all-paths-NFA, is $L$ regulier.
+\begin{quotation}
+\begin{proof}
+We bewijzen dit aan de hand van een constructie die gegeven een all-path-NFA, een DFA construeert die dezelfde taal beslist.
+\begin{construction}
+Gegeven een all-paths-NFA $\tupl{Q,\Sigma,\delta,q_0,F}$ dan construeren we een DFA $\tupl{\calQ,\Sigma,\delta',q_0',\calF}$ die dezelfde taal beslist met:
+\begin{eqnarray}
+\calQ&=&\powset{Q}\\
+\calF&=&\powset{F}\setminus\accl{\emptyset}\\
+q_0'=\funm{eb}{q_0}\\
+\forall Q'\in \calQ,\sigma\in\Sigma:\fun{\delta'}{Q',\sigma}&=&\fun{\delta_d}{Q',\sigma}
+\end{eqnarray}
+Met $\mbox{eb}$ en $\delta_d$ gedefinieerd zoals in de cursus.
+\end{construction}
+We voeren dus ongeveer dezelfde omzetting uit als van een NFA naar een DFA. Waarbij elke toestand in een DFA de ``hoofden'' van de mogelijke paden bijhoudt. We passen echter $\calF$ aan zodat de DFA enkel zal accepteren wanneer de de hoofden van alle paden accepteren.
+\end{proof}
+\end{quotation}
 \end{enumerate}
-\begin{answer}~~
-\begin{enumerate}
-  \item $\brak{1\brak{0|1}}^{\star}\brak{1|\epsilon}$
-  \item $0^{\star}\brak{00|001|010|100}0^{\star}$
-  \item $\epsilon|0\brak{0|1}^{\star}|10\brak{0|1}^{\star}|110\brak{0|1}^{\star}|111\brak{0|1}\brak{0|1}^{\star}$
-  \item $0^{\star}|1^{\star}|0\brak{0|1}^{\star}0|1\brak{0|1}^{\star}1$
-\end{enumerate}
-\begin{figure}
-\importtikzsubfigure{exc1-dfa1}{}
-\importtikzsubfigure{exc1-dfa2}{}
-\importtikzsubfigure{exc1-dfa3}{}
-\importtikzsubfigure{exc1-dfa4}{}
-\caption{NFA's voor de gegeven talen}
-\end{figure}
+
 \end{answer}
 \end{question}
 
 \begin{question}
-Toon aan dat er voor elke $n \geq 1$ NFA's bestaan die de volgende talen aanvaarden.
+Noem een string $x$ een \emph{prefix} van een string $y$ als er een string $z$ bestaat zodanig dat $y = xz$. Als bovendien $x \neq y$, dan noemen we $x$ een \emph{echte prefix} van $y$. Toon aan dat de klasse van reguliere talen gesloten is onder de volgende operaties.
 \begin{enumerate}
-  \item $\condset{a^k}{\mbox{$k$ is een veelvoud van $n$}}$ over het alfabet $\accl{a}$.
-  \item $\condset{x}{\mbox{$x$ is de binaire voorstelling van een natuurlijk getal dat een veelvoud is van $n$}}$
+  \item $\fun{NoPrefix} (L) = \{ w \in L \ | \ \mbox{geen enkele echte prefix van $w$ zit in $L$} \}$
+  \item $\fun{NoExtend} (L) = \{ w \in L \ | \ \mbox{$w$ is geen echte prefix van een string in $L$} \}$
 \end{enumerate}
-\begin{answer}~
+\begin{answer}
+Voor beide functies $f$ tonen we telkens aan dat we een DFA die een reguliere taal $L$ beslist kunnen omzetten naar een DFA die $\fun{f}{L}$ beslist. Vermits een DFA elke reguliere taal kan voorstellen en omgekeerd hebben we hiermee de geslotenheid bewezen. Dit doen we aan de hand van een constructie.
 \begin{enumerate}
- \item Men kan een DFA construeren die deze taal beslist al volgt:
+ \item $\fun{NoPrefix}{L}$
  \begin{construction}
-  Men beschouwt $n$ toestanden die we nummeren $q_1,q_2,\ldots,q_n$. $s_n$ is de starttoestand en de enige accepterende toestand. De transitiefunctie $\delta$ is gedefinieerd als volgt:
-  \begin{equation}
-   \forall q_i\in Q, j\in\accl{0,1}:\fun{\delta_1}{q_i,a}=\acclguard{q_{i+1}&\xif{i<n}\\q_{1}&\xotherwise}
-  \end{equation}
-  De volledige NFA is dan $\tupl{\accl{q_1,q_2,\ldots,q_n},\accl{a},\delta_1,q_n,\accl{q_n}}$.
+  Gegeven een DFA $D=\tuple{Q,\Sigma,\delta,q_s,F}$, we construeren een DFA $\tupl{Q',\Sigma,\delta',q_s,F}$ met:
+  \begin{eqnarray}
+  Q'=Q\cup\accl{q'}\\
+  \forall q\in F\cup\accl{q'},\sigma\in\Sigma:\fun{\delta'}{q,\sigma}&=&q'
+  \forall q\in\brak{Q\setminus F},\sigma\in\Sigma:\fun{\delta'}{q,\sigma}=\fun{\delta}{q,\sigma}
+  \end{eqnarray}
+  Met $q'$ een nieuwe toestand die niet in $Q$ zit. $q'$ is een toestand om strings te verwerpen. We sturen alle bogen na een toestand in $F$ naar deze toestand. Immers wanneer een pad \'e\'enmaal door een toestand in $F$ langskomt, mogen alle verdere strings niet meer geaccepteerd worden: het betekent immers dat er een string bestond met een pad tot $F$ die bijgevolg een prefix is. Indien zo'n prefix bestaat mogen er geen verlengde strings in de nieuwe taal zitten.
  \end{construction}
- \item We beschouwen een little-endian automaat: de minst significante bits bevinden zich op het einde van de string. Merk op dat dit geen noodzakelijke vereiste is: we weten immers door vraag~1 dat we door de omgekeerde taal te beschouwen, een big-endian automaat kunnen construeren. Men kan een DFA construeren die deze taal beslist al volgt:
+ \item $\fun{NoExtend}{L}$
+ Eerst defini\"eren we voor een DFA $\tupl{Q,\Sigma,\delta,q_s,F}$ een functie $\mbox{reachable}:Q\rightarrow\powset{Q}$: een functie die bepaalt welke toestanden bereikbaar zijn vanuit een toestand gegeven minstens \'e\'en karakter:
+ \begin{equation}
+  \forall q\in Q:\funm{reachable}{q}=\displaystyle\bigcup_{\sigma\in\Sigma}{\funm{reachable}{\fun{\delta}{q,\Sigma}}}
+ \end{equation}
+ Men kan deze functie uitrekenen aan de hand van vastepuntstheorie. Dan construeren we een DFA:
  \begin{construction}
-  Men beschouwt $n$ toestanden die we nummeren $q_0,q_1,\ldots,q_{n-1}$. $s_0$ is de starttoestand en de enige accepterende toestand. De transitiefunctie $\delta$ is gedefinieerd als volgt:
+  We constureren een DFA $\tupl{Q,\Sigma,\delta,q_s,F'}$ met
   \begin{equation}
-   \forall q_i\in Q, j\in\accl{0,1}:\fun{\delta_2}{q_i,j}=q_k\xwhere k=2\cdot i+j\mod n
+  F'=\condset{f\in F}{\funm{reachable}{f}\cap F\neq\emptyset}
   \end{equation}
-  De volledige NFA is dan $\tupl{\accl{q_0,q_1,\ldots,q_{n-1}},\accl{0,1},\delta_2,q_0,\accl{q_0}}$.
  \end{construction}
+ Met $q'$ een nieuwe toestand die niet in $Q$ zit. De constructie komt er op neer dat een string enkel geaccepteerd wordt indien deze door originele machine wordt geaccepteerd, en er geen bogen meer zijn naar toekomstige accepterende toestand (er zijn dus geen toestanden in $F$ meer bereikbaar vanuit de eerste toestand).
 \end{enumerate}
 \end{answer}
 \end{question}
-
 \end{document}

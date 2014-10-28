@@ -25,6 +25,9 @@ Zij $\Sigma_3$ het alfabet
 Beschouw een string over $\Sigma_3$ als drie rijen van $0$'en en $1$'en, en beschouw elk van die rijen als de binaire representatie van een natuurlijk getal. Zij $L$ de taal 
 \[ \{ w \ | \ \mbox{de onderste rij van $w$ is de som van de twee bovenste rijen} \} \]
 over $\Sigma_3$. {\tiny $\kolom{ 0 \\ 0 \\ 1} \kolom{ 1 \\ 0 \\ 0} \kolom{ 1 \\ 1 \\ 0}$} behoort bijvoorbeeld tot $L$, maar { \tiny $\kolom{ 0 \\0 \\ 1} \kolom{ 1 \\ 0 \\ 1}$} niet. Toon aan dat $L$ regulier is.
+\end{question}
+
+\begin{question}
 Toon aan dat als $L_1$ en $L_2$ reguliere talen zijn, $L_1 \cap L_2$ dan ook een reguliere taal is. Is $L_1 \setminus L_2$ ook regulier?
 \end{question}
 
@@ -35,25 +38,6 @@ Een \emph{all-paths}-NFA $(Q,\Sigma,\delta,q_0,F)$ verschilt van een NFA doordat
   \item er minstens \'e\'en schrijfwijze $w = y_1 y_2 \ldots y_m$, $y_i \in \Sigma_{\varepsilon}$ bestaat zodanig dat er een sequentie $r_0, \ldots, r_m$ van toestanden bestaat met $r_0 = q_0$ en $r_{i+1} \in \delta(r_i,y_{i+1})$.
 \end{itemize}
 Toon aan dat een taal $L$ regulier is als en slechts als ze herkend wordt door een all-paths-NFA.
-\begin{answer}
-We bewijzen dit in twee stappen.
-\begin{enumerate}
- \item Indien $L$ een reguliere taal is, wordt ze herkend door een all-paths-NFA.
-\begin{quotation}
-\begin{proof}
-
-\end{proof}
-\end{quotation}
-\item Indien $L$ herkend wordt door een all-paths-NFA, is $L$ regulier.
-\begin{quotation}
-\begin{proof}
-
-\end{proof}
-\end{quotation}
-\end{enumerate}
-
-\end{answer}
-
 \end{question}
 
 \begin{question}

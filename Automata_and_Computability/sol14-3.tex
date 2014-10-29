@@ -1,8 +1,12 @@
 \documentclass[a4paper]{article}
 \usepackage[dutch]{babel}
-\usepackage{color,xypic}
+\usepackage{color,xypic,booktabs}
 \xyoption{all}
 \usepackage{../assignment-nl,../brackets}
+
+\newcommand{\statetable}[1]{\begin{center}\begin{tabular}{c|ccccccc}\toprule &1&2&4&5&7&8&9\\\midrule #1 \\\bottomrule\end{tabular}\end{center}}
+\newcommand{\e}{\ensuremath{\epsilon}}
+\newcommand{\R}{\mathcal{R}}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#3\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -17,30 +21,147 @@ Minimaliseer de volgende DFA \\
 \[  \entrymodifiers={++[o][F-]}
   \SelectTips{cm}{}
   \xymatrix {
-    *{} \ar[r] &
-    1               \ar[r]_0    \ar[rd]^1                              &
-    *++[o][F=]{2}   \ar[d]_1    \ar `ur_r[dd]  `[dd] `_dl[dd]^0 [dd]     &
-    3               \ar `ur_d[dd] `_l[dd]^1 [dd]   \ar[d]_0                               \\
-    *{} &
-    4               \ar@(lu,ld)[]_1   \ar@/_/[r]_0      &
-    5               \ar[d]_1          \ar@/_/[l]_0      &
-    *++[o][F=]{6}   \ar@(ru,rd)[]_1   \ar[d]_0          \\
-    *{} &
-    7               \ar[u]_1          \ar[ru]_0                     &
-    *++[o][F=]{8}   \ar@(ld,rd)[]^0   \ar@/_/[r]_1                  &
-    9                \ar@/_/[l]_1      \ar `dr_l[ll] `_ur[ll]^0 [ll]  \\
+    *{}\ar[r] &1\ar[r]_0\ar[rd]^1           &*++[o][F=]{2}\ar[d]_1\ar `ur_r[dd]`[dd]`_dl[dd]^0[dd] &3\ar`ur_d[dd]`_l[dd]^1[dd]\ar[d]_0\\
+    *{}       &4\ar@(lu,ld)[]_1\ar@/_/[r]_0 &5\ar[d]_1\ar@/_/[l]_0                                 &*++[o][F=]{6}\ar@(ru,rd)[]_1\ar[d]_0\\
+    *{}       &7\ar[u]_1\ar[ru]_0           &*++[o][F=]{8}\ar@(ld,rd)[]^0\ar@/_/[r]_1              &9\ar@/_/[l]_1\ar`dr_l[ll]`_ur[ll]^0 [ll]\\
 } \]
+\begin{answer}
+Bij minimalisatie beschouwen we twee stappen:
+\begin{enumerate}
+ \item Het verwijderen van onbereikbare toestanden; en
+ \item Het samenvoegen van $f$-gelijke toestanden.
+\end{enumerate}
+De twee stappen mogen in willekeurige volgorde worden uitgevoerd, al zal de opgegeven volgorde meestal tot het minste werk leiden.
+\paragraph{Onbereikbare toestanden}
+Hiervoor berekenen we welke toestanden bereikbaar zijn vanuit de starttoestand. Dit doen we aan de hand van een \emph{vastepuntsiteratie} op volgende functie:
+\begin{equation}
+\funsig{\mbox{reaches}}{\powset{Q}}{\powset{Q}}:R\mapsto R\cup\condset{\fun{\delta}{q,\sigma}}{q\in R,\sigma\in\Sigma}.
+\end{equation}
+We beginnen met het singleton van de starttoestand, en berekenen achtereenvolgens:
+\begin{eqnarray}
+R_0&=&\accl{1}\\
+R_1&=&\accl{1,2,5}\\
+R_2&=&\accl{1,2,4,5,8}\\
+R_3&=&\accl{1,2,4,5,8,9}\\
+R_4&=&\accl{1,2,4,5,7,8,9}\\
+R_5=R^{\star}&=&\accl{1,2,4,5,7,8,9}
+\end{eqnarray}
+De onbereikbare toestanden zijn dan $Q\setminus R^{\star}=\accl{3,6}$. We verwijderen deze toestanden alsook de bogen die uit de toestanden vertrekken. De bogen die mogelijk in de toestanden zouden aankomen komen altijd uit toestanden die we ook verwijderen. De nieuwe DFA is dus:
+\[  \entrymodifiers={++[o][F-]}
+  \SelectTips{cm}{}
+  \xymatrix {
+    *{}\ar[r] &1\ar[r]_0\ar[rd]^1           &*++[o][F=]{2}\ar[d]_1\ar `ur_r[dd]`[dd]`_dl[dd]^0[dd] &*[]{}\\
+    *{}       &4\ar@(lu,ld)[]_1\ar@/_/[r]_0 &5\ar[d]_1\ar@/_/[l]_0                                 &*[]{}\\
+    *{}       &7\ar[u]_1\ar[ru]_0           &*++[o][F=]{8}\ar@(ld,rd)[]^0\ar@/_/[r]_1              &9\ar@/_/[l]_1\ar`dr_l[ll]`_ur[ll]^0 [ll]\\
+} \]
+\end{answer}
+\paragraph{$f$-equivalente toestanden}
+Eerst dienen we een graaf op te stellen met $f$-verschillende toestanden. Omdat deze graaf typisch veel bogen bevat, zullen we de graaf in tabelvorm schrijven. In de eerste stap beschouwen we koppels toestanden waarvan juist \'e\'en toestand een element is van $F$. De tabel ziet er dan als volgt uit:
+\statetable{
+%  1  2  4  5  7  8  9
+1&  &\e&  &  &  &\e&  \\
+2&\e&  &\e&\e&\e&  &\e\\
+4&  &\e&  &  &  &\e&  \\
+5&  &\e&  &  &  &\e&  \\
+7&  &\e&  &  &  &\e&  \\
+8&\e&  &\e&\e&\e&  &\e\\
+9&  &\e&  &  &  &\e&  
+}
+We itereren vervolgens \'e\'enmaal over alle mogelijke koppels van toestanden (waarbij de overeenkomstige cel nog leeg is in de tabel), en voegen in het geval van een conflict het symbool toe in de tabel:
+\statetable{
+%  1  2  4  5  7  8  9
+1&  &\e&0 &01&0 &\e&01\\
+2&\e&  &\e&\e&\e&  &\e\\
+4&0 &\e&  & 1&  &\e& 1\\
+5&01&\e& 1&  & 1&\e&  \\
+7&  &\e&  & 1&  &\e& 1\\
+8&\e&  &\e&\e&\e&  &\e\\
+9&01&\e& 1&  & 1&\e&  
+}
+We hebben in de tabel ook de karakters ingevuld die tot een conflict leiden, dit is strikt genomen niet nodig. Bovendien is de tabel symmetrisch: cel $i,j$ is altijd equivalent met cel $j,i$, dit spaart de helft van het werk uit. Bovendien is de diagonaal altijd leeg: een toestand kan nooit met zichzelf conflicteren. We hebben in de vorige iteratie aanpassingen aan de tabel gemaakt, dus dienen we nog een tweede iteratie te doen:
+\statetable{
+%  1  2  4  5  7  8  9
+1&  &\e&01&01&01&\e&01\\
+2&\e&  &\e&\e&\e&  &\e\\
+4&01&\e&  &01&  &\e&01\\
+5&01&\e&01&  &01&\e&  \\
+7&01&\e&  &01&  &\e&01\\
+8&\e&  &\e&\e&\e&  &\e\\
+9&01&\e&01&  &01&\e&  
+}
 \end{question}
-
+Dat cellen ingevuld geraken met meer symbolen is geen reden voor een extra iteratie, wat dit wel is, zijn cellen die nu wel een symbool bevatten. Dit is echter niet het geval. We hoeven dus niet langer nieuwe koppels op te sporen.
+Nu verwijderen we bogen uit de originele DFA: dit is het geval voor de volgende koppels: $\accl{\tupl{4,7},\tupl{5,9}}$. De complementsgraaf van de tabel is dan:
+\[  \entrymodifiers={++[o][F-]}
+  \SelectTips{}{}
+  \xymatrix {
+    *{} &1           &*++[o][F=]{2} &*[]{}\\
+    *{} &4\ar@{-}[d] &5\ar@{-}[dr]  &*[]{}\\
+    *{} &7           &*++[o][F=]{8} &9\\
+} \]
+Er is geen kliek van $3$ of meer knopen, de klieken ($Q_i$'s) zijn dus $\accl{\tupl{4,7},\tupl{5,9}}$. Deze toestanden nemen we vervolgens samen in de originele graaf. Het is zo dat de bogen uit de toestanden uit een kliek altijd in dezelfde kliek toekomen. De minimale DFA is dan:
+\[  \entrymodifiers={++[o][F-]}
+  \SelectTips{cm}{}
+  \xymatrix {
+    *{}\ar[r] &1\ar[r]_0\ar[rd]^1               &*++[o][F=]{2}\ar[d]_1\ar `ur_r[dd]`[dd]`_dl[dd]^0[dd]\\
+    *{}       &{4,7}\ar@(lu,ld)[]_1\ar@/_/[r]_0 &{5,9}\ar@/_/[d]_1\ar@/_/[l]_0\\
+    *{}       &*[]{}                            &*++[o][F=]{8}\ar@(ld,rd)[]^0\ar@/_/[u]_1\\
+} \]
 \begin{question}
 Zij $\Sigma_1 = \{0,1\}, \Sigma_2 = \{a\}$ en $\Sigma_3 = \{a,b,c\}$. Toon aan dat de volgende talen niet regulier zijn.
 \begin{enumerate}
-  \item $\{ w \in \Sigma_1^*\ |\ \mbox{$\left|w\right|$ is even en de $1$'en in $w$ komen enkel voor in de laatste helft van $w$}\}$   % Niet uit Sipser. 
-  \item $\{ a^{\left( 2^n \right) } \in \Sigma_2^* \ | \ n \geq 0 \}$                                      % Sipser 1.17 (c)
-  \item $\{ a^n \in \Sigma_2^*\ | \ \mbox{$n$ is een priemgetal} \}$                                       % Niet uit Sipser
-  \item $\{ 0^m1^n \in \Sigma_1^* \ | \ m \neq n \}$                                                       % Sipser 1.23 (c)
-  \item $\{ w \in \Sigma_1^* \ | \ \mbox{$w$ is geen palindroom} \}$                                       % Sipser 1.23 (d)
-  \item $\{ a^ib^jc^k \in \Sigma_3^* \ | \ \mbox{$i,j,k \geq 0$ en als $i = 1$, dan moet $j=k$} \}$        % Sipser 1.37
+  \item $\{ w \in \Sigma_1^*\ |\ \mbox{$\left|w\right|$ is even en de $1$'en in $w$ komen enkel voor in de laatste helft van $w$}\}$
+  \item $\{ a^{\left( 2^n \right) } \in \Sigma_2^* \ | \ n \geq 0 \}$
+  \item $\{ a^n \in \Sigma_2^*\ | \ \mbox{$n$ is een priemgetal} \}$
+  \item $\{ 0^m1^n \in \Sigma_1^* \ | \ m \neq n \}$
+  \item $\{ w \in \Sigma_1^* \ | \ \mbox{$w$ is geen palindroom} \}$
+  \item $\{ a^ib^jc^k \in \Sigma_3^* \ | \ \mbox{$i,j,k \geq 0$ en als $i = 1$, dan moet $j=k$} \}$
 \end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+ \item We beschouwen $L'=L^{\R}$: de taal
+ \begin{equation}
+ L'=\{ w \in \Sigma_1^*\ |\ \mbox{$\left|w\right|$ is even en de $1$'en in $w$ komen enkel voor in de eerste helft van $w$}\}
+ \end{equation}
+ \begin{proof}
+  We nemen de string $s=1^p0^p$ met $p$ de onbekende pomplengte. Het is duidelijk dat $s\in L'$. Voor elke geldige opdeling $s=xyz$ die voldoet aan de voorwaarden van het pompend lemma weten we dat:
+  \begin{enumerate}
+   \item $x\in 1^{\star}$
+   \item $y\in 11^{\star}$ met $\abs{y}=l>1$
+  \end{enumerate}
+  Wanneer we deze string ``pompen'' genereren we $xy^2z=1^{p+l}0^p$. Vermits $l>0$ bekomen we een string met $1$'en buiten de eerste helft van de string. Bijgevolg $xy^2z\notin L$, ongeacht welke opdeling
+  we kiezen voor $x$, $y$ en $z$.
+ \end{proof}
+ Omdat het omkeren van een reguliere taal inwendig is, betekent dit dat wanneer de omgekeerde taal niet regulier is, de originele taal niet regulier is. Bijgevolg is $L$ niet regulier.
+ \item $L=\{ a^{\left( 2^n \right) } \in \Sigma_2^* \ | \ n \geq 0 \}$
+ \begin{proof}
+  Neem de string $a^{2^p}$ met $p$ de onbekende pomplengte. Voor elke geldige opdeling $s=xyz$ geldt dat $y\in aa^{\star}$ en $l=\abs{a}$ met $0<l\leq p$. Bijgevolg is $xy^2z=a^{2^p+l}$. $2^p+l$ is enkel een macht van $2$ indien $l=2^p$ of groter, maar omdat $l\leq p$ en $\forall i\in\NNN:i<2^i$ weten we ook dat $l<2^p$, bijgevolg kan $2^p+l$ geen macht van $2$ zijn. Bijgevolg is $xy^2z\notin L$, ongeacht de opdeling van $s$. Bijgevolg is $L$ niet regulier.
+ \end{proof}
+ \item $L=\{ a^n \in \Sigma_2^*\ | \ \mbox{$n$ is een priemgetal} \}$
+ \begin{proof}
+  Neem de string $a^{q}$ met $q>p$, $p$ de onbekende pomplengte en $q$ een priemgetal. Voor elke geldige opdeling $s=xyz$ geldt dat $y\in aa^{\star}$ en $l=\abs{y}$ met $0<l\leq p$. Bijgevolg is $xy^qz=a^{\brak{l+1}\cdot q}$. Omdat $l\geq 1$ is $\brak{l+1}\geq 2$. $\brak{l+1}\cdot q$ heeft dus minstens een deler groter dan $1$. Misschien is die deler $\brak{l+1}\cdot q$ zelf? Dit kan echter niet want $q$ is een priemgetal, bijgevolg is $q>1$. We besluiten dat $\brak{l+1}\cdot q$ minstens \'e\'en\footnote{Het is mogelijk dat $l+1=q$, in dat geval is er maar \'e\'en deler.} deler heeft die niet $1$ of zichzelf is. Bijgevolg is $xy^qz\notin L$, ongeacht de opdeling van $s$. Bijgevolg is $L$ niet regulier.
+ \end{proof}
+  \item $L=\{ 0^m1^n \in \Sigma_1^* \ | \ m \neq n \}$. Hier beschouwen we de taal $L'=L^c\cap\accl{0^{\star}1^{\star}}=\{ 0^m1^n \in \Sigma_1^* \ | \ m=n \}$
+ \begin{proof}
+  Neem de string $0^p1^p$ met $p$ de onbekende pomplengte. Voor elke opdeling $s=xyz$ geldt dat $y\in 00^{\star}$ en $l=\abs{y}$ met $0<l\leq p$. Bijgevolg is $xy^2z=0^{p+l}1^p\notin L'$, ongeacht de opdeling van $s$. Bijgevolg is $L'$ niet regulier.
+ \end{proof}
+ De doorsnede is gesloten onder de reguliere talen. Als de doorsnede niet regulier is, betekent dit dat minstens \'e\'en van de operanden niet regulier was. Vermits de tweede operand door een reguliere expressie wordt beschreven, kan enkel de eerste operand $L^c$ niet regulier zijn. Ook het complement is gesloten onder de reguliere talen. Bijgevolg moet $L$ niet-regulier zijn.
+ \item $L=\{ w \in \Sigma_1^* \ | \ \mbox{$w$ is geen palindroom} \}$. We beschouwen $L'=L^c=\{ w \in \Sigma_1^* \ | \ \mbox{$w$ is een palindroom} \}$.
+ \begin{proof}
+  Neem de string $0^p10^p$ met $p$ de onbekende pomplengte. Voor elke opdeling $s=xyz$ geldt dat $y\in 00^{\star}$ en $l=\abs{y}$ met $0<l\leq p$. Bijgevolg is $xy^2z=0^{p+l}10^p\notin L'$, ongeacht de opdeling van $s$. Bijgevolg is $L'$ niet regulier.
+ \end{proof}
+ Omdat het complement gesloten is onder reguliere talen is $L$ bijgevolg niet regulier.
+ \item $L=\{ a^ib^jc^k \in \Sigma_3^* \ | \ \mbox{$i,j,k \geq 0$ en als $i = 1$, dan moet $j=k$} \}$. We beschouwen $L'=L\cap\accl{ab^{\star}c^{\star}}=\accl{ab^nc^n \in \Sigma_3^*}$
+ \begin{proof}
+  Neem de string $ab^pc^p$ met $p$ de onbekende pomplengte. Er bestaan twee soorten opdelingen:
+  \begin{enumerate}
+   \item $x=\epsilon$ en $y\in ab^{\star}$ met $l=\abs{y}$. In dat geval $xy^2z\in L''=ab^{\star}ab^{p+l-1}c^{p}$. Vermits $L\cap L''=\emptyset$, kan deze opdeling onmogelijk ``gepompt'' worden.
+   \item $x\in ab^{\star}$ en $y\in bb^{\star}$ met $l=\abs{y}$ en $0<l\leq p$, is $xy^2z=ab^{p+l}c^{p}$. Bijgevolg voldoet de voorwaarde van een gelijk aantal $b$'s en $c$'s niet meer. Ook deze opdeling is niet mogelijk.
+  \end{enumerate}
+  Uit de gevalanalyse besluiten we dat geen enkele mogelijk opdeling ``gepompt'' kan worden, ongeacht de opdeling van $s$. Bijgevolg is $L'$ niet regulier.
+ \end{proof}
+ Omdat de reguliere talen gesloten zijn onder de doorsnede en de tweede operand regulier is, is de eerste operand $L$ niet regulier.
+\end{enumerate}
+\end{answer}
 \end{question}
 \end{document}

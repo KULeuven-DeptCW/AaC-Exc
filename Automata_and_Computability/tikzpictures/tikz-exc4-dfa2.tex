@@ -1,0 +1,15 @@
+\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto,scale=0.75]
+\def\sc{0.75}
+\node[state,initial,scale=\sc]   (q0) at (0,0) {$q_0$};
+\node[state,scale=\sc] (q1) at (4,0) {$q_1$};
+\node[state,accepting,scale=\sc] (q2) at (4,2) {$q_2$};
+\node[state,scale=\sc] (q3) at (4,-2) {$q_3$};
+
+\path[->] (q0) edge              node       {$\epsilon/\epsilon/\$$}   (q1)
+          (q1) edge [bend left]  node       {$1/\$/\$$}   (q2)
+          (q2) edge [bend left]  node       {$0/\$/\$$}   (q1)
+          (q2) edge [loop above] node       {$1/\epsilon/a,0/a/\epsilon$}   (q2)
+          (q1) edge [bend left]  node       {$0/\$/\$$}   (q3)
+          (q3) edge [bend left]  node       {$1/\$/\$$}   (q1)
+          (q3) edge [loop below] node[below]{$0/\epsilon/a,1/a/\epsilon$}   (q3);
+\end{tikzpicture}

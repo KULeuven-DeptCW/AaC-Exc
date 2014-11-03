@@ -76,9 +76,8 @@ F&=&F_1\times F_2\\
 \forall q_1\in Q_1,q_2\in Q_2:\fun{\delta}{\tupl{q_1,q_2},\epsilon}&=&\accl{q_1}\times\fun{\delta_2}{q_2,\epsilon}
 \end{eqnarray}
 \end{construction}
-De constructie werkt als volgt: we beschouwen een toestandsruimte van tuples die telkens zowel een toestand uit de DFA en een toestand uit de PDA bevat, zo zullen we parallel beide machines op dezelfde string laten lopen. We beginnen in de begintoestanden van de twee machines. Wanneer we een karakter inlezen, zal de DFA migreren naar een nieuwe toestand, de PDA kan verschillende nieuwe toestanden bereiken, afhankelijk van de 
+De constructie werkt als volgt: we beschouwen een toestandsruimte van tuples die telkens zowel een toestand uit de DFA en een toestand uit de PDA bevat, zo zullen we parallel beide machines op dezelfde string laten lopen. We beginnen in de begintoestanden van de twee machines. Wanneer we een karakter inlezen, zal de DFA migreren naar een nieuwe toestand, de PDA kan verschillende nieuwe toestanden bereiken, afhankelijk van het symbool op de stapel. We maken gebruik van het non-determinisme om het kruisproduct te nemen tussen de deterministisch gekozen volgende toestand van de DFA en de mogelijke bogen van de NFA.
 \end{answer}
-
 \end{question}
 
 \begin{question}

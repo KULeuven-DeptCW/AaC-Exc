@@ -19,6 +19,44 @@
 
 \begin{question}
 Toon aan dat de klasse van context vrije talen gesloten is onder concatenatie en ster.
+
+\begin{answer}
+Meerdere manieren zijn mogelijk: we kunnen een constructie voorstellen voor een PDA of een context-vrije grammatica.
+We opteren hier voor het laatste.
+\begin{enumerate}
+ \item Concatenatie
+ \begin{construction}
+  Gegeven twee context-vrije grammatica's $\tupl{V_1,\Sigma,R_1,S_1}$ en $\tupl{V_2,\Sigma,R_2,S_2}$. We maken de assumptie
+  dat $V_1\cap V_2=\emptyset$: met andere woorden de beide context-vrije grammatica's bevatten geen gemeenschappelijke
+  non-terminalen. Indien dit wel het geval is, volstaat het om de non-terminalen van de $V_1$ van \'e\'en van de context-vrije
+  grammatica's te hernoemen (en deze substitutie ook toe te passen op de omzettingsregels $R_1$).
+  
+  Dan beschouwen we een contextvrije grammatica $\tupl{V,\Sigma,R,S}$ met:
+  \begin{eqnarray}
+   V&=&V_1\cup V_2\cup\accl{S}\\
+   R&=&R_1\cup R_2\cup\accl{S\rightarrow S_1S_2}
+  \end{eqnarray}
+  Met $S$ een nieuwe ingevoerde non-terminaal.
+ \end{construction}
+ Deze constructie werkt omdat $S_1$ zal evolueren naar elke mogelijke string $s\in L_1$ en $S_2$ naar elke mogelijke
+ string in $s\in L_2$. Omdat $S$ als enige overgangsregel de concatenatie van evoluties van $S_1$ en $S_2$ heeft, worden
+ er geen bijkomende strings ge\"introduceerd.
+ \item Kleene-ster
+ \begin{construction}
+  Gegeven een context-vrije grammatica $\tupl{V_1,\Sigma,R_1,S_1}$, dan construeren we een context-vrije grammatica $\tupl{V,\Sigma,R,S}$
+  met:
+  \begin{eqnarray}
+   V&=&V\cup\accl{S}\\
+   R&=&R_1\cup\accl{S\rightarrow\epsilon,S\rightarrow S_1S}
+  \end{eqnarray}
+  Met $S\notin V_1$.
+ \end{construction}
+ Omdat de Kleene ster impliceert dat we de originele taal $L_1$ nul of meer keer herhalen, beschouwen we eerst de overgangsregel $S\rightarrow\epsilon$ die
+ impliceert dat de lege string deel uitmaakt van de taal: nul keer een string herhalen is dus mogelijk. $S_1$ kan overgaan in elke mogelijke string
+ $s\in L$, wanneer we dus de overgangsregel $S\rightarrow S_1$ zouden beschouwen, maken alle strings in $L_1$ deel uit van $L$. Door $S$ toe te voegen aan (het
+ einde van) de regel, kunnen we \'e\'en of meer concatenaties van elementen uit $L_1$ verzekeren.
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
@@ -26,7 +64,7 @@ Bewijs dat de doorsnede van een reguliere taal met een context-vrije taal contex
 \end{question}
 
 \begin{question}
-Geef voor elk van de volgende talen over een CFG die die taal genereert.
+Geef voor elk van de volgende talen een CFG die die taal genereert.
 \begin{enumerate}
   \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
   \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$

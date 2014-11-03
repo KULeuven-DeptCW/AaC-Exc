@@ -2,7 +2,7 @@
 \usepackage[dutch]{babel}
 \usepackage{color,xypic,amsmath}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#4\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -66,11 +66,24 @@ Bewijs dat de doorsnede van een reguliere taal met een context-vrije taal contex
 \begin{question}
 Geef voor elk van de volgende talen een CFG die die taal genereert.
 \begin{enumerate}
-  \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
-  \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
-  \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
-  \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
+ \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
 \end{enumerate}
+
+\begin{answer}~~
+\begin{enumerate}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
+ \importgram{exc4-1}{Oneven lengte, middelste symbool is $0$.}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
+ \importgram{exc4-2}{Meer $1$'en dan $0$'en.}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
+ \importgram{exc4-3}{Tweemaal zoveel $1$'en als $0$'en.}
+ \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
+ \importgram{exc4-4}{Omgekeerde groep.}
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}

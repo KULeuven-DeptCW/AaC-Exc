@@ -63,6 +63,22 @@ We opteren hier voor het laatste.
 
 \begin{question}
 Bewijs dat de doorsnede van een reguliere taal met een context-vrije taal context-vrij is.
+
+\begin{answer}
+Dit kunnen we aantonen aan de hand van een constructie die gegeven een DFA en een PDA, een PDA construeert die de doorsnede van de talen beslist door deze machine beslist.
+\begin{construction}
+Gegeven een DFA $\tupl{Q_1,\Sigma,\delta_1,q_{s1},F_2}$ en een PDA $\tupl{Q_2,\Sigma,\Gamma,\delta_2,q_{s2},F_2}$, dan beschouwen we een PDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$ met:
+\begin{eqnarray}
+Q&=&Q_1\times Q_2\\
+q_s&=&\tupl{q_{s1},q_{s2}}\\
+F&=&F_1\times F_2\\
+\forall q_1\in Q_1,q_2\in Q_2,\sigma\in\Sigma:\fun{\delta}{\tupl{q_1,q_2},\sigma}&=&\accl{\fun{\delta_1}{q_1,\sigma}}\times\fun{\delta_2}{q_2,\sigma}\\
+\forall q_1\in Q_1,q_2\in Q_2:\fun{\delta}{\tupl{q_1,q_2},\epsilon}&=&\accl{q_1}\times\fun{\delta_2}{q_2,\epsilon}
+\end{eqnarray}
+\end{construction}
+De constructie werkt als volgt: we beschouwen een toestandsruimte van tuples die telkens zowel een toestand uit de DFA en een toestand uit de PDA bevat, zo zullen we parallel beide machines op dezelfde string laten lopen. We beginnen in de begintoestanden van de twee machines. Wanneer we een karakter inlezen, zal de DFA migreren naar een nieuwe toestand, de PDA kan verschillende nieuwe toestanden bereiken, afhankelijk van de 
+\end{answer}
+
 \end{question}
 
 \begin{question}
@@ -93,10 +109,10 @@ Geef voor de eerste twee talen uit $(3)$ een PDA die die taal herkent.
 
 \begin{answer}~~
 \begin{enumerate}
- \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
- \importtikzfigure{exc4-dfa1}{}
- \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
- \importtikzfigure{exc4-dfa2}{}
+ \item Zie \figref{exc4-dfa1}
+ \importtikzfigure{exc4-dfa1}{PDA voor $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$.}
+ \item Zie \figref{exc4-dfa2}
+ \importtikzfigure{exc4-dfa2}{PDA voor $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$.}
 \end{enumerate}
 \end{answer}
 \end{question}

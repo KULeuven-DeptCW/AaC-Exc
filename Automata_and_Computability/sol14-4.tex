@@ -1,6 +1,6 @@
 \documentclass[a4paper]{article}
 \usepackage[dutch]{babel}
-\usepackage{color,xypic,amsmath}
+\usepackage{color,xypic,amsmath,amsthm}
 \xyoption{all}
 \usepackage{../assignment-nl,../brackets,../importsreferences-nl}
 
@@ -11,6 +11,8 @@
 \newcommand{\rul}{\rightarrow}
 \newcommand{\gvar}[1]{\langle \text{{#1}} \rangle}
 \newcommand{\gend}[1]{\text{\bf{#1}}}
+
+\newtheorem{lemma}{Lemma}
 
 
 \begin{document}
@@ -96,6 +98,26 @@ Zij $G$ een CFG in Chomsky normaalvorm die precies $b$ niet-terminalen bevat.
   \item Toon aan dat voor elke $w \in L_G$ met lengte $n \geq 1$, elke afleiding van $w$ uit precies $2n - 1$ stappen bestaat.
   \item Toon aan dat, als $L_G$ een string bevat waarvoor elke afleiding meer dan $2^b$ stappen bevat, $L_G$ oneindig moet zijn.
 \end{enumerate}
+
+\begin{answer}~~
+\begin{enumerate}
+ \item Wanneer de grammatica in Chomsky normaalvorm staat, betekent dit dat er slechts drie mogelijke vormen zijn: $S\rightarrow \epsilon$, $A\rightarrow BC$ en $A\rightarrow a$ met $S$ het startsymbool, $A$, $B$ en $C$ willekeurige non-terminalen en $a$ een willekeurig karakter. Vermits de lengte van $w$ groter is dan $0$, is de eerste overgangsregel niet mogelijk. We kunnen
+ de afleiding van een string schrijven als een boom met als inodes de nonterminals en als bladen de karakters. Elk karakter/blad heeft precies \'e\'en ouder (want we kunnen enkel karakters afleiden volgens de derde vorm). Alle overige inodes hebben steeds twee kinderen. De inodes die niet naar een blad afleiden vormen bijgevolg een binaire boom.
+ \begin{lemma}
+  Een binaire boom met $n$ kinderen heeft precies $n-1$ inodes.
+  \begin{proof}
+   We bewijzen per inductie:
+   \begin{description}
+    \item [Basis] Een blad heeft $0$ inodes en $1$ blad, hier houdt de voorwaarde dus.
+    \item [Inductie] Een inode bevat juist twee inodes. De eerste inode heeft $n_{b1}$ bladen en $n_{i1}=n_{b1}-1$. De tweede inode heeft $n_{b1}$ bladen en $n_{i1}=n_{b1}-1$. In totaal
+    hebben we dus $n_{i}=n_{i1}+n_{i2}+1=n_{b1}-1+n_{b2}-1+1=n_{b1}+n_{b2}-1$ inodes\footnote{$+1$ staat voor de eigen inode.} en $n_{b}=n_{b1}+n_{b2}$ bladen. Bijgevolg houdt de inductie.
+   \end{description}
+  \end{proof}
+  Dit betekent dat het binaire boom gedeelte dus $n-1$ afleidingen voorstelt. De onderste laag bevat overgangen van het derde type. Omdat de string een lengte $n$ heeft, en elk karakter moet worden omgezet naar een non-terminaal, bevat de onderste inode-laag dus $n$ afleidingen. Het aantal afleidingen is dus gelijk aan $2\cdot n-1$.
+ \end{lemma}
+ \item Stel dat we $2^b$ afleidingen nodig hebben om een string $w$ af te leiden. Dan betekent dit dat het binaire boom gedeelte van de afleidingen strikt meer dan $2^{b-1}-1$ nodig. Anders kan men onvoldoende non-terminalen genereren die naar karakters evolueren. Een binaire boom met meer dan $2^{b-1}-1$ inodes heeft een hoogte van minstens $b-1$ en (vermits het aantal afleidingen groter is dan $2^{b-1}-1$ bestaat er ook een pad van de wortel naar een blad met een lengte van $b$ of meer. Als er zo'n pad bestaat, betekent dit dat er minstens \'e\'en non-terminaal twee keer voorkomt in dat pad. Bijvoorbeeld $b_0\rightarrow\ldots\rightarrow b_i\rightarrow\ldots b_i\rightarrow\ldots\rightarrow b_n$ met $b_i$ de non-terminal die tweemaal voorkomt. Maar in dat geval kunnen we het pad $b_i\rightarrow\ldots\rightarrow b_i$ willekeurig vaak herhalen. Omdat de Chomsky normaalvorm betekent dat alle afleidingen van een non-terminaal resulteren naar meer non-terminalen of een karakter betekent dit dat we dus willekeurig meer bladen aan de boom kunnen toevoegen, en de string dus bijgevolg willekeurig kan groeien. Omdat voor elke $n$, we een string kunnen genereren die groter is dan $n$, is de taal bijgevolg oneindig.
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}

@@ -38,8 +38,11 @@ Gegeven een string $s=O^p\#O^{2p}\#O^{3p}$ met $p$ de onbekende pomplengte. Het 
 \begin{proof}
 We beschouwen de string $s=a^pb^pc^p$ met $p$ de pomplengte. Wanneer we $s$ opdelen in $s=uvxyz$ zodat de twee laatste voorwaarden voldoen, betekent dit dat $v$ en $y$ ofwel uit strings van hetzelfde karakter bestaan (dus $v,y\in a^{\star}$), ofwel uit twee opeenvolgende karakters (bijvoorbeeld $u\in aa^{\star}$ en $y\in a^{\star}bb^{\star}$). Het is echter onmogelijk dat $v$ en $y$ strings zijn die bestaan uit alle drie de karakters. Bij het ``pompen'' zal echter minstens \'e\'en van de karakters in aantal toenemen. Omdat ze niet alle drie kunnen toenemen, is aan de voorwaarde van de taal niet meer voldaan. Dus inconsistentie.
 \end{proof}
-\item \textbf{context-vrij}: We kunnen deze taal beslissen met volgende grammatica:
-\item \textbf{context-vrij}: We kunnen deze taal beslissen met volgende grammatica:
+\item \textbf{context-vrij}: We kunnen deze taal beslissen met de PDA op \figref{}. De PDA werkt als volgt: eerst bouwen we de stack op voor $x$ op een willekeurig moment beschouwen we het begin van $y$\footnote{Omdat een PDA non-deterministisch is, mogen we gokken, immers moet er maar \'e\'en gok slagen om de taal te accepteren.}. Vervolgens bouwen we de stack terug af. We houden ondertussen bij van rechts naar links of de karakters rechts van de twee strings gelijk zijn of niet. Vanaf het moment dat dit voor \'e\'en karakter niet geldt, is dit het geval. We accepteren als de stack op het einde leeg is, .
+\begin{note}
+Een interessante oefening is misschien de DFA aanpassen zodat deze de taal $\condset{xy}{x,y\in\accl{0,1}^{\star}\wedge x\leq y}$ beslist, waarbij $x$ dus binair kleiner dan of gelijk is aan $y$. In het geval men little-endian encodiering gebruikt is dit uitdagend.
+\end{note}
+\item \textbf{context-vrij}: We kunnen deze taal beslissen met de PDA op \figref{}. De PDA werkt als volgt, eerst slaan we $w$ volledig op op de stack
 \item \textbf{niet-contextvrij}
 \end{enumerate}
 \end{answer}

@@ -21,3 +21,5 @@
 *.svn
 *.toc
 *.kilepr
+*.swp
+*.bak

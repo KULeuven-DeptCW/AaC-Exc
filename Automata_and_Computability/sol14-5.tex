@@ -1,0 +1,76 @@
+\documentclass[a4paper]{article}
+\usepackage[dutch]{babel}
+\usepackage{color,xypic,amsmath}
+\xyoption{all}
+\usepackage{../assignment-nl,../brackets}
+
+\title{Automaten en Berekenbaarheid\\Opgave \#5\\\url{http://goo.gl/1RlVG5}}
+\author{prof. B. Demoen\\W. Van Onsem}
+\date{November 2014}
+
+\newcommand{\rul}{\rightarrow}
+\newcommand{\gvar}[1]{\langle \text{{#1}} \rangle}
+\newcommand{\gend}[1]{\text{\bf{#1}}}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{question}
+Welke van de volgende talen zijn context-vrij, welke niet? Bewijs je antwoord.
+  \begin{enumerate}
+		    \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ is een palindroom}\}$
+      \item $\{ 0^n\#0^{2n}\#0^{3n} \ | \ n \geq 0 \}$
+      \item $\{ w \in \{a,b,c\}^* \ | \ \text{$w$ bevat een gelijk aantal $a$'s, $b$'s en $c$'s} \}$
+      \item $\{ xy \ | \ \text{$x,y \in \{0,1\}^*$ en $|x| = |y|$, maar $x \neq y$} \}$
+      \item $\{ w \# x \ | \ \text{$w,x \in \{0,1\}^*$ en $w$ is een substring van $x$} \}$
+		    \item $\{a^ib^jc^k \ | \ 0 \leq i \leq j \leq k \}$
+  \end{enumerate}
+\begin{answer}
+\begin{enumerate}~~
+\item \textbf{contextvrij}: We kunnen deze taal beslissen met volgende grammatica.
+\item \textbf{niet-contextvrij}: Dit kunnen we aantonen met het pompend lemma.
+\item \textbf{niet-contextvrij}: Dit kunnen we aantonen met het pompend lemma.
+\item \textbf{context-vrij}: We kunnen deze taal beslissen met volgende grammatica:
+\item \textbf{context-vrij}: We kunnen deze taal beslissen met volgende grammatica:
+\item \textbf{niet-contextvrij}
+\end{enumerate}
+\end{answer}
+\end{question}
+
+\begin{question}
+Een $k$-PDA is een PDA met $k$ stacks. Een $0$-PDA is dus een NFA en een $1$-PDA een gewone PDA. 
+\begin{enumerate}
+  \item Toon aan dat $2$-PDA's strikt sterker zijn dan $1$-PDA's. (Met andere woorden, toon aan dat de klasse van talen die met een $1$-PDA te herkennen zijn een strikte deelverzameling is van de klasse van talen die met een $2$-PDA te herkennen zijn.)
+  \item Toon aan dat $3$-PDA's even sterk zijn als $2$-PDA's.
+\end{enumerate}
+\end{question}
+\begin{answer}
+\begin{enumerate}
+\item Dit bewijzen we in twee stappen: (a) we bewijzen dat elke taal die beslist kan worden door een $1$-PDA ook door een $2$-PDA beslist kan worden, en (b) we tonen aan dat er minstens \'e\'en taal bestaat die niet door een $1$-PDA beslist kan worden, maar wel door een $2$-PDA.
+\item 
+\begin{note}
+Merk op dat een $2$-PDA even sterk is als een Turing machine en er dus ook mee samenvalt. We kunnen immers de eerste stack gebruiken om alle karakters links van de lees/schrijfkop voor te stellen (waarbij de ``top'' van de stack het dichtste karakter bij de kop bevat), en de tweede stack bevat de karakters rechts van de stack (opnieuw met het dichtste karakter als ``top''). De toestand kan het huidige karakter bijhouden (of we plaatsen het op \'e\'en van de stacks). Wanneer de kop naar links of rechts beweegt, kunnen we dan met wat boekhouding de stacks correct aanpassen.
+\end{note}
+\end{enumerate}
+\end{answer}
+\begin{question}
+Zij 
+\begin{align*}
+  \Sigma & = \{ \gend{if, condition, then, else, a:=1} \} \\
+  V & = \{ \gvar{STMT}, \gvar{IF-THEN}, \gvar{IF-THEN-ELSE}, \gvar{ASSIGN} \} \\
+\end{align*}
+  en zij $G = (V,\Sigma,R,\gvar{STMT})$ de grammatica met regels
+  \begin{align*}                                                                               
+      \gvar{STMT}          & \rul \gvar{ASSIGN} \ | \ \gvar{IF-THEN} \ | \ \gvar{IF-THEN-ELSE}  \\
+      \gvar{IF-THEN}       & \rul \gend{if condition then } \gvar{STMT} \\
+      \gvar{IF-THEN-ELSE}  & \rul \gend{if condition then } \gvar{STMT} \gend{ else } \gvar{STMT} \\
+      \gvar{ASSIGN}        & \rul \gend{a:=1} \\
+  \end{align*}
+  Toon aan dat $G$ ambigu is en construeer een niet-ambigue grammatica die dezelfde taal herkent.
+\begin{answer}
+Beschouw volgende expressie: \texttt{if condition then if condition then a := 1; else a := 1;}. Deze expressie is ambigu, omdat het niet duidelijk is tot welke \texttt{then}, de \texttt{else} behoort\footnote{Doordat de meeste talen gebruik maken van LALR parsing waarbij men geneigd is de \texttt{else} te binden aan de dichtste \texttt{then} (die nog niet gebonden is), kan het moeilijk zijn de ambiguiteit meteen te zien.}. Immers kan men dit groeperen (de haakjes tonen de oorsprong van de overgangsregels) als \texttt{(if condition then (if condition then (a := 1) else (a := 1)))} of als \texttt{(if condition then (if condition then (a := 1)) else (a := 1))}. We kunnen dit oplossen door voor het \texttt{else} gedeelte een apparte non-terminal in te voeren, die ofwel 
+\end{answer}
+\end{question}
+\end{document}

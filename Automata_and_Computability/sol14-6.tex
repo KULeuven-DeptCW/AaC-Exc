@@ -1,0 +1,61 @@
+\documentclass[a4paper]{article}
+\usepackage[dutch]{babel}
+\usepackage{color,xypic,amsmath}
+\xyoption{all}
+\usepackage{../assignment-nl,../brackets}
+
+\title{Automaten en Berekenbaarheid\\Opgave \#6\\\url{http://goo.gl/1RlVG5}}
+\author{prof. B. Demoen\\W. Van Onsem}
+\date{November 2014}
+
+
+\begin{document}
+\maketitle
+
+\begin{question}
+Een \emph{`blijf staan Turing machine'} verschilt van een gewone Turing machine doordat de head naar rechts kan bewegen of kan blijven staan, maar niet naar links kan bewegen. Toon aan dat deze variant van Turing machines niet equivalent is met de originele variant. Welke talen worden herkend door `blijf staan Turing machines'?
+\begin{answer}
+De verzameling van talen die beslist kan worden met zo'n machine is equivalent aan de verzameling van reguliere talen. %TODO
+\end{answer}
+\end{question}
+
+\begin{question}
+Zij $INF_{\rm DFA} = \{ \langle A \rangle \ | \ \text{$A$ is een DFA en $L(A)$ is een oneindige taal} \} $. Toon aan dat $INF_{\rm DFA}$ beslisbaar is.
+\begin{answer}
+\begin{lemma}
+Een DFA belist een oneindige taal als en slechts als ze een lus bevat \textbf{en} paden vanuit die lus in een accepterende toestand kunnen bereiken.
+\begin{proof}
+Een DFA beslist een oneindige taal indien oneindig veel paden in een accepterende toestand terecht komen\footnote{Immers komt elk pad overeen met een unieke string}. Indien de DFA een lus bevat, betekent dat oneindig veel paden en dus ook strings toekomen in de toestanden die de lus aandoet: immers kunnen we de lus een willekeurig aantal keer herhalen. Indien een toestand die in de lus vervat zit tot een accepterende toestand leidt (of zelf een accepterende toestand is), betekent dit dat we door een vast aantal karakters toe te voegen aan elke string van elke pad, we een accepterende string genereren. Omdat het aantal paden oneindig is, is het aantal strings die geaccepteerd worden, ook oneindig.
+\end{proof}
+\end{lemma}
+Op basis van dit lemma kunnen we gegeven een DFA bepalen of de taal die de DFA beslist oneindig is: we voeren eerst een lusdetectie algoritme uit. Vervolgens voeren we een bereikbaarheidsanalyse uit op de lussen. Indien minstens \'e\'en lus nog een accepterende toestand bereikt . Het beschreven algoritme werkt in \bigoh{n^4}, met $n$ het aantal toestanden. Een intelligenter algoritme werkt echter in \bigoh{n^2} wat een bewezen optimale tijdscomplexiteit is.
+\end{answer}
+
+\end{question}
+
+\begin{question}
+Is $VIJF_{\rm DFA} = \{ \langle A \rangle \ | \ \text{$A$ is een DFA en $L(A)$ bestaat uit precies 5 strings} \} $ beslisbaar? Bewijs je antwoord.
+\begin{answer}
+
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat de vraag of een context-vrije grammatica minstens \'e\'en string uit $1^*$ kan genereren, beslisbaar is.
+\end{question}
+
+\begin{question}
+Zij $A$ en $B$ twee disjuncte talen die co-Turing-herkenbaar zijn. Toon aan dat er een beslisbare taal $C$ bestaat zodanig dat $A \subseteq C$ en $B \subseteq \overline{C}$.
+\begin{answer}
+
+\end{answer}
+\end{question}
+
+\begin{question}
+Een \emph{Turing machine met RESET} verschilt van een gewone Turing machine doordat de head enkel naar rechts kan bewegen of in \'e\'en stap helemaal aan het begin van de tape gezet kan worden. De transitiefunctie van zo een machine is dus van de vorm $\delta : Q \times \Gamma \to Q \times \Gamma \times \{ \text{R}, \text{RESET} \}$. Toon aan dat deze variant van Turing machines equivalent is met de originele variant.
+\begin{answer}
+
+\end{answer}
+\end{question}
+
+\end{document}

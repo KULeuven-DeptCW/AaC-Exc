@@ -38,10 +38,7 @@ Gegeven een string $s=O^p\#O^{2p}\#O^{3p}$ met $p$ de onbekende pomplengte. Het 
 \begin{proof}
 We beschouwen de string $s=a^pb^pc^p$ met $p$ de pomplengte. Wanneer we $s$ opdelen in $s=uvxyz$ zodat de twee laatste voorwaarden voldoen, betekent dit dat $v$ en $y$ ofwel uit strings van hetzelfde karakter bestaan (dus $v,y\in a^{\star}$), ofwel uit twee opeenvolgende karakters (bijvoorbeeld $u\in aa^{\star}$ en $y\in a^{\star}bb^{\star}$). Het is echter onmogelijk dat $v$ en $y$ strings zijn die bestaan uit alle drie de karakters. Bij het ``pompen'' zal echter minstens \'e\'en van de karakters in aantal toenemen. Omdat ze niet alle drie kunnen toenemen, is aan de voorwaarde van de taal niet meer voldaan. Dus inconsistentie.
 \end{proof}
-\item \textbf{context-vrij}: We kunnen deze taal beslissen met de PDA op \figref{}. De PDA werkt als volgt: eerst bouwen we de stack op voor $x$ op een willekeurig moment beschouwen we het begin van $y$\footnote{Omdat een PDA non-deterministisch is, mogen we gokken, immers moet er maar \'e\'en gok slagen om de taal te accepteren.}. Vervolgens bouwen we de stack terug af. We houden ondertussen bij van rechts naar links of de karakters rechts van de twee strings gelijk zijn of niet. Vanaf het moment dat dit voor \'e\'en karakter niet geldt, is dit het geval. We accepteren als de stack op het einde leeg is, .
-\begin{note}
-Een interessante oefening is misschien de DFA aanpassen zodat deze de taal $\condset{xy}{x,y\in\accl{0,1}^{\star}\wedge x\leq y}$ beslist, waarbij $x$ dus binair kleiner dan of gelijk is aan $y$. In het geval men little-endian encodiering gebruikt is dit uitdagend.
-\end{note}
+\item \textbf{context-vrij}: We kunnen deze taal beslissen met de PDA op \figref{}. De PDA werkt als volgt: eerst bouwen we de stack op voor $x$ op een willekeurig moment beschouwen we het begin van $y$\footnote{Omdat een PDA non-deterministisch is, mogen we gokken, immers moet er maar \'e\'en gok slagen om de taal te accepteren.}. Vervolgens bouwen we de stack terug af. We houden ondertussen bij van rechts naar links of de karakters rechts van de twee strings gelijk zijn of niet. Vanaf het moment dat dit voor \'e\'en karakter niet geldt, is dit het geval. We accepteren als de stack op het einde leeg is.
 \item \textbf{context-vrij}: We kunnen deze taal beslissen met de PDA op \figref{}. De PDA werkt als volgt, eerst slaan we $w$ volledig op op de stack
 \item \textbf{niet-contextvrij}
 \end{enumerate}
@@ -58,9 +55,13 @@ Een $k$-PDA is een PDA met $k$ stacks. Een $0$-PDA is dus een NFA en een $1$-PDA
 \begin{answer}
 \begin{enumerate}
 \item Dit bewijzen we in twee stappen: (a) we bewijzen dat elke taal die beslist kan worden door een $1$-PDA ook door een $2$-PDA beslist kan worden, en (b) we tonen aan dat er minstens \'e\'en taal bestaat die niet door een $1$-PDA beslist kan worden, maar wel door een $2$-PDA.
+\begin{enumerate}
+ \item Dit is triviaal waar: we kunnen immers elke $1$-PDA omvormen naar een $2$-PDA waar we de tweede stapel niet gebruiken (we voorzien dus telkens een ``no operation'' overgangsregel $\epsilon\rightarrow\epsilon$).
+ \item Dit bewijzen we door aan te tonen dat de taal $\{ 0^n\#0^{2n}\#0^{3n} \ | \ n \geq 0 \}$ (zie eerder) wel beslisbaar is door een $2$-PDA. Dit staat beschreven op \figref{}. De PDA leest de eerste groep $O$'s in en zet op de eerste stapel overal $2$'en en op de tweede stapel $3$'en. Bij de tweede groep wordt de eerste stapel afgebouwd: we herschrijven een $2$ tot een $1$ en we halen $1$'en van de stack. Bij de derde groep bouwen we de tweede stack op een gelijkaardige manier af. Een $2$-PDA kan de taal dus wel beslissen.
+\end{enumerate}
 \item 
 \begin{note}
-Merk op dat een $2$-PDA even sterk is als een Turing machine en er dus ook mee samenvalt. We kunnen immers de eerste stack gebruiken om alle karakters links van de lees/schrijfkop voor te stellen (waarbij de ``top'' van de stack het dichtste karakter bij de kop bevat), en de tweede stack bevat de karakters rechts van de stack (opnieuw met het dichtste karakter als ``top''). De toestand kan het huidige karakter bijhouden (of we plaatsen het op \'e\'en van de stacks). Wanneer de kop naar links of rechts beweegt, kunnen we dan met wat boekhouding de stacks correct aanpassen.
+Merk op dat een $2$-PDA even sterk is als een Turing machine en er dus ook mee samenvalt. We kunnen immers de eerste stack gebruiken om alle karakters links van de lees/schrijfkop voor te stellen (waarbij de ``top'' van de stack het dichtste karakter bij de kop bevat), en de tweede stack bevat de karakters rechts van de stack (opnieuw met het dichtste karakter als ``top''). De toestand kan het huidige karakter bijhouden (of we plaatsen het op \'e\'en van de stacks). Wanneer de kop naar links of rechts beweegt, kunnen we dan met wat boekhouding de stacks correct aanpassen. Er is dus geen rekeninstrument (behalve een orakel) die krachtiger is dan een $2$-PDA.
 \end{note}
 \end{enumerate}
 \end{answer}
@@ -79,7 +80,7 @@ Zij
   \end{align*}
   Toon aan dat $G$ ambigu is en construeer een niet-ambigue grammatica die dezelfde taal herkent.
 \begin{answer}
-Beschouw volgende expressie: \texttt{if condition then if condition then a := 1; else a := 1;}. Deze expressie is ambigu, omdat het niet duidelijk is tot welke \texttt{then}, de \texttt{else} behoort\footnote{Doordat de meeste talen gebruik maken van LALR parsing waarbij men geneigd is de \texttt{else} te binden aan de dichtste \texttt{then} (die nog niet gebonden is), kan het moeilijk zijn de ambiguiteit meteen te zien.}. Immers kan men dit groeperen (de haakjes tonen de oorsprong van de overgangsregels) als \texttt{(if condition then (if condition then (a := 1) else (a := 1)))} of als \texttt{(if condition then (if condition then (a := 1)) else (a := 1))}. We kunnen dit oplossen door voor het \texttt{else} gedeelte een apparte non-terminal in te voeren, die ofwel 
+Beschouw volgende expressie: \texttt{if condition then if condition then a := 1; else a := 1;}. Deze expressie is ambigu, omdat het niet duidelijk is tot welke \texttt{then}, de \texttt{else} behoort\footnote{Doordat de meeste talen gebruik maken van LALR parsing waarbij men geneigd is de \texttt{else} te binden aan de dichtste \texttt{then} (die nog niet gebonden is), kan het moeilijk zijn de ambiguiteit meteen te zien.}. Immers kan men dit groeperen (de haakjes tonen de oorsprong van de overgangsregels) als \texttt{(if condition then (if condition then (a := 1) else (a := 1)))} of als \texttt{(if condition then (if condition then (a := 1)) else (a := 1))}.
 \end{answer}
 \end{question}
 \end{document}

@@ -29,9 +29,9 @@ Zijn de volgende uitspraken waar of niet? Bewijs je antwoord.
 \end{enumerate}
 \begin{answer}~~
 \begin{enumerate}
+ \item Waar: we kunnen immers over alle mogelijke strings itereren, en telkens beslissen of een string $s$ inderdaad tot de gegeven context-vrije grammatica's behoort. Indien dit voor juist \'e\'en contextvrije grammatica het geval is, rejecten we de twee contextvrije grammatica's.
  \item 
- \item 
- \item 
+ \item Niet waar, we kunnen immers elke Turing complete taal $L_1$ reduceren naar een reguliere taal $L_2=\accl{1}$: we laten eerst een Turing machine $M_{L_1}$ lopen op de invoer. Indien deze machine accepteert schrijven we $1$ op de tape en roepen we het orakel op, indien de machine reject, schrijven we bijvoorbeeld $0$ naar de tape.
  \item 
 \end{enumerate}
 \end{answer}
@@ -47,7 +47,6 @@ Schrijf de volgende primitief recursieve functies met behulp van compositie, pri
 \begin{answer}~~
 \begin{enumerate}
  \item $\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prpr{\prnul}{\prcn{\prpr{\prp{1}{1}}{\prcn{\prsucc}{\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}$
- \item $\prpr{\prnul}{\prp{3}{2}}$
  \item $\prpr{\prnul}{\prp{3}{2}}$
 \end{enumerate}
 \end{answer}

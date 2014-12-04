@@ -15,7 +15,10 @@
 \begin{question}
 Een \emph{`blijf staan Turing machine'} verschilt van een gewone Turing machine doordat de head naar rechts kan bewegen of kan blijven staan, maar niet naar links kan bewegen. Toon aan dat deze variant van Turing machines niet equivalent is met de originele variant. Welke talen worden herkend door `blijf staan Turing machines'?
 \begin{answer}
-De verzameling van talen die beslist kan worden met zo'n machine is equivalent aan de verzameling van reguliere talen. %TODO
+De verzameling van talen die beslist kan worden met zo'n machine is equivalent aan de verzameling van reguliere talen. We bewijzen de equivalentie:
+\begin{proof}
+
+\end{proof}
 \end{answer}
 \end{question}
 
@@ -36,7 +39,17 @@ Op basis van dit lemma kunnen we gegeven een DFA bepalen of de taal die de DFA b
 \begin{question}
 Is $VIJF_{\rm DFA} = \{ \langle A \rangle \ | \ \text{$A$ is een DFA en $L(A)$ bestaat uit precies 5 strings} \} $ beslisbaar? Bewijs je antwoord.
 \begin{answer}
+Ja.
+\begin{proof}
+We bewijzen dit aan de hand van het minimalisatie-lemma:
+\begin{lemma}
+De minimale DFA is uniek, op grafe-isomorfisme na.
+\begin{proof}
+Het bewijs van dit lemma staat in de cursus.
+\end{proof}
+\end{lemma}
 
+\end{proof}
 \end{answer}
 \end{question}
 
@@ -47,7 +60,13 @@ Toon aan dat de vraag of een context-vrije grammatica minstens \'e\'en string ui
 \begin{question}
 Zij $A$ en $B$ twee disjuncte talen die co-Turing-herkenbaar zijn. Toon aan dat er een beslisbare taal $C$ bestaat zodanig dat $A \subseteq C$ en $B \subseteq \overline{C}$.
 \begin{answer}
-
+We introduceren eerst het concept van ``parallel lopen'', dit is een concept die in heel wat beslissingsvraagstukken een rol kan spelen. Een universele Turing machine is een Turing machine die de beschrijving van een Turing machine inleest en deze vervolgens kan uitvoeren op een string. Met andere woorden een programma die een programma uitvoert. Het is een kleine stap om een universele Turing machine om te bouwen tot een machine die de beschrijving van twee Turing machines als invoer neemt, en vervolgens vervlochten\footnote{Engels: interleaved.} eerst een stap op de ene Turing machine uitvoert, en daarna een stap op de andere. We nemen aan dat dit kan.
+\paragraph{}
+Met deze tool kunnen we een Turing machine bouwen voor $C$, de Turing machine laat de co-herkenners voor $A$ en $B$ ``parallel'' lopen. Als de Turing machine voor $A$ accepteert, accepteren we ook, als de Turing machine voor $B$ accepteert, verwerpen we de string. Een string die door beide machine geaccepteerd zou worden, wordt dus beslist op basis van de machine die het eerste accepteert\footnote{En indien dit in dezelfde stap gebeurd, spreken we een tie-breaker af, bijvoorbeeld dat co-herkenner voor $A$ prioriteit krijgt.}.
+\paragraph{}
+Het is duidelijk dat de taal $C$ aan de voorwaarden voldoet: indien de co-herkenner voor $A$ beslist, betekent dit dat 
+\paragraph{}
+We dienen ook nog aan te tonen dat de machine een beslisser is.
 \end{answer}
 \end{question}
 

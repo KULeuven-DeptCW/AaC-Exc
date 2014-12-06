@@ -98,19 +98,29 @@ We introduceren eerst het concept van ``parallel lopen'', dit is een concept die
 \paragraph{}
 Met deze tool kunnen we een Turing machine bouwen voor $C$, de Turing machine laat de co-herkenners voor $A$ en $B$ ``parallel'' lopen. Als de Turing machine voor $A$ accepteert, verwerpen we, als de co-herkenner voor $B$ accepteert, accepteren we de string. Een string die door beide machine geaccepteerd zou worden, wordt dus beslist op basis van de machine die het eerste accepteert\footnote{En indien dit in dezelfde stap gebeurd, spreken we een tie-breaker af, bijvoorbeeld dat co-herkenner voor $A$ prioriteit krijgt. Dit is echter volledig arbitrair: elke tie-breaker is te verdedigen.}.
 \paragraph{}
-Het is duidelijk dat de taal $C$ aan de voorwaarden voldoet: indien onze beslisser voor $C$ verwerpt 
+Het is duidelijk dat de taal $C$ aan de voorwaarden voldoet: uit $A\subseteq C$ volgt dat indien een string $s$ niet in $C$ zit, deze ook niet in $A$ zit. De enige mogelijkheid waarom onze beslisser een string verwerpt is echter omdat de co-herkenner voor $A$ accepteert. De voorwaarde is dus rechtstreeks voldaan. Analoog betekent $B\subseteq\overline{C}$ dat indien indien onze beslisser een string aanvaard, deze niet tot $B$ mag behoren, wat ook rechtstreeks terug te vinden is in de beschrijving van ons algoritme. De specificaties in de vraag scheppen dus geen voorwaarden wat men moet doen wanneer beide co-herkenners (tegelijk) aantonen dat een string niet tot de taal behoort.
 \paragraph{}
-We dienen ook nog aan te tonen dat de machine een beslisser is: het algoritme moet altijd stoppen. 
+We dienen ook nog aan te tonen dat de machine een beslisser is: het algoritme moet altijd stoppen. Dit volgt uit de disjunctie van $A$ en $B$. Immers volgt uit $A\cap B=\emptyset$ dat $\overline{A\cap B}=\Sigma^{\star}$ en $\overline{A}\cup\overline{B}=\Sigma^{\star}$. Met andere woorden, voor elke string zal minstens \'e\'en van de co-herkenners ooit aantonen dat de string niet in de taal zit.
 \end{answer}
 \end{question}
 
 \begin{question}
 Een \emph{Turing machine met RESET} verschilt van een gewone Turing machine doordat de head enkel naar rechts kan bewegen of in \'e\'en stap helemaal aan het begin van de tape gezet kan worden. De transitiefunctie van zo een machine is dus van de vorm $\delta : Q \times \Gamma \to Q \times \Gamma \times \{ \text{R}, \text{RESET} \}$. Toon aan dat deze variant van Turing machines equivalent is met de originele variant.
 \begin{answer}
+We bewijzen in twee richtingen:
+\begin{enumerate}
+\item Een ``originele Turing machine'' is even krachtig als een ``Turing machine met RESET''.
+\begin{proof}
+We kunnen vanuit een ``Turing machine met RESET'' $T_1$ een ``originele Turing machine'' $T_2$ constureren door het tape-alfabet $\Gamma$ te dupliceren $\Gamma'=\Gamma\cup\condset{\gamma'}{\gamma\in\Gamma}$. De Turing machine markeert vervolgens eerst de beginpositie van de tape door het karakter die daar staat $\gamma$ te vervangen door $\gamma'$. Wanneer $T_1$ naar rechts beweegt doen we dit ook op $T_2$, we behandelen de karakters met of zonder marker allemaal alsof het karakters zijn zonder marker. Wanneer we karakters wegschrijven doen we dit zonder marker (behalve op de beginpositie). Indien $T_1$ de RESET-functie oproept, komen we in een speciale toestand terecht die terugkeert op de band tot het het karakter op de band vindt die gemarkeerd is. Vervolgens voert het de beschreven overgang uit, maar markeert ook het uitvoer-symbool (zodat we kunnen blijven bijhouden waar de tape begint).
+\end{proof}
+\item Een ``Turing machine met RESET'' is even krachtig als een ``originele Turing machine''.
+\begin{proof}
 Hiervoor maken we gebruik van een constructie die we informeel beschrijven:
 \begin{construction}
-
+Gegeven een originele Turing machine $\tupl{Q,\Sigma,\Gamma,\delta,q_s,q_a,q_r}$ beschrijven we de constructie van een 
 \end{construction}
+\end{proof}
+\end{enumerate}
 \end{answer}
 \end{question}
 \end{document}

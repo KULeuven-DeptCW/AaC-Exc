@@ -1,0 +1,6 @@
+<STMT>:<MATCHED> | <UNMATCHED>.
+<MATCHED>:"if","condition","then",<MATCHED>,"else",<MATCHED>.
+<MATCHED>:<ASSIGN>.
+<UNMATCHED>:"if","condition","then",<MATCHED>,"else",<UNMATCHED>.
+<UNMATCHED>:"if","condition","then",<STMT>.
+<ASSIGN>:"a := 1".

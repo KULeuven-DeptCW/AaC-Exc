@@ -29,10 +29,16 @@ Zijn de volgende uitspraken waar of niet? Bewijs je antwoord.
 \end{enumerate}
 \begin{answer}~~
 \begin{enumerate}
- \item Waar: we kunnen immers over alle mogelijke strings itereren, en telkens beslissen of een string $s$ inderdaad tot de gegeven context-vrije grammatica's behoort. Indien dit voor juist \'e\'en contextvrije grammatica het geval is, rejecten we de twee contextvrije grammatica's.
- \item 
- \item Niet waar, we kunnen immers elke Turing complete taal $L_1$ reduceren naar een reguliere taal $L_2=\accl{1}$: we laten eerst een Turing machine $M_{L_1}$ lopen op de invoer. Indien deze machine accepteert schrijven we $1$ op de tape en roepen we het orakel op, indien de machine reject, schrijven we bijvoorbeeld $0$ naar de tape.
- \item 
+ \item \textbf{Waar}: we kunnen immers over alle mogelijke strings itereren, en telkens beslissen of een string $s$ inderdaad tot de gegeven context-vrije grammatica's behoort. Indien dit voor juist \'e\'en contextvrije grammatica het geval is, rejecten we de twee contextvrije grammatica's.
+ \item \textbf{Waar}: Gegeven een $A_{\rm TM}$ query $\tupl{s,M}$, we manipuleren eerst $M$ naar $M'$ die de omgekeerde taal beslist, dit doen we door $q_a$ en $q_r$ om te wisselen. $M'$ accepteert dus een string $s$ wanneer $M$ deze reject en vice versa. Vervolgens manipuleren we $M'$ verder door een preprocessing stap te voorzien: we controleren of de invoer string $x$ gelijk is aan $s$ (die gehardwired is), indien dit niet het geval is, rejecten we onmiddellijk. In het andere geval laten we $M'$ lopen op $s$. Het gevolg is dat $M''$ de lege taal beslist indien $s$ geaccepteerd zou worden door $M$.
+ \item \textbf{Niet waar}: we kunnen immers elke Turing complete taal $L_1$ reduceren naar een reguliere taal $L_2=\accl{1}$: we laten eerst een Turing machine $M_{L_1}$ lopen op de invoer. Indien deze machine accepteert schrijven we $1$ op de tape en roepen we het orakel op, indien de machine reject, schrijven we bijvoorbeeld $0$ naar de tape.
+ \item \textbf{Waar}: We bewijzen in twee richtingen:
+ \begin{proof}
+ Indien een taal $L$ herkenbaar is, bestaat er een Turing machine $M_L$ die de taal herkent. We kunnen de taal $L$ dan reduceren naar $A_{\rm TM}$ door een query $s$ om te vormen naar $\tupl{s,M_L}$ (met een hardwired Turing machine).
+ \end{proof}
+ \begin{proof}
+  Indien een taal Turing gereduceerd kan worden naar $A_{\rm TM}$ kunnen we een herkenner construeren voor deze taal: de herkenner past eerst de invoer aan volgens de reductie en draait vervolgens $s$ (mogelijk is de invoer ook verandert) op de gegeven Turing machine. Indien de Turing machine ooit accepteert, accepteert de herkenner.
+ \end{proof}
 \end{enumerate}
 \end{answer}
 \end{question}
@@ -48,6 +54,7 @@ Schrijf de volgende primitief recursieve functies met behulp van compositie, pri
 \begin{enumerate}
  \item $\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prpr{\prnul}{\prcn{\prpr{\prp{1}{1}}{\prcn{\prsucc}{\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}$
  \item $\prpr{\prnul}{\prp{3}{2}}$
+ \item $\prpr{\prp{1}{1}}{\prp{3}{2}}$
 \end{enumerate}
 \end{answer}
 \end{question}

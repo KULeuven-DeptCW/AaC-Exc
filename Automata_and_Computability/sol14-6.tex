@@ -36,9 +36,23 @@ Gegeven een `blijf staan Turing machine' $\tupl{Q,\Sigma,\Gamma,\delta,q_s,q_a,q
 \begin{enumerate}
  \item regels waarbij de lees/schrijf-kop naar rechts beweegt. Omdat de lees/schrijfkop enkel naar rechts kan bewegen of blijft staan is wat we schrijven irrelevant.
  \item regels waarbij de lees/schrijf-kop blijft staan. In dat geval schrijven we een karakter weg, die onmiddellijk weer zal worden ingelezen door de volgende toestand.
-Een DFA ``schuift'' bij elke invoer altijd onmiddellijk op naar rechts. We dienen dus eerst overgangsregels van de tweede soort te elimineren. Dit doen we door volgende reductie te blijven toepassen op de verzameling regels, tot er geen kandidaten meer gevonden kunnen worden.
+Een DFA ``schuift'' bij elke invoer altijd onmiddellijk op naar rechts. We dienen dus eerst overgangsregels van de tweede soort te elimineren. Dit doen we door volgende reductie te blijven toepassen op de verzameling regels, tot er geen kandidaten meer gevonden kunnen worden:
+\begin{quote}
+Voor elke twee overgangsregels $1:\tupl{q_1,\gamma_1}\rightarrow\tupl{q_2,\gamma_2,S}$ en $2:\tupl{q_2,\gamma_2}\rightarrow\tupl{q_3,\gamma_3,m}$, vervang de regel door $\tupl{q_1,\gamma_1}\rightarrow\tupl{q_3,\gamma_3,m}$. $m$ kan hier ofwel $S$ ofwel $R$ zijn. Behouw de tweede regel tot er geen kandidaten meer voor de eerste regel bestaan.
+\end{quote}
 \end{enumerate}
-
+Het resultaat van deze omzetting herhaaldelijk toe te passen is dat de Turing machine enkel nog naar rechts beweegt. We hebben de overgangen waar de Turing machine bleef staan, ``kortgesloten''. Het is niet helemaal uitgesloten dat er niet nog een blijf staan instructies in de Turing machine staat: dit is het gevolg van een lus van van blijf staan instructies in de originele Turing machine. In dat geval komt de Turing machine dus in een oneindige lus terecht, en horen we de string te verwerpen.
+\paragraph{}
+We modificeren de Turing machine verder door toestanden die niet bereikbaar zijn vanuit $q_s$ te verwijderen. Nu dienen we de gemodificeerde ``blijf staan Turing machine'' nog om te zetten naar een DFA. Dit doen we met volgende constructie.
+\begin{construction}
+Gegeven de gemodificeerde ``blijf staan Turing machine'' $\tupl{Q,\Sigma,\Gamma,\delta,q_s,q_a,q_r}$, we construeren een DFA $\tupl{Q,\Sigma,\delta',q_s,F}$ als volgt:
+\begin{eqnarray}
+F&=&\accl{q_a}\\
+\forall q\in Q\setminus\accl{q_a,q_r},\sigma\in\Sigma:\fun{\delta'}{q,\sigma}&=&\acclguard{q_r&\xif m=S\\q'&\xotherwise}\xwhere\tupl{q',\sigma',m}=\fun{\delta}{q,\sigma}\\
+\forall q\in\accl{q_a,q_r}\forall\sigma\in\Sigma:\fun{\delta'}{q,\sigma}&=&q
+\end{eqnarray}
+\end{construction}
+We beschouwen dus dezelfde verzameling toestanden. Maar de $q_r$ en $q_a$ toestand, zijn toestanden waarin de DFA blijft zitten tot alle karakters zijn opgebruikt. Enkel in het geval van $q_a$ accepteren we ook. Voor de overige toestanden volgen we de overgangsfunctie van de gemodificeerde Turing machine. Indien deze machine echter blijft stilstaan, geraken we in een oneindige lus. Dit lossen we op door naar deze strings af te leiden naar $q_r$.
 \end{proof}
 \end{enumerate}
 \end{answer}
@@ -55,7 +69,6 @@ Een DFA beslist een oneindige taal indien oneindig veel paden in een accepterend
 \end{lemma}
 Op basis van dit lemma kunnen we gegeven een DFA bepalen of de taal die de DFA beslist oneindig is: we voeren eerst een lusdetectie algoritme uit. Vervolgens voeren we een bereikbaarheidsanalyse uit op de lussen. Indien minstens \'e\'en lus nog een accepterende toestand bereikt . Het beschreven algoritme werkt in \bigoh{n^4}, met $n$ het aantal toestanden. Een intelligenter algoritme werkt echter in \bigoh{n^2} wat een bewezen optimale tijdscomplexiteit is.
 \end{answer}
-
 \end{question}
 
 \begin{question}
@@ -63,20 +76,19 @@ Is $VIJF_{\rm DFA} = \{ \langle A \rangle \ | \ \text{$A$ is een DFA en $L(A)$ b
 \begin{answer}
 Ja.
 \begin{proof}
-We bewijzen dit aan de hand van het minimalisatie-lemma:
-\begin{lemma}
-De minimale DFA is uniek, op grafe-isomorfisme na.
-\begin{proof}
-Het bewijs van dit lemma staat in de cursus.
+We kunnen eerst de vorige oefening gebruiken om te controleren of de DFA een eindige taal beslist. Indien de DFA $n$ toestanden bevat en geen oneindige taal beslist, kunnen de strings hoogstens een lengte $n$ hebben, immers zouden we om een string met een lengte groter dan $n$ te accepteren, gebruik moeten maken van een lus om in een accepterende toestand terecht te komen, waardoor de taal oneindig is. We kunnen vervolgens alle strings tot en met lengte $n$ opsommen en op de DFA laten lopen. Wanneer er precies $5$ zo'n strings worden geaccepteerd, accepteren we. Anders rejecten we. Het algoritme werkt dus in \bigoh{n^4+\abs{\Sigma}^n}.
 \end{proof}
-\end{lemma}
-
-\end{proof}
+\begin{note}
+Een effici\"enter maar ook complexer algoritme maakt gebruik van DFA minimalisatie.
+\end{note}
 \end{answer}
 \end{question}
 
 \begin{question}
 Toon aan dat de vraag of een context-vrije grammatica minstens \'e\'en string uit $1^*$ kan genereren, beslisbaar is.
+\begin{answer}
+De doorsnede van een context-vrije taal met een reguliere taal is een context-vrije taal. We hebben hiervoor een constructie gezien in een vorige oefenzitting. Men kan dus een PDA construeren die de doorsnede beslist. We vormen vervolgens die PDA om tot een equivalente context-vrije grammatica. Stelling $10.5$ beschrijft vervolgens op hoog niveau een algoritme die bepaalt of een gegeven context-vrije grammatica een lege taal beslist. Indien de resulterende taal leeg is, verwerpen we de grammatica, anders aanvaarden we de grammatica.
+\end{answer}
 \end{question}
 
 \begin{question}
@@ -84,19 +96,21 @@ Zij $A$ en $B$ twee disjuncte talen die co-Turing-herkenbaar zijn. Toon aan dat 
 \begin{answer}
 We introduceren eerst het concept van ``parallel lopen'', dit is een concept die in heel wat beslissingsvraagstukken een rol kan spelen. Een universele Turing machine is een Turing machine die de beschrijving van een Turing machine inleest en deze vervolgens kan uitvoeren op een string. Met andere woorden een programma die een programma uitvoert. Het is een kleine stap om een universele Turing machine om te bouwen tot een machine die de beschrijving van twee Turing machines als invoer neemt, en vervolgens vervlochten\footnote{Engels: interleaved.} eerst een stap op de ene Turing machine uitvoert, en daarna een stap op de andere. We nemen aan dat dit kan.
 \paragraph{}
-Met deze tool kunnen we een Turing machine bouwen voor $C$, de Turing machine laat de co-herkenners voor $A$ en $B$ ``parallel'' lopen. Als de Turing machine voor $A$ accepteert, accepteren we ook, als de Turing machine voor $B$ accepteert, verwerpen we de string. Een string die door beide machine geaccepteerd zou worden, wordt dus beslist op basis van de machine die het eerste accepteert\footnote{En indien dit in dezelfde stap gebeurd, spreken we een tie-breaker af, bijvoorbeeld dat co-herkenner voor $A$ prioriteit krijgt.}.
+Met deze tool kunnen we een Turing machine bouwen voor $C$, de Turing machine laat de co-herkenners voor $A$ en $B$ ``parallel'' lopen. Als de Turing machine voor $A$ accepteert, verwerpen we, als de co-herkenner voor $B$ accepteert, accepteren we de string. Een string die door beide machine geaccepteerd zou worden, wordt dus beslist op basis van de machine die het eerste accepteert\footnote{En indien dit in dezelfde stap gebeurd, spreken we een tie-breaker af, bijvoorbeeld dat co-herkenner voor $A$ prioriteit krijgt. Dit is echter volledig arbitrair: elke tie-breaker is te verdedigen.}.
 \paragraph{}
-Het is duidelijk dat de taal $C$ aan de voorwaarden voldoet: indien de co-herkenner voor $A$ beslist, betekent dit dat 
+Het is duidelijk dat de taal $C$ aan de voorwaarden voldoet: indien onze beslisser voor $C$ verwerpt 
 \paragraph{}
-We dienen ook nog aan te tonen dat de machine een beslisser is.
+We dienen ook nog aan te tonen dat de machine een beslisser is: het algoritme moet altijd stoppen. 
 \end{answer}
 \end{question}
 
 \begin{question}
 Een \emph{Turing machine met RESET} verschilt van een gewone Turing machine doordat de head enkel naar rechts kan bewegen of in \'e\'en stap helemaal aan het begin van de tape gezet kan worden. De transitiefunctie van zo een machine is dus van de vorm $\delta : Q \times \Gamma \to Q \times \Gamma \times \{ \text{R}, \text{RESET} \}$. Toon aan dat deze variant van Turing machines equivalent is met de originele variant.
 \begin{answer}
+Hiervoor maken we gebruik van een constructie die we informeel beschrijven:
+\begin{construction}
 
+\end{construction}
 \end{answer}
 \end{question}
-
 \end{document}

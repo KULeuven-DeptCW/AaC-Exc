@@ -15,10 +15,32 @@
 \begin{question}
 Een \emph{`blijf staan Turing machine'} verschilt van een gewone Turing machine doordat de head naar rechts kan bewegen of kan blijven staan, maar niet naar links kan bewegen. Toon aan dat deze variant van Turing machines niet equivalent is met de originele variant. Welke talen worden herkend door `blijf staan Turing machines'?
 \begin{answer}
-De verzameling van talen die beslist kan worden met zo'n machine is equivalent aan de verzameling van reguliere talen. We bewijzen de equivalentie:
+De verzameling van talen die beslist kan worden met zo'n machine is equivalent aan de verzameling van reguliere talen. We bewijzen de equivalentie in twee richtingen.
+\begin{enumerate}
+ \item Elke reguliere taal kan belist worden door een `blijf staan Turing machine':
 \begin{proof}
+Gegeven een reguliere taal $L$, dan bestaat er een DFA $\tupl{Q,\Sigma,\delta,q_s,F}$ die deze taal beslist. We kunnen aan de hand van volgende constructie een Turing machine bouwen die dezelfde taal beslist.
+\begin{construction}
+We construeren een Turing machine $\tupl{Q\cup\accl{q_a,q_f},\Sigma,\Sigma\cup\accl{\#},\delta',q_s,q_a,q_f}$ met:
+\begin{eqnarray}
+\forall q\in Q,\sigma\in\Sigma:\fun{\delta'}{q,\sigma}&=&\tupl{\fun{\delta}{q,\sigma},\#,R}\\
+\forall q\in F,\sigma\in\Sigma:\fun{\delta'}{q,\#}&=&\tupl{q_a,\#,R}\\
+\forall q\in Q\setminus F,\sigma\in\Sigma:\fun{\delta'}{q,\#}&=&\tupl{q_r,\#,R}
+\end{eqnarray}
+\end{construction}
+De Turing machine redeneert dus over dezelfde verzameling toestanden en maakt dezelfde overgangen als de DFA. Verder gaat de machine telkens naar rechts. Wat er geschreven wordt op de tape is in principe irrelevant (hier $\#$, maar elk karakter $\gamma\in\Gamma$ is correct). Wanneer we het einde van de invoer bereiken, kijken we of we in een accepterende toestand van de DFA zaten. Indien zo nemen we de overgang naar de accept-toestand $q_a$, anders verwerpen we met $q_r$.
+\end{proof}
+ \item Elke `blijf staan Turing machine' beslist een reguliere taal:
+\begin{proof}
+Gegeven een `blijf staan Turing machine' $\tupl{Q,\Sigma,\Gamma,\delta,q_s,q_a,q_r}$. Dan zijn er twee soorten regels:
+\begin{enumerate}
+ \item regels waarbij de lees/schrijf-kop naar rechts beweegt. Omdat de lees/schrijfkop enkel naar rechts kan bewegen of blijft staan is wat we schrijven irrelevant.
+ \item regels waarbij de lees/schrijf-kop blijft staan. In dat geval schrijven we een karakter weg, die onmiddellijk weer zal worden ingelezen door de volgende toestand.
+Een DFA ``schuift'' bij elke invoer altijd onmiddellijk op naar rechts. We dienen dus eerst overgangsregels van de tweede soort te elimineren. Dit doen we door volgende reductie te blijven toepassen op de verzameling regels, tot er geen kandidaten meer gevonden kunnen worden.
+\end{enumerate}
 
 \end{proof}
+\end{enumerate}
 \end{answer}
 \end{question}
 

@@ -86,7 +86,9 @@ Een $k$-PDA is een PDA met $k$ stacks. Een $0$-PDA is dus een NFA en een $1$-PDA
  \end{proof}
  \item ~~
  \begin{proof}
- Een Turing machine bestaat uit een tape die oneindig in de twee richtingen werkt. Dit kunnen we simuleren aan de hand van twee stapels. De eerste stapel 
+Een Turing machine bestaat uit een tape die oneindig in de twee richtingen werkt. Dit kunnen we simuleren aan de hand van twee stapels. De eerste stapel houdt de karakters links van de lees/schrijfkop bij. Het ``top''-element van de stapel, is het karakter dat precies \'e\'en plaats links staat van de lees/schrijfkop, de elementen onder de top staan telkens \'e\'en plaats verder naar links. Analoog geldt hetzelfde voor rechts op de tweede stapel. De toestand van de $2$-PDA zelf houdt de toestand van de Turing machine bij alsook het actieve karakter: het karakter die zich op dat moment onder de lees/schrijfkop bevindt.
+\paragraph{}
+Wanneer de leeskop bijvoorbeeld naar links beweegt, zetten we het karakter die we in de toestand hebben opgeslagen op de tweede stapel. We halen het bovenste element van de eerste stapel, en dit wordt het nieuwe ``actieve karakter''. Analoog doen we hetzelfde voor een beweging naar rechts. Verder respecteren we de transities van de Turing machine.
  \end{proof}
 \end{enumerate}
 \begin{note}

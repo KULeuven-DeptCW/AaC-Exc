@@ -30,7 +30,7 @@ Zijn de volgende uitspraken waar of niet? Bewijs je antwoord.
 \begin{answer}~~
 \begin{enumerate}
  \item \textbf{Waar}: we kunnen immers over alle mogelijke strings itereren, en telkens beslissen of een string $s$ inderdaad tot de gegeven context-vrije grammatica's behoort. Indien dit voor juist \'e\'en contextvrije grammatica het geval is, rejecten we de twee contextvrije grammatica's.
- \item \textbf{Waar}: Gegeven een $A_{\rm TM}$ query $\tupl{s,M}$, we manipuleren eerst $M$ naar $M'$ die de omgekeerde taal beslist, dit doen we door $q_a$ en $q_r$ om te wisselen. $M'$ accepteert dus een string $s$ wanneer $M$ deze reject en vice versa. Vervolgens manipuleren we $M'$ verder door een preprocessing stap te voorzien: we controleren of de invoer string $x$ gelijk is aan $s$ (die gehardwired is), indien dit niet het geval is, rejecten we onmiddellijk. In het andere geval laten we $M'$ lopen op $s$. Het gevolg is dat $M''$ de lege taal beslist indien $s$ geaccepteerd zou worden door $M$.
+ \item \textbf{Niet waar}: Een logisch gevolg van $A_{\rm TM}\leq_mE_{\rm TM}$ is dat $\overline{A_{\rm TM}}\leq_m\overline{E_{\rm TM}}$ (zie definitie $16.2$). We weten dat $E_{\rm TM}$ co-herkenbaar is, terwijl $A_{\rm TM}$ herkenbaar maar niet beslisbaar is. Het bestaan van een reductie zou dus impliceren dat $A_{\rm TM}$ wel herkenbaar is, en bijgevolg beslisbaar. Uit stelling $8.1$ weten we echter dat dit niet zo is. Dus inconsistentie.
  \item \textbf{Niet waar}: we kunnen immers elke Turing complete taal $L_1$ reduceren naar een reguliere taal $L_2=\accl{1}$: we laten eerst een Turing machine $M_{L_1}$ lopen op de invoer. Indien deze machine accepteert schrijven we $1$ op de tape en roepen we het orakel op, indien de machine reject, schrijven we bijvoorbeeld $0$ naar de tape.
  \item \textbf{Waar}: We bewijzen in twee richtingen:
  \begin{proof}
@@ -52,9 +52,13 @@ Schrijf de volgende primitief recursieve functies met behulp van compositie, pri
 \end{enumerate}
 \begin{answer}~~
 \begin{enumerate}
- \item $\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prpr{\prnul}{\prcn{\prpr{\prp{1}{1}}{\prcn{\prsucc}{\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}$
- \item $\prpr{\prnul}{\prp{3}{2}}$
- \item $\prpr{\prp{1}{1}}{\prp{3}{2}}$
+ \item $\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\mbox{product}}{\prp{3}{1},\prp{3}{3}}}$ of voluit: \begin{equation}\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prpr{\prnul}{\prcn{\prpr{\prp{1}{1}}{\prcn{\prsucc}{\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}}{\prp{3}{1},\prp{3}{3}}}\end{equation}
+ \item $\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}$. De compositie-functie dient hier enkel om een virtuele eerste parameter te injecteren in de primitieve recursie: $\prnul$ mag in de \textbf{compositie} dan ook vervangen worden door eender welke functie met signatuur $\NNN\rightarrow\NNN$.
+ \item Eerst introduceren we een helper-functie $\mbox{min}$. $\mbox{min}$ neemt twee argumenten $a$ en $b$ en berekent $a-b$, maar geeft $0$ terug indien $b\geq a$:\begin{equation}\prpr{\prp{1}{1}}{\prcn{\mbox{pred}}{\prp{3}{3}}}\end{equation}
+ Vervolgens is $\mbox{dif}$ gelijk aan $\funm{min}{x,y}+\funm{min}{y,x}$:\begin{equation}\prcn{\mbox{som}}{\mbox{min},\prcn{\mbox{min}}{\prp{2}{2},\prp{2}{1}}}\end{equation}. Voluit schrijven we de functie dus als:
+ \begin{equation}
+  \prcn{\prpr{\prp11}{\prcn{\prsucc}{\prp33}}}{\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}},\prcn{\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}}}{\prp{2}{2},\prp{2}{1}}}
+ \end{equation}
 \end{enumerate}
 \end{answer}
 \end{question}

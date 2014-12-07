@@ -115,10 +115,25 @@ We kunnen vanuit een ``Turing machine met RESET'' $T_1$ een ``originele Turing m
 \end{proof}
 \item Een ``Turing machine met RESET'' is even krachtig als een ``originele Turing machine''.
 \begin{proof}
-Hiervoor maken we gebruik van een constructie die we informeel beschrijven:
-\begin{construction}
-Gegeven een originele Turing machine $\tupl{Q,\Sigma,\Gamma,\delta,q_s,q_a,q_r}$ beschrijven we de constructie van een 
-\end{construction}
+Een ``Turing machine met RESET'' heeft slechts een oneindige band in \'e\'en richting: immers kunnen we hoogstens terugkeren naar het beginpunt, we kunnen dus de kop onmogelijk links van dit punt bewegen. Dit kunnen we oplossen door de band ``samen te plooien'': daar de band origineel bestond uit de karakters:
+\begin{equation}
+\ldots,l_3,l_2,l_1,s,r_1,r_2,r_3,\ldots
+\end{equation}
+Beschouwen we nu een tape met eerst het start-element $s$ en vervolgens afwisselend een element naar links en naar rechts:
+\begin{equation}
+s,l_1,r_1,l_2,r_2,l_3,r_3,\ldots
+\end{equation}
+Het vraagt enige extra boekhouding on een Turing machine aan te passen (men dupliceert bijvoorbeeld de toestanden: een toestand die stelt dat de Turing machine op het ``linkse gedeelte'' van de tape zit een een toestand voor het ``rechtse'' gedeelte), alsook dient men toestanden te voorzien zodat men sprongen van twee naar links en naar rechts kan maken, maar men kan een compiler bouwen die een Turing machine volgens dit paradigma laat werken. We hebben dus aangetoond dat een Turing machine die werkt met een tape oneindig in twee richtingen precies even sterk is als een Turing machine met een tape oneindig in juist \'e\'en richting.
+
+Vervolgens beschrijven we informeel hoe we de bewegingen naar links en blijven staan op deze Turing machine, kunnen emuleren op een ``Turing machine met RESET''. Dit is gebaseerd op een verdrievoudiging van het tape-alfabet $\Gamma$. De eerste reeks zijn de originele karakters, de tweede reeks de karakters met een marker voor de positie van de lees/schrijfkop en de derde reeks zijn gok-markers.
+\paragraph{}
+De hoofdmarker beschrijft waar de kop zich bevindt op de tape. Indien de tape dus het karakter $a$ bevat, en het hoofd is daaronder gevestigd, dient er voortaan $\hat{a}$ te staan. Wanneer de Turing machine dus naar rechts beweegt, dient hij een karakter weg te schrijven zonder marker. De kop is er immers al gepasseerd.
+\paragraph{}
+Wanneer de originele Turing machine blijft staan, wordt dit door de ``Turing machine met RESET'' ge\"emuleerd door een karakter met marker weg te schrijven onder de tape en vervolgens een RESET beweging uit te voeren. Vervolgens beweegt men de kop weer naar rechts tot men het symbool met de marker tegenkomt waarna men verder gaat met het originele programma. Merk op dat men ook de toestand moet bijhouden waarin men zich bevond voor de RESET. Dit kan men doen door per toestand een ``specifieke RESET procedure'' te ontwikkelen, of bijvoorbeeld het tape-alfabet nog verder uit te breiden zodat men voor de RESET ook de toestand weg schrijft.
+\paragraph{}
+In het geval de Turing machine naar links gaat, kunnen we de hierboven beschreven procedure niet gebruiken, immers is het ``al te laat'' wanneer we het marker karakter opmerken. We kunnen dit oplossen aan de hand van ``gok-markers''. Vlak na de RESET gokken we dat de tape zich op de start-locatie zal bevinden. We zetten dus de gok-marker en voeren een reset uit. Vervolgens schuiven we naar rechts tot we de gok-marker tegenkomen (in dit geval dus na $0$ stappen), verwijderen de gok-marker, schuiven een vakje op naar rechts en kijken of rechts van de gok-marker inderdaad de echte marker stond. Zo ja, verwijderen we de echte marker, voeren een RESET uit, lopen terug naar de gok-marker en vervolgen vanaf daar het oude programma.
+\paragraph{}
+Wanneer rechts na het vakje van de gok-marker de echte marker niet staat, hebben we ons vergist. We hebben echter de gok-marker al verwijderd, en plaatsen de gok-marker juist \'e\'en vakje meer naar rechts. We doen dus een gok dat lees/schrijfkop dan maar een positie verder naar rechts ligt. We voeren opnieuw een RESET uit en controleren onze gok. We schuiven dus de gok-marker verder op tot we uiteindelijk ooit eens juist zullen gokken en we dus de marker inderdaad naar links hebben geplaatst. Deze operatie is echter zeer arbeidsintensief en komt neer op een kwadratische tijdscomplexiteit in de lengte van de tape op dat moment.
 \end{proof}
 \end{enumerate}
 \end{answer}

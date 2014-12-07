@@ -1,0 +1,127 @@
+\documentclass[a4paper]{article}
+\usepackage[dutch]{babel}
+\usepackage{color,xypic,amsmath}
+\xyoption{all}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl}
+
+\title{Automaten en Berekenbaarheid\\Opgave \#5\\\url{http://goo.gl/1RlVG5}}
+\author{prof. B. Demoen\\W. Van Onsem}
+\date{November 2014}
+
+\newcommand{\rul}{\rightarrow}
+\newcommand{\gvar}[1]{\langle \text{{#1}} \rangle}
+\newcommand{\gend}[1]{\text{\bf{#1}}}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{question}
+Welke van de volgende talen zijn context-vrij, welke niet? Bewijs je antwoord.
+  \begin{enumerate}
+    \item $\condset{w\in \accl{0,1}^{\star}}{\mbox{$w$ is een palindroom}}$
+    \item $\condset{0^n\#0^{2n}\#0^{3n}}{n\geq 0}$
+    \item $\condset{w\in\accl{a,b,c}^{\star}}{\mbox{$w$ bevat een gelijk aantal $a$'s, $b$'s en $c$'s}}$
+    \item $\condset{xy}{\mbox{$x,y\in\accl{0,1}^{\star}$ en $\abs{x}=\abs{y}$, maar $x \neq y$}}$
+    \item $\condset{w\#x}{\mbox{$w,x\in\accl{0,1}^{\star}$ en $w$ is een substring van $x$}}$
+    \item $\condset{a^ib^jc^k}{0\leq i\leq j\leq k}$
+  \end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+\item \textbf{contextvrij}: We kunnen deze taal beslissen met volgende grammatica.
+\item \textbf{niet context-vrij}: Dit kunnen we aantonen met het pompend lemma.
+\begin{proof}
+Gegeven een string $s=O^p\#O^{2p}\#O^{3p}$ met $p$ de onbekende pomplengte. Het is duidelijk dat $\abs{s}\geq p$. Voor elke opdeling $s=uvxyz$ die voldoet aan regels (2) en (3) geldt: dat $v$ en $y$ onmogelijk een $\#$ kunnen bevatten: immers zou dit betekenen dat we door te ``pompen'' meer van deze karakters in de string kunnen introduceren, wat niet kan volgens de taal. Het gevolg is dat ofwel (1) $v$ en $y$ tot \textbf{eenzelfde} groep $O$'s behoren, ofwel (2) tot twee opeenvolgende. In het eerste geval zullen we door te ``pompen'', meer $O$'s in deze groep introduceren (immers $\abs{vy}>0$), waardoor de boekhouding niet meer klopt. In het tweede geval kunnen we misschien de boekhouding van twee opeenvolgende groepen nog laten kloppen (bijvoorbeeld dat de tweede groep dubbel zoveel $O$'s als de eerste groep bevat), maar we kunnen enkel de karakters in twee groepen laten groeien, terwijl ze in alle drie de groepen volgens de gestelde wetmatigheid moeten groeien. Bijgevolg bestaat er geen geldige opdeling.
+\end{proof}
+\item \textbf{niet context-vrij}: Dit kunnen we aantonen met het pompend lemma.
+\begin{proof}
+We beschouwen de string $s=a^pb^pc^p$ met $p$ de pomplengte. Wanneer we $s$ opdelen in $s=uvxyz$ zodat de twee laatste voorwaarden voldoen, betekent dit dat $v$ en $y$ ofwel uit strings van hetzelfde karakter bestaan (dus $v,y\in a^{\star}$), ofwel uit twee opeenvolgende karakters (bijvoorbeeld $u\in aa^{\star}$ en $y\in a^{\star}bb^{\star}$). Het is echter onmogelijk dat $v$ en $y$ strings zijn die bestaan uit alle drie de karakters. Bij het ``pompen'' zal echter minstens \'e\'en van de karakters in aantal toenemen. Omdat ze niet alle drie kunnen toenemen, is aan de voorwaarde van de taal niet meer voldaan. Dus inconsistentie.
+\end{proof}
+\item \textbf{niet context-vrij}: We nemen eerst de doorsnede met de taal $01^{\star}0^{\star}1\#01^{\star}0^{\star}1$, de resulterende taal is bijgevolg gelijk aan $L'=\condset{01^p0^q1\#01^p0^q1}{p,q\in\NNN}$. Omdat de doorsnede van een context-vrije en een reguliere taal altijd een contextvrije taal is, volstaat het aan te tonen dat $L'$ niet context-vrij is.
+\begin{proof}
+Gegeven de string $s=01^p0^p1\#01^p0^p1$. Voor elke opdeling die voldoet aan de twee laatste voorwaarden geldt, dat $v$ en $y$ ofwel behoren tot hetzelfde segment (bijvoorbeeld $v,y\in 0^{\star}$). In dat geval genereren we echter strings waarbij \'e\'en van de opeenvolgende $0$-en toeneemt, omdat de eerste $0$ en laatste $1$ zowel voor als na het $\#$ niet kunnen toenemen, dienen we dan voor $v$ en $y$ dus segmenten te kiezen die bij $s$, $p$ keer worden herhaald. Omdat deze segmenten echter zowel voor als na het $\#$ even vaak moeten voorkomen, kunnen we deze segmenten niet ``pompen''. Hetzelfde argument geldt wanneer $u$ en $y$ een verschillende segment ``pompen'', dit omdat de afstand tussen $v$ en $y$ minder dan $p$ moet zijn (voorwaarde $3$).
+\end{proof}
+\item \textbf{niet context-vrij}:
+\begin{proof}
+Stel de string $s=a^pb^pc^p$. Beschouw elke mogelijke opdeling $s=uvxyz$. Het is evident dat $v$ en $y$ telkens \'e\'en soort karakters bevatten: anders zouden we verschillende segmenten van dezelfde letter bekomen. Omdat we de string $s'=uv^2xy^2z$ bekomen door \'e\'en keer te ``pompen'', weten we dat $v$ onmogelijk $a's$ kan bevatten: immers indien dit het geval zou zijn, zou $y$ enkel $a$'s of $b$'s bevatten, waardoor de beperking $j\leq k$ zou gebroken worden. Omdat $\abs{vy}>0$ weten we dat $vy$ minstens \'e\'en $c$ moet bevatten: immers bevat $vy$ geen $a$ en mocht $vy$ enkel een $b$ bevatten, zou door de string te pompen het aantal $b's$ toenemen terwijl het aantal $c$'s gelijk blijft. Dit zou leiden tot meer $b$'s dan $c$'s.
+\paragraph{}
+We kunnen dezelfde redenering in omgekeerde zin toepassen, we kunnen immers ook \'e\'en keer negatief pompen. De string $s''=uxz$ dient immers ook in de taal te zitten. Omdat we weten dat $\abs{vxy}\leq p$, weten we zeker dat $s''$ niet de lege string is. Ook in $s''$ moeten er meer $c$'s dan $b$'s zitten. Omdat $v$ en $y$ geen $a$ bevatten, zit $a^p$ in $s''=uxz$. Maar dat impliceert dat ook $b^p$ en $c^p$ in $s''$ hoort te zitten (immers dienen er meer $b$'s en $c$'s dan $a$'s in elke string te zitten). We besluiten bijgevolg dat $\abs{vy}=0$, maar dat is in contradictie met voorwaarde $2$.
+\end{proof}
+\end{enumerate}
+\end{answer}
+\end{question}
+
+\begin{question}
+Een $k$-PDA is een PDA met $k$ stacks. Een $0$-PDA is dus een NFA en een $1$-PDA een gewone PDA. 
+\begin{enumerate}
+  \item Toon aan dat $2$-PDA's strikt sterker zijn dan $1$-PDA's. (Met andere woorden, toon aan dat de klasse van talen die met een $1$-PDA te herkennen zijn een strikte deelverzameling is van de klasse van talen die met een $2$-PDA te herkennen zijn.)
+  \item Toon aan dat $3$-PDA's even sterk zijn als $2$-PDA's.
+\end{enumerate}
+\end{question}
+\begin{answer}
+\begin{enumerate}
+\item Dit bewijzen we in twee stappen: (a) we bewijzen dat elke taal die beslist kan worden door een $1$-PDA ook door een $2$-PDA beslist kan worden, en (b) we tonen aan dat er minstens \'e\'en taal bestaat die niet door een $1$-PDA beslist kan worden, maar wel door een $2$-PDA.
+\begin{enumerate}
+ \item Dit is triviaal waar: we kunnen immers elke $1$-PDA omvormen naar een $2$-PDA waar we de tweede stapel niet gebruiken (we voorzien dus telkens een ``no operation'' overgangsregel $\epsilon\rightarrow\epsilon$).
+ \item Dit bewijzen we door aan te tonen dat de taal $\{ 0^n\#0^{2n}\#0^{3n} \ | \ n \geq 0 \}$ (zie eerder) wel beslisbaar is door een $2$-PDA. Dit staat beschreven op \figref{}. De PDA leest de eerste groep $O$'s in en zet op de eerste stapel overal $2$'en en op de tweede stapel $3$'en. Bij de tweede groep wordt de eerste stapel afgebouwd: we herschrijven een $2$ tot een $1$ en we halen $1$'en van de stack. Bij de derde groep bouwen we de tweede stack op een gelijkaardige manier af. Een $2$-PDA kan de taal dus wel beslissen.
+\end{enumerate}
+\item Dit bewijzen we aan de hand van drie deelbewijzen:
+\begin{enumerate}
+ \item een $3$-PDA is sterker dan een $2$-PDA;
+ \item een Turing machine is sterker dan een $3$-PDA; en
+ \item een $2$-PDA is sterker dan een Turing machine.
+\end{enumerate}
+ We bewijzen deze uitspraken achtereenvolgens:
+ \begin{enumerate}
+ \item ~~
+ \begin{proof}
+ Deze uitspraak is triviaal waar: we kunnen immers de derde stack negeren (bijvoorbeeld een ``no-operation'' overgangsregel. Het is evident dat wanneer we meer ``hardware'' ter beschikking krijgen, we daar onmogelijk minder talen mee kunnen beslissen.
+ \end{proof}
+ \item ~~
+ \begin{proof}
+ In de vorige oefenzittingen hebben we constructies met DFA's en PDA's zeer formeel beschreven. Bij Turing machines is dit typisch minder evident. Daarom beperken we ons tot een hoog niveau beschrijving. Men kan echter op basis hiervan een virtuele machine of een compiler ontwikkelen die wel degelijk een $3$-PDA uitvoert op een Turing machine.
+ \paragraph{}
+ We kunnen de drie stacks op een Turing machine voorstellen door ze bijvoorbeeld achtereenvolgens op de tape te plaatsen. Wanneer \'e\'en van de stapels dan groter wordt, kan dit er toe leiden dat de andere stapels naar rechts verplaatst moeten worden, iets wat men eenvoudig op een Turing machine kan implementeren. Tijdens elke stap van een $3$-PDA zal de lees/schrijfkop dus alle drie de stapels aandoen en wijzigingen maken. Men behoudt het onderscheid tussen de stapels bijvoorbeeld met een hiervoor speciaal ge\"introduceerd karakter. PDA's zijn typisch non-deterministisch van aard, maar ook dit is geen probleem: we kunnen immers alle mogelijke paden uitproberen en de ``backtrack-stack'' (ook wel ``trail'' genoemd in Prolog-systemen) ook ergens op de tape opslaan.
+ \end{proof}
+ \item ~~
+ \begin{proof}
+Een Turing machine bestaat uit een tape die oneindig in de twee richtingen werkt. Dit kunnen we simuleren aan de hand van twee stapels. De eerste stapel houdt de karakters links van de lees/schrijfkop bij. Het ``top''-element van de stapel, is het karakter dat precies \'e\'en plaats links staat van de lees/schrijfkop, de elementen onder de top staan telkens \'e\'en plaats verder naar links. Analoog geldt hetzelfde voor rechts op de tweede stapel. De toestand van de $2$-PDA zelf houdt de toestand van de Turing machine bij alsook het actieve karakter: het karakter die zich op dat moment onder de lees/schrijfkop bevindt.
+\paragraph{}
+Wanneer de leeskop bijvoorbeeld naar links beweegt, zetten we het karakter die we in de toestand hebben opgeslagen op de tweede stapel. We halen het bovenste element van de eerste stapel, en dit wordt het nieuwe ``actieve karakter''. Analoog doen we hetzelfde voor een beweging naar rechts. Verder respecteren we de transities van de Turing machine.
+ \end{proof}
+\end{enumerate}
+\begin{note}
+Merk op dat een $2$-PDA even sterk (equivalent) is als een Turing machine en er dus ook mee samenvalt.
+\end{note}
+\end{enumerate}
+\end{answer}
+\begin{question}
+Zij 
+\begin{align*}
+  \Sigma & = \{ \gend{if, condition, then, else, a:=1} \} \\
+  V & = \{ \gvar{STMT}, \gvar{IF-THEN}, \gvar{IF-THEN-ELSE}, \gvar{ASSIGN} \} \\
+\end{align*}
+  en zij $G = (V,\Sigma,R,\gvar{STMT})$ de grammatica met regels
+  \begin{align*}                                                                               
+      \gvar{STMT}          & \rul \gvar{ASSIGN} \ | \ \gvar{IF-THEN} \ | \ \gvar{IF-THEN-ELSE}  \\
+      \gvar{IF-THEN}       & \rul \gend{if condition then } \gvar{STMT} \\
+      \gvar{IF-THEN-ELSE}  & \rul \gend{if condition then } \gvar{STMT} \gend{ else } \gvar{STMT} \\
+      \gvar{ASSIGN}        & \rul \gend{a:=1} \\
+  \end{align*}
+  Toon aan dat $G$ ambigu is en construeer een niet-ambigue grammatica die dezelfde taal herkent.
+\begin{answer}
+Beschouw volgende expressie: \texttt{if condition then if condition then a := 1; else a := 1;}. Deze expressie is ambigu, omdat het niet duidelijk is tot welke \texttt{then}, de \texttt{else} behoort\footnote{Doordat de meeste talen gebruik maken van LALR parsing waarbij men geneigd is de \texttt{else} te binden aan de dichtste \texttt{then} (die nog niet gebonden is), kan het moeilijk zijn de ambiguiteit meteen te zien.}. Immers kan men dit groeperen (de haakjes tonen de oorsprong van de overgangsregels) als \texttt{(if condition then (if condition then (a := 1) else (a := 1)))} of als \texttt{(if condition then (if condition then (a := 1)) else (a := 1))}.
+\paragraph{}
+\begin{align*}
+      \gvar{STMT}       & \rul \gvar{MATCHED} \ | \ \gvar{UNMATCHED}\\
+      \gvar{MATCHED}    & \rul \gend{if condition then } \gvar{MATCHED} \gend{ else } \gvar{MATCHED}\\
+      \gvar{MATCHED}    & \rul \gvar{ASSIGN}\\
+      \gvar{UNMATCHED}	& \rul \gend{if condition then } \gvar{MATCHED} \gend{ else } \gvar{UNMATCHED} \\
+      \gvar{UNMATCHED}	& \rul \gend{if condition then } \gvar{STMT}\\
+      \gvar{ASSIGN}     & \rul \gend{a:=1} \\
+  \end{align*}
+De grammatica werkt als volgt: er zijn twee soorten statements: ``matched'' en ``unmatched''. In het geval van ``matched'' bevat de regel altijd een bijbehorende \texttt{else} en is het evident waar de \texttt{else} met de \texttt{then} zal binden: we vereisen immers dat als er $k$ \texttt{then}'s bestaan, er ook $k$ \texttt{else}'s bestaan. ``matched'' kan verder enkel worden afgeleid naar een toekenning. In het geval van ``unmatched'', maken we gebruik van een ``dangling else''. In het geval er een \texttt{else} tot de afleiding behoort, hoort deze ``else'' te binden met ``unmatched''. Het gevolg is dus dat wanneer we een \texttt{else} tekort komen, deze altijd zal verhaalt worden op de eerste \texttt{then}. Deze grammatica zal dus een \texttt{else} binden met de dichtste \texttt{then} zoals ook het geval is in de \texttt{C/C++} taalfamilie.
+\end{answer}
+\end{question}
+\end{document}

@@ -1,0 +1,91 @@
+\documentclass[a4paper]{article}
+\usepackage[dutch]{babel}
+\usepackage{color,xypic,amsmath}
+\xyoption{all}
+\usepackage{../assignment-nl,../brackets}
+
+\title{Automaten en Berekenbaarheid\\Opgave \#7\\\url{http://goo.gl/1RlVG5}}
+\author{prof. B. Demoen\\W. Van Onsem}
+\date{November 2014}
+
+
+\begin{document}
+\maketitle
+
+\begin{question}
+Een \emph{nutteloze toestand van een TM $M$} is een toestand waarin $M$ voor geen enkele invoer kan komen. Zij $U = \{ \langle M, q \rangle \ | \ \text{$M$ is een TM en $q$ een nutteloze toestand van $M$} \}$. Toon aan dat $U$ onbeslisbaar is.
+\begin{answer}
+Indien $U_{\rm TM}$ beslisbaar zou zijn, is $E_{\rm TM}$ ook beslisbaar. We weten echter zeker dat $E_{\rm TM}$ niet beslisbaar is.
+\begin{proof}
+Stel dat er een machine $B$ bestaat die $U_{\rm TM}$ zou beslissen. Voor invoer $\tupl{M}$ voor het $E_{\rm TM}$ probleem, dan voeren we $\tupl{M,q_a}$ uit op $B$ met $q_a$ de accepterende toestand van $M$. Wanneer $B$ accepteert, wordt $\tupl{M}$ verworpen voor $E_{\rm TM}$ en vice versa. Immers zal een machine de lege taal beslissen, wanneer de machine voor geen enkele invoer string $s$ in de accepterende toestand kan terecht komen.
+\end{proof}
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat $R_{\rm DFA} = \{ \langle A \rangle \ | \ \text{$A$ is een DFA die $\widehat{w}$ aanvaardt asa hij $w$ aanvaardt} \}$ beslisbaar is. Is $R_{\rm TM} = \{ \langle M \rangle \ | \ \text{$M$ is een TM die $w$ aanvaardt asa ze $\widehat{w}$ aanvaardt} \}$ ook beslisbaar? Bewijs je antwoord.
+\begin{answer}~~
+\begin{enumerate}
+  \item $R_{\rm DFA}$ is beslisbaar. We stellen hier een algoritme voor die dit kan beslissen:
+  \begin{proof}
+  In de eerste oefenzitting hebben we getoond hoe we voor een gegeven DFA, een DFA kunnen construeren die de omgekeerde\footnote{Met omgekeerde bedoelen we hier de taal van omgekeerde strings. Niet de taal die alle strings bevat die de oorspronkelijke niet bevat.} taal beslist. Verder kunnen we door de Myhill-Nerode relaties stellen dat een minimale DFA uniek is op isomorfisme na: wanneer de geminimaliseerde versies van twee DFA's isomorf zijn met elkaar beslissen deze DFA's dus dezelfde taal en vice versa. Het algoritme minimaliseert dus eerst de gegeven DFA tot een DFA $A$, vervolgens genereren we een DFA die de omgekeerde taal beslist $B$ de geminimaliseerde versie van $B$ is $C$ en vervolgens bepalen we of $A$ en $C$ isomorf zijn met elkaar.
+  \end{proof}
+  \item $R_{\rm TM}$ is niet beslisbaar. Dit is een gevolg van de stelling van Rice. De eigenschap is immers niet triviaal: voor sommige talen is de uitspraak waar, voor andere niet; en taal-invariant: concrete details met betrekking tot de machine doen niet ter zake zolang de machines dezelfde taal beslissen.
+\end{enumerate}
+
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat de taal van alle Turing machines $M$ waarvoor er een invoer bestaat zodanig dat $M$ bij die invoer een niet-blanco symbool zal overschrijven met een blanco symbool, onbeslisbaar is.
+\begin{answer}
+Indien dit probleem beslisbaar zou zijn, zou $E_{\rm TM}$ ook beslisbaar zijn. We bewijzen dit aan de hand van een omzetting naar ons probleem.
+\begin{proof}
+Gegeven een beslisser $B$ voor het hierboven beschreven probleem. Voor een invoer $\tupl{M}$ willen we beslissen of de taal die $M$ bepaalt leeg is $L_M=\emptyset$. Dit kunnen we doen door er eerst voor te zorgen dat $M$ nooit een blanco symbool zal schrijven. Dit is niet moeilijk: we kunnen een nieuw symbool invoeren, bijvoorbeeld $\hat{}$ dat dienst doet als een blanco symbool, maar gemarkeerd. Vervolgens dupliceren we de overgangsregels van de Turing machine: we lezen $\hat{}$-symbolen alsof het blanco symbolen zijn.
+\paragraph{}
+Vervolgens introduceren we een nieuwe accepterende toestand $q_a'$ en we trekken bogen tussen de oude accepterende toestand $q_a$ en $q_a'$ voor elk mogelijk karakter in het tape-alfabet $\Gamma$ waarbij we een blanco karakter wegschrijven op de tape. Het maakt niet uit of we de lees/schrijfkop verplaatsen omdat we toch meteen erna ``werkelijk'' accepteren. We noemen de nieuwe machine $M'$. Merk op dat $M'$ dezelfde taal accepteert als $M$, alleen de manier om een taal te beslissen is aangepast.
+\paragraph{}
+We draaien vervolgens $B$ op $M'$ als $B$ accepteert verwerpen we en vice versa. Als $B$ de machine accepteert betekent dit dat er minstens een invoer bestaat waarvoor het blanco karakter wordt weggeschreven en we dus de string ``accepteren''. $B$ zal dus accepteren wanneer de taal die $M$ en $M'$ bepalen niet volledig leeg is. We kunnen dus $E_{\rm TM}$ beslissen, dus inconsistentie.
+\end{proof}
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat het `overeenkomstprobleem van Post' beslisbaar is over het alfabet $\Sigma = \{ a \}$. (Dat wil zeggen: toon aan dat het voor een verzameling domino's van de vorm $\left[ \frac{a^m}{a^n} \right]$ met $n,m \in \mathbb{N}$, beslisbaar is of er een overeenkomst bestaat.) 
+\begin{answer}
+De verzameling van dominostenen moet een steen $\left[\frac{a^m}{a^n}\right]$ met $m\geq n$ en een steen met $n\geq m$.
+\begin{proof}
+Wanneer er een steen bestaat met $m=n$ gelden beiden voorwaarden, er bestaat dus een steen met evenveel $a$'s bovenaan als onderaan. In dat geval zal een willekeurig aantal kopie\"en van deze steen altijd tot een gelijk aantal $a$'s leiden.
+\paragraph{}
+In het andere geval bestaan er twee stenen: $\left[\frac{a^{m+p}}{a^m}\right]$ en $\left[\frac{a^n}{a^{n+q}}\right]$ met $p,q>0$. In dat geval kunnen we een overeenkomst bereiken door volgende configuratie:
+\begin{equation}
+q\cdot\left[\frac{a^{m+p}}{a^m}\right]+p\cdot\left[\frac{a^n}{a^{n+q}}\right]=\left[\frac{a^{q\cdot m+q\cdot p+p\cdot n}}{a^{q\cdot m+p\cdot n+p\cdot q}}\right]=\left[\frac{a^{q\cdot m+q\cdot p+p\cdot n}}{a^{q\cdot m+q\cdot p+p\cdot n}}\right]
+\end{equation}
+\end{proof}
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat er een onbeslisbare deelverzameling van $1^{\star}$ bestaat.
+\begin{answer}
+Het aantal deelverzamelingen van $1^{\star}$, is overaftelbaar. We kunnen slechts een eindig aantal Turing machines beschrijven: immers kunnen we elke Turing machine encoderen naar een natuurlijk getal of nog: we kunnen elke Turing machine beschrijven aan de hand van een eindig aantal karakters. Het telargument toont aan dat er dus onbeslisbare deelverzamelingen bestaan: zelfs indien elke Turing machine een beslisser zou zijn voor (juist) \'e\'en deelverzameling van $1^{\star}$, zijn er oneindig veel deelverzamelingen waarvoor er geen zo'n Turing machine bestaat.
+\end{answer}
+\end{question}
+
+\begin{question}
+Toon aan dat de vraag of een context-vrije grammatica $G$ alle strings uit $1^{\star}$ kan genereren beslisbaar is.
+\begin{answer}
+Hiervoor maken we gebruik van volgend lemma:
+\begin{lemma}
+Een context-vrije taal $L$ met pomplengte $p$ bevat alle strings uit $1^{\star}$, als en slechts als $L$ $\epsilon,1,1^2,\ldots,1^{p!+p}$ bevat.
+\begin{proof}
+We bewijzen het lemma enkel in de rechtse richting -- omdat dit de relevante richting voor de vraag is -- aan de hand van het pompend lemma. Stel dat $\accl{\epsilon,1,1^2,\ldots,1^{p!+p}}\subset L$. We bewijzen nu dat $1^l$ ook in $L$ zit met $l>p!+p$ een willekeurig getal (groter dan de hierboven beschreven elementen). Immers kunnen we $l$ herschrijven als: $l=p+m+q$ met $m=\brak{l-p}\mod p!$ en $q=l-p-m$ de rest. $q$ is deelbaar door $p!$ vermits $m$ de rest bij deling met $p!$ bevat, dit is belangrijk voor later.
+\paragraph{}
+Vermits $p\leq p+m\leq p+p!$ geldt, weten we zeker dat $s=1^{p+m}\in L$ zit: het bevindt zich namelijk tussen de grenzen van elementen waarvan we weten dat ze tot de taal behoren. We delen nu $s$ op in $s=1^{p+m}=uvxyz$. Het is evident dat elke variabele $u,v,x,y,z\in 1^{\star}$ en dat $1\leq\abs{vy}\leq p$. Vervolgens kiezen we $i=1+q/\abs{vy}$. Dan kunnen we $1^k$ pompen als $uv^ixy^iz=1^{p+m+q}$. We dienen ons er wel nog van te vergewissen dat $i$ een natuurlijk getal is. Dit is zo omdat $q$ deelbaar is door $p!$ en dus bijgevolg door elk getal tussen $1$ en $p$ (inclusief). Omdat $1\leq\abs{vy}\leq p$ maakt de concrete lengte van $\abs{vy}$ dus niet uit, het blijft altijd deelbaar.
+\end{proof}
+\end{lemma}
+We weten dat de pomplengte begrensd wordt door het aantal overgangsregels in een context-vrije grammatica. Het volstaat dus om alle strings $\epsilon,1,1^2,1^{n!+n}$ met $n$ het aantal regels te beslissen. Indien al deze strings tot de taal behoren, aanvaarden we de context-vrije grammatica, indien niet verwerpen we de grammatica.
+\end{answer}
+\end{question}
+
+\end{document}

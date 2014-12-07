@@ -30,6 +30,7 @@ Welke van de volgende talen zijn context-vrij, welke niet? Bewijs je antwoord.
 \begin{answer}~~
 \begin{enumerate}
 \item \textbf{contextvrij}: We kunnen deze taal beslissen met volgende grammatica.
+\importgram{exc5-1}{Contextvrije grammatica voor $\condset{w\in \accl{0,1}^{\star}}{\mbox{$w$ is een palindroom}}$.}
 \item \textbf{niet context-vrij}: Dit kunnen we aantonen met het pompend lemma.
 \begin{proof}
 Gegeven een string $s=O^p\#O^{2p}\#O^{3p}$ met $p$ de onbekende pomplengte. Het is duidelijk dat $\abs{s}\geq p$. Voor elke opdeling $s=uvxyz$ die voldoet aan regels (2) en (3) geldt: dat $v$ en $y$ onmogelijk een $\#$ kunnen bevatten: immers zou dit betekenen dat we door te ``pompen'' meer van deze karakters in de string kunnen introduceren, wat niet kan volgens de taal. Het gevolg is dat ofwel (1) $v$ en $y$ tot \textbf{eenzelfde} groep $O$'s behoren, ofwel (2) tot twee opeenvolgende. In het eerste geval zullen we door te ``pompen'', meer $O$'s in deze groep introduceren (immers $\abs{vy}>0$), waardoor de boekhouding niet meer klopt. In het tweede geval kunnen we misschien de boekhouding van twee opeenvolgende groepen nog laten kloppen (bijvoorbeeld dat de tweede groep dubbel zoveel $O$'s als de eerste groep bevat), maar we kunnen enkel de karakters in twee groepen laten groeien, terwijl ze in alle drie de groepen volgens de gestelde wetmatigheid moeten groeien. Bijgevolg bestaat er geen geldige opdeling.

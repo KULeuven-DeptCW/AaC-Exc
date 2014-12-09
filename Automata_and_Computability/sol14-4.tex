@@ -1,8 +1,8 @@
 \documentclass[a4paper]{article}
 \usepackage[dutch]{babel}
-\usepackage{color,xypic,amsmath}
+\usepackage{color,xypic,amsmath,amsthm}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl,subfigure}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#4\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -12,6 +12,8 @@
 \newcommand{\gvar}[1]{\langle \text{{#1}} \rangle}
 \newcommand{\gend}[1]{\text{\bf{#1}}}
 
+\newtheorem{lemma}{Lemma}
+
 
 \begin{document}
 
@@ -19,24 +21,99 @@
 
 \begin{question}
 Toon aan dat de klasse van context vrije talen gesloten is onder concatenatie en ster.
+
+\begin{answer}
+Meerdere manieren zijn mogelijk: we kunnen een constructie voorstellen voor een PDA of een context-vrije grammatica.
+We opteren hier voor het laatste.
+\begin{enumerate}
+ \item Concatenatie
+ \begin{construction}
+  Gegeven twee context-vrije grammatica's $\tupl{V_1,\Sigma,R_1,S_1}$ en $\tupl{V_2,\Sigma,R_2,S_2}$. We maken de assumptie
+  dat $V_1\cap V_2=\emptyset$: met andere woorden de beide context-vrije grammatica's bevatten geen gemeenschappelijke
+  non-terminalen. Indien dit wel het geval is, volstaat het om de non-terminalen van de $V_1$ van \'e\'en van de context-vrije
+  grammatica's te hernoemen (en deze substitutie ook toe te passen op de omzettingsregels $R_1$).
+  
+  Dan beschouwen we een contextvrije grammatica $\tupl{V,\Sigma,R,S}$ met:
+  \begin{eqnarray}
+   V&=&V_1\cup V_2\cup\accl{S}\\
+   R&=&R_1\cup R_2\cup\accl{S\rightarrow S_1S_2}
+  \end{eqnarray}
+  Met $S$ een nieuwe ingevoerde non-terminaal.
+ \end{construction}
+ Deze constructie werkt omdat $S_1$ zal evolueren naar elke mogelijke string $s\in L_1$ en $S_2$ naar elke mogelijke
+ string in $s\in L_2$. Omdat $S$ als enige overgangsregel de concatenatie van evoluties van $S_1$ en $S_2$ heeft, worden
+ er geen bijkomende strings ge\"introduceerd.
+ \item Kleene-ster
+ \begin{construction}
+  Gegeven een context-vrije grammatica $\tupl{V_1,\Sigma,R_1,S_1}$, dan construeren we een context-vrije grammatica $\tupl{V,\Sigma,R,S}$
+  met:
+  \begin{eqnarray}
+   V&=&V\cup\accl{S}\\
+   R&=&R_1\cup\accl{S\rightarrow\epsilon,S\rightarrow S_1S}
+  \end{eqnarray}
+  Met $S\notin V_1$.
+ \end{construction}
+ Omdat de Kleene ster impliceert dat we de originele taal $L_1$ nul of meer keer herhalen, beschouwen we eerst de overgangsregel $S\rightarrow\epsilon$ die
+ impliceert dat de lege string deel uitmaakt van de taal: nul keer een string herhalen is dus mogelijk. $S_1$ kan overgaan in elke mogelijke string
+ $s\in L$, wanneer we dus de overgangsregel $S\rightarrow S_1$ zouden beschouwen, maken alle strings in $L_1$ deel uit van $L$. Door $S$ toe te voegen aan (het
+ einde van) de regel, kunnen we \'e\'en of meer concatenaties van elementen uit $L_1$ verzekeren.
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
 Bewijs dat de doorsnede van een reguliere taal met een context-vrije taal context-vrij is.
+
+\begin{answer}
+Dit kunnen we aantonen aan de hand van een constructie die gegeven een DFA en een PDA, een PDA construeert die de doorsnede van de talen beslist door deze machine beslist.
+\begin{construction}
+Gegeven een DFA $\tupl{Q_1,\Sigma,\delta_1,q_{s1},F_2}$ en een PDA $\tupl{Q_2,\Sigma,\Gamma,\delta_2,q_{s2},F_2}$, dan beschouwen we een PDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$ met:
+\begin{eqnarray}
+Q&=&Q_1\times Q_2\\
+q_s&=&\tupl{q_{s1},q_{s2}}\\
+F&=&F_1\times F_2\\
+\forall q_1\in Q_1,q_2\in Q_2,\sigma\in\Sigma:\fun{\delta}{\tupl{q_1,q_2},\sigma}&=&\accl{\fun{\delta_1}{q_1,\sigma}}\times\fun{\delta_2}{q_2,\sigma}\\
+\forall q_1\in Q_1,q_2\in Q_2:\fun{\delta}{\tupl{q_1,q_2},\epsilon}&=&\accl{q_1}\times\fun{\delta_2}{q_2,\epsilon}
+\end{eqnarray}
+\end{construction}
+De constructie werkt als volgt: we beschouwen een toestandsruimte van tuples die telkens zowel een toestand uit de DFA en een toestand uit de PDA bevat, zo zullen we parallel beide machines op dezelfde string laten lopen. We beginnen in de begintoestanden van de twee machines. Wanneer we een karakter inlezen, zal de DFA migreren naar een nieuwe toestand, de PDA kan verschillende nieuwe toestanden bereiken, afhankelijk van het symbool op de stapel. We maken gebruik van het non-determinisme om het kruisproduct te nemen tussen de deterministisch gekozen volgende toestand van de DFA en de mogelijke bogen van de NFA.
+\end{answer}
 \end{question}
 
 \begin{question}
-Geef voor elk van de volgende talen over een CFG die die taal genereert.
+Geef voor elk van de volgende talen een CFG die die taal genereert.
 \begin{enumerate}
-  \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
-  \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
-  \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
-  \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
+ \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
 \end{enumerate}
+
+\begin{answer}~~
+\begin{enumerate}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$
+ \importgram{exc4-1}{Oneven lengte, middelste symbool is $0$.}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$
+ \importgram{exc4-2}{Meer $1$'en dan $0$'en.}
+ \item $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat tweemaal zoveel $1$'en als $0$'en} \}$
+ \importgram{exc4-3}{Tweemaal zoveel $1$'en als $0$'en.}
+ \item $\{ w_1 \# w_2 \# \ldots \# w_n \ | \ \text{$n \geq 1$, elke $w_i \in \{0,1\}^*$ en er bestaat een $i$ en een $j$ waarvoor $w_i = w_j^\mathcal{R}$} \}$
+ \importgram{exc4-4}{Omgekeerde groep.}
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
 Geef voor de eerste twee talen uit $(3)$ een PDA die die taal herkent.
+
+\begin{answer}~~
+\begin{enumerate}
+ \item Zie \figref{exc4-dfa1}
+ \importtikzfigure{exc4-dfa1}{PDA voor $\{ w \in \{0,1\}^* \ | \ \text{de lengte van $w$ is oneven en het middelste symbool is een $0$} \}$.}
+ \item Zie \figref{exc4-dfa2}
+ \importtikzfigure{exc4-dfa2}{PDA voor $\{ w \in \{0,1\}^* \ | \ \text{$w$ bevat strikt meer $1$'en dan $0$'en} \}$.}
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
@@ -45,10 +122,45 @@ Zij $G$ een CFG in Chomsky normaalvorm die precies $b$ niet-terminalen bevat.
   \item Toon aan dat voor elke $w \in L_G$ met lengte $n \geq 1$, elke afleiding van $w$ uit precies $2n - 1$ stappen bestaat.
   \item Toon aan dat, als $L_G$ een string bevat waarvoor elke afleiding meer dan $2^b$ stappen bevat, $L_G$ oneindig moet zijn.
 \end{enumerate}
+
+\begin{answer}~~
+\begin{enumerate}
+ \item Wanneer de grammatica in Chomsky normaalvorm staat, betekent dit dat er slechts drie mogelijke vormen zijn: $S\rightarrow \epsilon$, $A\rightarrow BC$ en $A\rightarrow a$ met $S$ het startsymbool, $A$, $B$ en $C$ willekeurige non-terminalen en $a$ een willekeurig karakter. Vermits de lengte van $w$ groter is dan $0$, is de eerste overgangsregel niet mogelijk. We kunnen
+ de afleiding van een string schrijven als een boom met als inodes de nonterminals en als bladen de karakters. Elk karakter/blad heeft precies \'e\'en ouder (want we kunnen enkel karakters afleiden volgens de derde vorm). Alle overige inodes hebben steeds twee kinderen. De inodes die niet naar een blad afleiden vormen bijgevolg een binaire boom.
+ \begin{lemma}
+  Een binaire boom met $n$ kinderen heeft precies $n-1$ inodes.
+  \begin{proof}
+   We bewijzen per inductie:
+   \begin{description}
+    \item [Basis] Een blad heeft $0$ inodes en $1$ blad, hier houdt de voorwaarde dus.
+    \item [Inductie] Een inode bevat juist twee inodes. De eerste inode heeft $n_{b1}$ bladen en $n_{i1}=n_{b1}-1$. De tweede inode heeft $n_{b1}$ bladen en $n_{i1}=n_{b1}-1$. In totaal
+    hebben we dus $n_{i}=n_{i1}+n_{i2}+1=n_{b1}-1+n_{b2}-1+1=n_{b1}+n_{b2}-1$ inodes\footnote{$+1$ staat voor de eigen inode.} en $n_{b}=n_{b1}+n_{b2}$ bladen. Bijgevolg houdt de inductie.
+   \end{description}
+  \end{proof}
+  Dit betekent dat het binaire boom gedeelte dus $n-1$ afleidingen voorstelt. De onderste laag bevat overgangen van het derde type. Omdat de string een lengte $n$ heeft, en elk karakter moet worden omgezet naar een non-terminaal, bevat de onderste inode-laag dus $n$ afleidingen. Het aantal afleidingen is dus gelijk aan $2\cdot n-1$.
+ \end{lemma}
+ \item Stel dat we $2^b$ afleidingen nodig hebben om een string $w$ af te leiden. Dan betekent dit dat het binaire boom gedeelte van de afleidingen strikt meer dan $2^{b-1}-1$ nodig. Anders kan men onvoldoende non-terminalen genereren die naar karakters evolueren. Een binaire boom met meer dan $2^{b-1}-1$ inodes heeft een hoogte van minstens $b-1$ en (vermits het aantal afleidingen groter is dan $2^{b-1}-1$ bestaat er ook een pad van de wortel naar een blad met een lengte van $b$ of meer. Als er zo'n pad bestaat, betekent dit dat er minstens \'e\'en non-terminaal twee keer voorkomt in dat pad. Bijvoorbeeld $b_0\rightarrow\ldots\rightarrow b_i\rightarrow\ldots b_i\rightarrow\ldots\rightarrow b_n$ met $b_i$ de non-terminal die tweemaal voorkomt. Maar in dat geval kunnen we het pad $b_i\rightarrow\ldots\rightarrow b_i$ willekeurig vaak herhalen. Omdat de Chomsky normaalvorm betekent dat alle afleidingen van een non-terminaal resulteren naar meer non-terminalen of een karakter betekent dit dat we dus willekeurig meer bladen aan de boom kunnen toevoegen, en de string dus bijgevolg willekeurig kan groeien. Omdat voor elke $n$, we een string kunnen genereren die groter is dan $n$, is de taal bijgevolg oneindig.
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
 Toon aan dat $\{ x \# y \ | \ \text{$x,y \in \{0,1\}^*$ en $x \neq y$} \}$ een context-vrije taal is over $\{ 0,1,\# \}$.
+\begin{answer}
+Dit kunnen we doen door een PDA te construeren. Zo'n PDA kan men construeren door de unie\footnote{In tegenstelling tot de doorsnede, is de unie van twee contextvrije-talen altijd een context-vrije taal} te nemen tussen twee talen:
+\begin{enumerate}
+ \item de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\abs{x}\neq\abs{y}}$, zie \figref{exc4-pda1a}; en
+ \item de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\exists i\in\NNN:x_i\neq y_i}$, zie \figref{exc4-pda1b}.
+\end{enumerate}
+\begin{figure}[hbt]
+\centering
+\importtikzsubfigure{exc4-pda1a}{$\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\abs{x}\neq\abs{y}}$}
+\importtikzsubfigure{exc4-pda1b}{$\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\exists i\in\NNN:x_i\neq y_i}$}
+\caption{Deel-PDA's om de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:x\neq y}$ te beslissen.}
+\end{figure}
+De eerste PDA is triviaal, tel eerst het aantal karakters van $x$ door de stapel op te bouwen, en tel vervolgens af bij $y$. Wanneer er nog iets op de stapel staat, of je bereikt de lege stapel voor $y$ helemaal is doorgerekend zijn $x$ en $y$ niet equivalent.
+\paragraph{}
+In de tweede PDA laten we eerst een willekeurig aantal karakters passeren van $x$: we gokken op het karakter dat moet verschillen, maar door non-determinisme gokken we op alles tegelijk. Op een willekeurig ogenblik kijken we dan naar een karakter van $x$, en dit slaan we op in de toestand (namelijk ofwel volgen we de lijn $x_2\rightarrow x_4\rightarrow x_6$ bij $0$ ofwel de lijn $x_3\rightarrow x_5\rightarrow x_6$ bij $1$). Met de overige karakters van $x$ doen we niets. Nadat we $\#$ passeren, bouwen we de stapel terug af: op die manier zullen we ook het $i$-de karakter van $y$ beschouwen. Doordat we in de toestand bijhouden welk karakter dit moet zijn ($1$ in het geval van $x_4$ en $0$ in het geval van $x_5$), testen we dus of de karakters verschillend zijn, indien dit zo is komen we in de accepterende toestand $q_6$ terecht die de resterende karakters van $y$ verwerkt).
+\end{answer}
 \end{question}
-
 \end{document}

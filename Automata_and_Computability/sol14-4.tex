@@ -2,7 +2,7 @@
 \usepackage[dutch]{babel}
 \usepackage{color,xypic,amsmath,amsthm}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets,../importsreferences-nl}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl,subfigure}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#4\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -147,8 +147,20 @@ Zij $G$ een CFG in Chomsky normaalvorm die precies $b$ niet-terminalen bevat.
 \begin{question}
 Toon aan dat $\{ x \# y \ | \ \text{$x,y \in \{0,1\}^*$ en $x \neq y$} \}$ een context-vrije taal is over $\{ 0,1,\# \}$.
 \begin{answer}
-\importgram{exc4-5}{$\{ x \# y \ | \ \text{$x,y \in \{0,1\}^*$ en $x \neq y$} \}$ een context-vrije taal is over $\{ 0,1,\# \}$.}
+Dit kunnen we doen door een PDA te construeren. Zo'n PDA kan men construeren door de unie\footnote{In tegenstelling tot de doorsnede, is de unie van twee contextvrije-talen altijd een context-vrije taal} te nemen tussen twee talen:
+\begin{enumerate}
+ \item de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\abs{x}\neq\abs{y}}$, zie \figref{exc4-pda1a}; en
+ \item de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\exists i\in\NNN:x_i\neq y_i}$, zie \figref{exc4-pda1b}.
+\end{enumerate}
+\begin{figure}[hbt]
+\centering
+\importtikzsubfigure{exc4-pda1a}{$\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\abs{x}\neq\abs{y}}$}
+\importtikzsubfigure{exc4-pda1b}{$\condset{x\#y}{x,y\in\accl{0,1}^{\star}:\exists i\in\NNN:x_i\neq y_i}$}
+\caption{Deel-PDA's om de taal $\condset{x\#y}{x,y\in\accl{0,1}^{\star}:x\neq y}$ te beslissen.}
+\end{figure}
+De eerste PDA is triviaal, tel eerst het aantal karakters van $x$ door de stapel op te bouwen, en tel vervolgens af bij $y$. Wanneer er nog iets op de stapel staat, of je bereikt de lege stapel voor $y$ helemaal is doorgerekend zijn $x$ en $y$ niet equivalent.
+\paragraph{}
+In de tweede PDA laten we eerst een willekeurig aantal karakters passeren van $x$: we gokken op het karakter dat moet verschillen, maar door non-determinisme gokken we op alles tegelijk. Op een willekeurig ogenblik kijken we dan naar een karakter van $x$, en dit slaan we op in de toestand (namelijk ofwel volgen we de lijn $x_2\rightarrow x_4\rightarrow x_6$ bij $0$ ofwel de lijn $x_3\rightarrow x_5\rightarrow x_6$ bij $1$). Met de overige karakters van $x$ doen we niets. Nadat we $\#$ passeren, bouwen we de stapel terug af: op die manier zullen we ook het $i$-de karakter van $y$ beschouwen. Doordat we in de toestand bijhouden welk karakter dit moet zijn ($1$ in het geval van $x_4$ en $0$ in het geval van $x_5$), testen we dus of de karakters verschillend zijn, indien dit zo is komen we in de accepterende toestand $q_6$ terecht die de resterende karakters van $y$ verwerkt).
 \end{answer}
 \end{question}
-
 \end{document}

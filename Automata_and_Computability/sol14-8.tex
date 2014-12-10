@@ -2,7 +2,7 @@
 \usepackage[dutch]{babel}
 \usepackage{color,xypic,amsmath}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets}
+\usepackage{../assignment-nl,../brackets,breqn}
 
 \newcommand{\prnul}[0]{\ensuremath{\mbox{nul}}}
 \newcommand{\prsucc}[0]{\ensuremath{\mbox{succ}}}
@@ -57,7 +57,7 @@ Schrijf de volgende primitief recursieve functies met behulp van compositie, pri
  \item Eerst introduceren we een helper-functie $\mbox{min}$. $\mbox{min}$ neemt twee argumenten $a$ en $b$ en berekent $a-b$, maar geeft $0$ terug indien $b\geq a$:\begin{equation}\prpr{\prp{1}{1}}{\prcn{\mbox{pred}}{\prp{3}{3}}}\end{equation}
  Vervolgens is $\mbox{dif}$ gelijk aan $\funm{min}{x,y}+\funm{min}{y,x}$:\begin{equation}\prcn{\mbox{som}}{\mbox{min},\prcn{\mbox{min}}{\prp{2}{2},\prp{2}{1}}}\end{equation}. Voluit schrijven we de functie dus als:
  \begin{equation}
-  \prcn{\prpr{\prp11}{\prcn{\prsucc}{\prp33}}}{\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}},\prcn{\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}}}{\prp{2}{2},\prp{2}{1}}}
+  \prcn{\prpr{\prp11}{\prcn{\prsucc}{\prp33}}}{\begin{array}{l}\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}},\\\prcn{\prpr{\prp{1}{1}}{\prcn{\prcn{\prpr{\prnul}{\prp{3}{2}}}{\prnul,\prp{1}{1}}}{\prp{3}{3}}}}{\prp{2}{2},\prp{2}{1}}\end{array}}
  \end{equation}
 \end{enumerate}
 \end{answer}

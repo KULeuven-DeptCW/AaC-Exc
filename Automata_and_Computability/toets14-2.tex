@@ -34,8 +34,8 @@ Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, besc
  \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$
  \begin{enumerate}
   \item \textbf{niet-beslisbaar}: 
-  \item \textbf{niet herkenbaar}: 
-  \item \textbf{co-herkenbaar}: We beschrijven een co-herkenner. De co-herkenner laat zoals bij \ref{itm:berekenexis} 
+  \item \textbf{niet herkenbaar}: Volgt uit het feit dat we een co-herkenner kunnen beschrijven en de taal niet beslisbaar is.
+  \item \textbf{co-herkenbaar}: We beschrijven een co-herkenner. De co-herkenner laat zoals bij \ref{itm:berekenexis} in verschillende fases Turing machines lopen. Het verschil is echter dat we Turing machines laten stoppen na $2^{\abs{s}}$ stappen, ook indien de machine zelf nog niet zo stoppen. Wanneer zo'n machine echter meer tijd nodig heeft, accepteren we.
  \end{enumerate}
  \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$
  \begin{enumerate}
@@ -62,6 +62,16 @@ Uitspraken:
  \item $L_1\cap L_2$ is beslisbaar; en
  \item $L_1\cup L_2$ is herkenbaar.
 \end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+ \item Dit hangt af van de talen:
+ \begin{enumerate}
+  \item Stel $L_1=A_{\rm TM}$ en $L_2=H_{\rm TM}$: het is zo dat $A_{\rm TM}\subsetneq H_{\rm TM}$ immers moet voor elk koppel $\tupl{M,s}$ $M$ stoppen bij invoer $s$ om $s$ te accepteren. Bijgevolg is $L_1\setminus L_2$ leeg, dus beslisbaar en herkenbaar.
+ \end{enumerate}
+ \item $L_1\cap L_2$ is beslisbaar; en
+ \item $L_1\cup L_2$ is herkenbaar.
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}[synchrone PDA]

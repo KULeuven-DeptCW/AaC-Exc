@@ -64,6 +64,23 @@ Uitspraken:
 
 \begin{question}[synchrone PDA]
 Een sPDA is een PDA met $2$ stapels, maar waarbij stapels synchroon moeten bewegen: beide stapels ``pushen'' en ``poppen'' op hetzelfde ogenblik. Het is met andere woorden niet toegelaten dat \'e\'en stapel groeit terwijl de andere wordt afgebouwd. Is een sPDA strikt\footnote{Met ``strikt'' bedoelen we dat een sPDA minstens \'e\'en taal meer kan beslissen dan een gewone PDA.} sterker dan een gewone PDA? Bewijs je antwoord.
+\begin{answer}
+Een sPDA is niet sterker dan een PDA. We bewijzen dat beide automaten even krachtig zijn door constructies tussen een sPDA en PDA te geven in beide richtingen.
+\begin{enumerate}
+ \item Een PDA naar een sPDA.
+ \begin{construction}
+  Gegeven een PDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$, we beschouwen een PDA $\tupl{Q,\Sigma,\Gamma,\delta',q_s,F}$ die dezelfde taal beslist met volgende overgangsregels:
+  \begin{equation}
+  \forall q\in Q,\sigma\in\Sigma,\gamma,\gamma_2\in\Gamma_{\epsilon}:\fun{\delta'}{q,\sigma,\gamma,\gamma_2}=\condset{\tupl{q',\gamma',\gamma'}}{\tupl{q',\gamma'}\in\fun{\delta}{q,\sigma,\gamma}}
+  \end{equation}
+  We hebben hier gekozen om dezelfde inhoud te ``pushen'' op de tweede stapel (maar men zou bijvoorbeeld ook altijd hetzelfde karakter kunnen pushen). Er wordt verder nooit gekeken naar het karakter op de tweede stapel: het is eender wat daar staat, al weten we dat dit altijd hetzelfde is als de eerste stapel.
+ \end{construction}
+ \item Een sPDA naar een PDA.
+ \begin{construction}
+  Gegeven een sPDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$ we beschouwen een PDA $\tupl{Q,\Sigma,\Gamma\times\Gamma,\delta',q_s,F}$
+ \end{construction}
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}[Bezige bever]

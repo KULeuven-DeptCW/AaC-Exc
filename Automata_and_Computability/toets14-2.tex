@@ -17,6 +17,34 @@ Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, besc
  \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$; en
  \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$.
 \end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+ \item $\condset{\tupl{M}}{\exists s_1,s_2\in L_M:\abs{s_1}\neq\abs{s_2}}$
+ \begin{enumerate}
+  \item \textbf{niet beslisbaar}: dit volgt rechtstreeks uit de \emph{Stelling van Rice}. De taal is niet \emph{triviaal}: we kunnen een Turing machine construeren die de taal $\accl{a,aa}$ beslist en een Turing machine die de taal $\accl{a}$ beslist. De ene machine zit in de taal de andere niet. De taal is ook \emph{taal-invariant}: er zijn geen aspecten van de Turing machine opgenomen in de voorwaarde.
+  \item \textbf{herkenbaar}: We beschrijven een herkenner.
+  \item \textbf{niet co-herkenbaar}: immers is de taal herkenbaar en niet beslisbaar.
+ \end{enumerate}
+ \item $\condset{\tupl{M,s}}{\mbox{$M$ stopt na hoogstens $2^{\abs{s}}$ stappen bij invoer $s$}}$
+ \begin{enumerate}
+  \item \textbf{beslisbaar}: 
+  \item \textbf{herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+  \item \textbf{co-herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+ \end{enumerate}
+ \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$
+ \begin{enumerate}
+  \item \textbf{niet-beslisbaar}: 
+  \item \textbf{niet herkenbaar}: 
+  \item \textbf{co-herkenbaar}: 
+ \end{enumerate}
+ \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$
+ \begin{enumerate}
+  \item \textbf{beslisbaar}: 
+  \item \textbf{herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+  \item \textbf{co-herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+ \end{enumerate}
+\end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}[Inwendige operaties]

@@ -22,7 +22,7 @@ Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, besc
  \item $\condset{\tupl{M}}{\exists s_1,s_2\in L_M:\abs{s_1}\neq\abs{s_2}}$
  \begin{enumerate}
   \item \textbf{niet beslisbaar}: dit volgt rechtstreeks uit de \emph{Stelling van Rice}. De taal is niet \emph{triviaal}: we kunnen een Turing machine construeren die de taal $\accl{a,aa}$ beslist en een Turing machine die de taal $\accl{a}$ beslist. De ene machine zit in de taal de andere niet. De taal is ook \emph{taal-invariant}: er zijn geen aspecten van de Turing machine opgenomen in de voorwaarde.
-  \item \textbf{herkenbaar}: We beschrijven een herkenner. Deze herkenner werkt in fases beginnend met fase $0$. In fase $i$ wordt er voor elke string $s\in\Sigma^i$ een Turing machine opgestart (gesimuleerd) en worden alle tot dusver begonnen Turing machines een stap verder gezet. Wanneer er twee Turing machines accepteren en de strings hebben een verschillende lengte, accepteren we ook.
+  \item \label{itm:berekenexis}\textbf{herkenbaar}: We beschrijven een herkenner. Deze herkenner werkt in fases beginnend met fase $0$. In fase $i$ wordt er voor elke string $s\in\Sigma^i$ een Turing machine opgestart (gesimuleerd) en worden alle tot dusver begonnen Turing machines een stap verder gezet. Wanneer er twee Turing machines accepteren en de strings hebben een verschillende lengte, accepteren we ook.
   \item \textbf{niet co-herkenbaar}: immers is de taal herkenbaar en niet beslisbaar.
  \end{enumerate}
  \item $\condset{\tupl{M,s}}{\mbox{$M$ stopt na hoogstens $2^{\abs{s}}$ stappen bij invoer $s$}}$
@@ -35,13 +35,13 @@ Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, besc
  \begin{enumerate}
   \item \textbf{niet-beslisbaar}: 
   \item \textbf{niet herkenbaar}: 
-  \item \textbf{co-herkenbaar}: 
+  \item \textbf{co-herkenbaar}: We beschrijven een co-herkenner. De co-herkenner laat zoals bij \ref{itm:berekenexis} 
  \end{enumerate}
  \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$
  \begin{enumerate}
   \item \textbf{beslisbaar}: we beschrijven een beslisser. We simuleren de Turing machine $M$ met een soort debugger (een programma die $M$ een stap laat zetten, maar nadien het geheugen, etc. kan inspecteren). In eerste instantie draaien we de Turing machine tot deze voorbij de invoer leest. Indien de Turing machine probeert naar links te bewegen, dan verwerpen we natuurlijk onmiddellijk. Verder kunnen we ook lusdetectie uitvoeren: wanneer de Turing machine blijft stilstaan houden we de combinaties van toestanden en karakters die onder de tape staan bij. Wanneer we eenzelfde koppel een tweede maal tegenkomen, weten we dat we in een oneindige lus zitten en accepteren we: immers leidt deze lus nooit tot het naar links bewegen van de kop.
   \paragraph{}
-  Wanneer we het invoergedeelte van 
+  Wanneer we het invoergedeelte voorbij gaan is er \'e\'en variant: rechts van de lees/schrijfkop staan altijd lege symbolen: immers mogen we niet naar links gaan. We weten verder ook in welke toestand we zitten bij het verlaten van het invoergedeelte. Met deze toestand en de invariant kunnen we bepalen welke toestanden we allemaal zullen aandoen: wanneer we naar rechts gaan, nemen we bij de volgende toestand uiteraard de overgang met het lege karakters als karakter onder de tape. Wanneer de tape blijft stilstaan, rekenen we door met het karakter dat we net hebben weggeschreven. Wanneer we zo een boog zullen bereiken die naar links gaat, verwerpen we; anders accepteren we. Merk op dat we dit gedeelte niet simuleren: we voeren een analyse uit op de toestandsgraaf.
   \item \textbf{herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
   \item \textbf{co-herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
  \end{enumerate}

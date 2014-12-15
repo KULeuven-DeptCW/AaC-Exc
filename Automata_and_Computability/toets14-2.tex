@@ -1,0 +1,45 @@
+\documentclass{article}
+\title{Automaten en Berekenbaarheid:\\opgave 2}
+\author{Prof. B. Demoen (\url{Bart.Demoen@cs.kuleuven.be})\\ W. Van Onsem (\url{Willem.VanOnsem@cs.kuleuven.be})}
+\date{11 december 2014}
+\usepackage{../assignment-nl,../brackets}
+\newcommand{\lang}[1]{\textsc{#1}}
+\newcommand{\RegEx}[0]{\ensuremath{\mbox{RegEx}}}
+\begin{document}
+\maketitle
+\richtlijnen{}
+
+\begin{question}[Berekenbaarheid]
+Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, beschrijf een beslisser/herkenner. Indien niet, toon dit aan (bijvoorbeeld aan de hand van een reductie). $\Sigma$ slaat altijd op het invoeralfabet van een machine. $L_M$ slaat op de taal die beslist wordt door $M$. De machines zijn allemaal Turing machines.
+\begin{enumerate}
+ \item $\condset{\tupl{M}}{\exists s_1,s_2\in L_M:\abs{s_1}\neq\abs{s_2}}$;
+ \item $\condset{\tupl{M,s}}{\mbox{$M$ stopt na hoogstens $2^{\abs{s}}$ stappen bij invoer $s$}}$;
+ \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$; en
+ \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$.
+\end{enumerate}
+\end{question}
+
+\begin{question}[Inwendige operaties]
+Stel twee verschillende niet-beslisbare talen $L_1$ en $L_2$, geef voor elke uitspraak hieronder aan:
+\begin{enumerate}
+ \item indien de uitspraak waar is voor elke $L_1$ en $L_2$, waarom (bewijs);
+ \item indien de uitspraak afhangt van de keuze voor $L_1$ en $L_2$: twee voorbeelden (voor het geval waar de uitspraak klopt en voor het geval waar de uitspraak niet klopt); en
+ \item indien de uitspraak niet klopt, een tegenvoorbeeld of reden.
+\end{enumerate}
+Uitspraken:
+\begin{enumerate}
+ \item $L_1\setminus L_2$ is herkenbaar;
+ \item $L_1\cap L_2$ is beslisbaar; en
+ \item $L_1\cup L_2$ is herkenbaar.
+\end{enumerate}
+\end{question}
+
+\begin{question}[synchrone PDA]
+Een sPDA is een PDA met $2$ stapels, maar waarbij stapels synchroon moeten bewegen: beide stapels ``pushen'' en ``poppen'' op hetzelfde ogenblik. Het is met andere woorden niet toegelaten dat \'e\'en stapel groeit terwijl de andere wordt afgebouwd. Is een sPDA strikt\footnote{Met ``strikt'' bedoelen we dat een sPDA minstens \'e\'en taal meer kan beslissen dan een gewone PDA.} sterker dan een gewone PDA? Bewijs je antwoord.
+\end{question}
+
+\begin{question}[Bezige bever]
+Stel dat de bezige bever functie $\fun{S}{n}$ toch berekenbaar is. Beschrijf een Turing machine op hoog niveau die $A_{\rm TM}$ kan beslissen.
+\end{question}
+
+\end{document}

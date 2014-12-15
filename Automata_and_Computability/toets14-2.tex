@@ -67,9 +67,18 @@ Uitspraken:
  \item Dit hangt af van de talen:
  \begin{enumerate}
   \item Stel $L_1=A_{\rm TM}$ en $L_2=H_{\rm TM}$: het is zo dat $A_{\rm TM}\subsetneq H_{\rm TM}$ immers moet voor elk koppel $\tupl{M,s}$ $M$ stoppen bij invoer $s$ om $s$ te accepteren. Bijgevolg is $L_1\setminus L_2$ leeg, dus beslisbaar en herkenbaar.
+  \item Stel $L_1=\overline{A_{\rm TM}}$ en $L_2=A_{\rm TM}$, dan is $L=L_1\setminus L_2=\overline{A_{\rm TM}}$, deze taal is niet herkenbaar, maar co-herkenbaar.
  \end{enumerate}
- \item $L_1\cap L_2$ is beslisbaar; en
- \item $L_1\cup L_2$ is herkenbaar.
+ \item Dit hangt af van de talen:
+  \begin{enumerate}
+   \item Stel $L_2=\overline{L_1}$. In dat geval is $L_1\cap L_2=\emptyset$ en dit is beslisbaar.
+   \item Stel $L_1=A_{\rm TM}$ en $L_2=H_{\rm TM}$ dan is $L_1\cap L_2=A_{\rm TM}$ en dit is niet beslisbaar.
+  \end{enumerate}
+ \item Dit hangt af van de talen:
+  \begin{enumerate}
+    \item Stel $L_2=\overline{L_1}$. In dat geval is $L_1\cup L_2=\Sigma^{\star}$ en dit is beslisbaar en dus herkenbaar.
+    \item Stel $L_1=\overline{A_{\rm TM}}$ en $L_2=\overline{H_{\rm TM}}$, dan is $L_1\cup L_2=\overline{H_{\rm TM}}$ en dit is niet herkenbaar.
+  \end{enumerate}
 \end{enumerate}
 \end{answer}
 \end{question}

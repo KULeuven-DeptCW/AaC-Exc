@@ -111,7 +111,15 @@ De bezige bever beschrijft het maximale aantal stappen dat een Turing machine me
 
 \paragraph{}
 Er zijn echter enkele problemen: de Turing machine kan een willekeurig alfabet hebben, en de invoer staat aanvankelijk op de tape, de tape is dus niet leeg.
+
+
+Het eerste probleem kunnen we oplossen door het alfabet $\Sigma$ om te zetten naar $\Sigma'=\accl{0,1}$. We kunnen dit doen door een \emph{encodering} af te spreken, ASCII bijvoorbeeld schrijft $a$ als $0011\ 1101$. Het impliceert verder dat we de Turing machine wat aanpassen: waar we vroeger een karakter inlazen met \'e\'en operatie, zullen we nu verschillende bits moeten inlezen, en aan de hand van toestanden bijhouden wat we al gezien hebben, ook zullen we dus de lees/schrijf-kop meer naar links/rechts moeten bewegen. Dit introduceert extra toestanden.
+
+
+Het tweede probleem kunnen we oplossen door de Turing machine verder aan te passen: we laten de Turing machine zelf eerst de invoer-string op de tape schrijven en terugkeren naar het begin. Daarna pas laten we ``originele'' machine lopen.
+
+
+Beide oplossingen introduceren extra toestanden, maar dat is geen probleem met betrekking tot de beslisbaarheid. We kunnen vervolgens het aantal toestanden van de resulterende Turing machine tellen, de bezige bever $\fun{S}{n}$ uitrekenen, en de Turing-machine voor dat aantal stappen simuleren.
 \end{answer}
 \end{question}
-
 \end{document}

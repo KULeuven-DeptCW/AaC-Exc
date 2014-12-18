@@ -2,7 +2,7 @@
 \usepackage[dutch]{babel}
 \usepackage{color,xypic,amsmath}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#9\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -10,6 +10,12 @@
 
 \newcommand{\twar}[2]{\left[ { }^{#1}_{#2} \right] }
 \newcommand{\N}{\mathbb{N}}
+
+\newcommand{\prnul}[0]{\ensuremath{\mbox{nul}}}
+\newcommand{\prsucc}[0]{\ensuremath{\mbox{succ}}}
+\newcommand{\prp}[2]{\ensuremath{p_{#2}^{#1}}}
+\newcommand{\prcn}[2]{\funmf{Cn}{#1,#2}}
+\newcommand{\prpr}[2]{\funmf{Pr}{#1,#2}}
 
 \begin{document}
 \maketitle
@@ -58,19 +64,34 @@ We dupliceren dus de toestanden en defini\"eren een niet-deterministische overga
 \begin{question}
 Geef voor elk van de volgende talen aan of ze regulier, context-vrij, beslisbaar, Turing-herkenbaar en/of co-Turing-herkenbaar zijn.
 \begin{enumerate}
-  \item $\{ x = y+z \  | \ \text{$x$, $y$ en $z$ zijn natuurlijke getallen in binaire notatie en $x$ is de som van $y$ en $z$.} \}$ over het alfabet $\{0,1,+,=\}$.
+  \item $\{ a = b+c \  | \ \text{$a$, $b$ en $c$ zijn natuurlijke getallen in binaire notatie en $a$ is de som van $b$ en $c$.} \}$ over het alfabet $\{0,1,+,=\}$.
   \item De taal van alle strings $w$ over het alfabet $\left\{ \twar{0}{0}, \twar{0}{1}, \twar{1}{0}, \twar{1}{1} \right\}$ zodanig dat het binair getal gevormd door de onderste rij van $w$ gelijk is aan drie maal het binair getal gevormd door de bovenste rij van $w$. 
   \item $\{ \langle M \rangle \ | \ \text{$M$ is een TM zodanig dat $L(M)$ precies 1234 strings bevat} \}$ % vraag: is deze taal co-Turing-herkenbaar?
   \item $\{ a^ib^jc^k \ | \ \text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$} \}$ 
 \end{enumerate}
 \begin{answer}~~
 \defaulttable{c|ccccc}{Taal&Regulier&Context-vrij&Beslisbaar&Herkenbaar&Co-herkenbaar}{
-(a)&         &         &$\bullet$&$\bullet$&$\bullet$\\
-(b)&$\bullet$&$\bullet$&$\bullet$&$\bullet$&$\bullet$\\
-(c)&         &         &         &         &         \\
-(d)&         &$\bullet$&$\bullet$&$\bullet$&$\bullet$
+1.&         &         &$\bullet$&$\bullet$&$\bullet$\\
+2.&$\bullet$&$\bullet$&$\bullet$&$\bullet$&$\bullet$\\
+3.&         &         &         &         &         \\
+4.&         &$\bullet$&$\bullet$&$\bullet$&$\bullet$
 }
 \end{answer}
+We argumenteren per taal de oplossing:
+\begin{enumerate}
+ \item Deze taal is evident beslisbaar: je zou in een derde fase in staat moeten zijn een Java-programma te schrijven die dit soort expressies kan parsen en controleren of de optelling inderdaad klopt, we gaan hier niet verder op in.
+ \paragraph{}De taal is verder niet context-vrij (of lager).
+ \begin{proof}
+  We bewijzen dit aan de hand van het pompend lemma. Stel volgende optelling: $1^{2p}=1^p+1^p0^p$, dit is duidelijk een element van de taal. Voor elke opdeling $s=uvxyz$ die aan de voorwaarden van het pompend lemma voldoen is het duidelijk dat $v$ en $y$ geen karakters uit $\accl{+,=}$ kunnen bevatten: anders zouden we door te ``pompen'' deze karakters meerdere malen introduceren.
+  \paragraph{}
+  Bijgevolg mappen $v$ en $y$ op (delen van) de getallen. Indien beide groepen op eenzelfde nummer zouden mappen, blazen we \'e\'en nummer op, terwijl ofwel de som, ofwel de operanden niet volgen. Vermits er geen $0$ vooraan in de getallen van een optelling staan, staat het opblazen van een getal gelijk met het groter worden van dat getal, bijgevolg moet de som de operand volgen. Het is dus onmogelijk dat $v$ en $y$ tot hetzelfde getal behoren.
+  \paragraph{}
+  Dan blijft enkel nog het geval over dat $v$ en $y$ tot een verschillend getal behoren. Dit kunnen niet de twee laatste getallen zijn: dit zou de operanden opblazen terwijl de som niet volgt, wat tot onjuiste sommen zou leiden. De som ($a$) en de tweede operand ($c$) gaat ook niet omdat er teveel karakters tussen $a$ en $c$ staan (meer dan $p$). Bijgevolg is de enige mogelijkheid dat $v$ tot de som ($a$) behoort en $y$ tot de eerste operand ($b$). Stel dat $b$ wordt ``gepompt'', dan komt er dus minstens \'e\'en $1$ bij, op plaatsen waar al een $1$ staat bij $c$, dit resulteert dus in minstens \'e\'en $0$ in de som, maar de som kan geen $0$ bevatten, omdat $a$ oorspronkelijk geen $0$ bevatte. Stel dat we de som pompen, dan komt er dus minstens \'e\'en $1$ bij. Dit impliceert dus dat $b$ gelijk zou worden aan $1^k0^p1^p$ (met $k$ het aantal $1$en die erbij komen), maar $b$ bevat geen $0$en, dus inconsistentie.
+ \end{proof}
+ \item Dit is een variant op een opgave in de eerste oefenzitting.
+ \item 
+ \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1}
+\end{enumerate}
 \end{question}
 
 \begin{question}
@@ -86,8 +107,14 @@ Schrijf de volgende primitief recursieve functies met behulp van compositie, pri
   \item $\mbox{sg}:\NNN\to\NNN:x\mapsto1\text{ als $x = 0$ en $x \mapsto 0$ anders}$
   \item $max:\mathbb{N} \times \mathbb{N}\to\NNN:\tupl{a,b}\mapsto\text{ het maximum van $a$ en $b$}$
 \end{enumerate}
-\begin{answer}
-
+\begin{answer}~~
+\begin{enumerate}
+ \item $\prcn{\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prnul}{\prp31}}}{\prp11,\prp11}$
+ \item Hiervoor kunnen we gebruik maken van de in de vorige oefenzitting gedefinieerde functie $\mbox{min}$, het maximum is dan $\funm{min}{a,b}+b$. Immers indien $a\geq b$, is $\funm{min}{a,b}=a-b$, bijgevolg is het resultaat $a-b+b=a$. Indien $a\leq b$, dan is $\funm{min}{a,b}=0$, het resultaat wordt dan $0+b=b$. De resulterende functie is dan:
+ \begin{equation}
+  \prcn{\mbox{som}}{\prpr{\prp{1}{1}}{\prcn{\mbox{pred}}{\prp{3}{3}}},\prp21}
+ \end{equation}
+\end{enumerate}
 \end{answer}
 \end{question}
 \end{document}

@@ -33,7 +33,15 @@ Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, besc
  \end{enumerate}
  \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$
  \begin{enumerate}
-  \item \textbf{niet-beslisbaar}: 
+  \item \textbf{niet-beslisbaar}: We tonen eerst aan dat $\mbox{\sc AllHalt}_{\rm TM}$ niet herkenbaar is.
+  \begin{proof}
+  Indien $\mbox{\sc AllHalt}_{\rm TM}$ herkenbaar zou zijn, zou ${\sc All}_{\rm TM}$ herkenbaar zijn. Stel een herkenner $H$ voor $\mbox{\sc AllHalt}_{\rm TM}$. Bij invoer $\tupl{M}$ passen we $M$ aan tot $M'$ zodat indien $M$ zou verwerpen, deze in een oneindige lus zou terecht komen. Dit betekent dus dat elke string $s$ die $M$ niet zou accepteren (het zij actief verwerpen of in een oneindige lus terecht komt), bij $M'$ sowieso in een oneindige lus terecht komen. $M'$ wordt herkent door $H$ wanneer $M'$ nooit in een oneindige lus terecht komt, en $M$ dus alle strings accepteert. ${\sc All}_{\rm TM}$ is echter noch herkenbaar noch co-herkenbaar, bijgevolg is $\mbox{\sc AllHalt}_{\rm TM}$ ook niet herkenbaar.
+  \end{proof}
+  Indien $L$ beslisbaar was met een beslisser $B$, dan konden we een herkenner bouwen voor $\mbox{\sc AllHalt}_{\rm TM}$.
+  \begin{quote}
+   Bij invoer $\tupl{M}$ geven we $\tupl{M}$ eerst mee aan de beslisser voor onze taal $B$. Wanneer $B$ accepteert is het evident dat $M$ op alle strings zou stoppen: het stopt immers binnen de $2^{\abs{s}}$ voor elke string $s$. Indien $B$ verwerpt wil dit natuurlijk niet zeggen dat $M$ niet uiteindelijk zou stoppen op alle invoer: misschien heeft de machine meer tijd nodig om sommige strings te beslissen. In dat geval passen we $M$ aan naar $M'$. Elke string moet worden vooraf gegaan door een speciaal karakter $\Game$: wanneer dit niet aanwezig is op de tape, verwerpen we meteen. In het andere geval verwijderen we dit teken en laten we $M$ lopen op de rest van de string. Door alle invoer dus te laten voorafgaan met \'e\'en karakter, geven we de machine $M'$ dubbel zoveel tijd om de string te beslissen. We draaien opnieuw $B$ op $M'$ als $B$ accepteert dan accepteren we, indien niet, passen we de machine opnieuw aan tot $B$ ooit accepteert.
+  \end{quote}
+  Door herhaaldelijk de machine aan te passen, kopen we extra tijd voor $M$ tot dat het uiteindelijk voldoende is om de machine $M$ alle strings te laten beslissen. We accepteren enkel wanneer dit het geval is.
   \item \textbf{niet herkenbaar}: Volgt uit het feit dat we een co-herkenner kunnen beschrijven en de taal niet beslisbaar is.
   \item \textbf{co-herkenbaar}: We beschrijven een co-herkenner. De co-herkenner laat zoals bij \ref{itm:berekenexis} in verschillende fases Turing machines lopen. Het verschil is echter dat we Turing machines laten stoppen na $2^{\abs{s}}$ stappen, ook indien de machine zelf nog niet zo stoppen. Wanneer zo'n machine echter meer tijd nodig heeft, accepteren we.
  \end{enumerate}

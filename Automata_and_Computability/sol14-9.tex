@@ -2,7 +2,7 @@
 \usepackage[dutch]{babel}
 \usepackage{color,xypic,amsmath}
 \xyoption{all}
-\usepackage{../assignment-nl,../brackets}
+\usepackage{../assignment-nl,../brackets,../importsreferences-nl}
 
 \title{Automaten en Berekenbaarheid\\Opgave \#9\\\url{http://goo.gl/1RlVG5}}
 \author{prof. B. Demoen\\W. Van Onsem}
@@ -10,6 +10,12 @@
 
 \newcommand{\twar}[2]{\left[ { }^{#1}_{#2} \right] }
 \newcommand{\N}{\mathbb{N}}
+
+\newcommand{\prnul}[0]{\ensuremath{\mbox{nul}}}
+\newcommand{\prsucc}[0]{\ensuremath{\mbox{succ}}}
+\newcommand{\prp}[2]{\ensuremath{p_{#2}^{#1}}}
+\newcommand{\prcn}[2]{\funmf{Cn}{#1,#2}}
+\newcommand{\prpr}[2]{\funmf{Pr}{#1,#2}}
 
 \begin{document}
 \maketitle
@@ -21,8 +27,15 @@ Waar of niet waar?
   \item Elke deelverzameling van een niet-reguliere taal is niet-regulier.
   \item De klasse van beslisbare talen is gesloten onder het nemen van het complement.
 \end{enumerate}
-\begin{answer}
-
+\begin{answer}~~
+\begin{enumerate}
+ \item \textbf{Waar}: stel dat de taal $L={s_1,s_2,\ldots,s_n}$, kunnen we deze taal beslissen aan de hand van de reguliere expressie $s_1|s_2|\ldots|s_n$.
+ \item \textbf{Niet waar}: een triviaal reguliere deelverzameling is de lege of elke eindige deelverzameling; dit volgt uit de vorige oefening.
+ \item \textbf{Waar}.
+ \begin{proof}
+  Gegeven een beslisbare taal $L$, dan bestaat er een beslisser $B$ die de taal beslist. In dat geval is $\overline{L}$ ook beslisbaar: we kunnen immers een beslisser $\overline{B}$ construeren die $\overline{L}$ beslist: we laten eerst $B$ op de invoer lopen, wanneer $B$ accepteert verwerpen we en vice versa.
+ \end{proof}
+\end{enumerate}
 \end{answer}
 \end{question}
 
@@ -31,38 +44,98 @@ Zij $L$ een reguliere taal over een alfabet $\Sigma$ met minstens 2 tekens. Defi
 \[ fout_1(L) = \{s \in \Sigma^* \mid \text{er bestaat een $t \in L$ zodat $|s| == |t|$ en $d(s,t) \leq 1$} \}\]
 Informeel is dat de taal met strings met hoogstens \'e\'en foutje ten opzichte van een string in L. Bewijs dat $fout_1(L)$ regulier is.
 \begin{answer}
-
+\begin{proof}
+Dit kunnen we aantonen aan de hand van een constructie.
+\begin{construction}
+Gegeven een DFA $\tupl{Q,\Sigma,\delta,q_s,F}$ due $L$ beslist, dan construeren we een NFA $\tupl{Q',\Sigma,\delta',q_s',F'}$ met:
+\begin{eqnarray}
+Q'&=&Q\times\accl{0,1}\\
+q_s'&=&\tupl{q_s,0}\\
+F'&=&F\times\accl{0,1}\\
+\forall q\in Q,\sigma\in\Sigma:\fun{\delta'}{\tupl{q,0},\sigma}&=&\condset{\tupl{q',0}}{q'=\fun{\delta}{q,\sigma}}\cup\condset{\tupl{q'',1}}{\forall \sigma'\in\Sigma:q''=\fun{\delta}{q,\sigma'}}\\
+\forall q\in Q,\sigma\in\Sigma:\fun{\delta'}{\tupl{q,1},\sigma}&=&\accl{\tupl{q',1}}\xwhere q'=\fun{\delta}{q,\sigma}
+\end{eqnarray}
+\end{construction}
+We dupliceren dus de toestanden en defini\"eren een niet-deterministische overgangsfunctie $\delta'$. Deze overgangsfunctie volgt grotendeels de originele overgangsfunctie. Wanneer we tot dusver nog geen fout zijn tegengekomen -- dit zijn toestanden van het type $\tupl{q,0}$ -- hebben we de keuze om zowel $\tupl{q',0}$ en $\tupl{q'',1}$ te nemen: we weten immers niet of $q'$ een ``vuilbaktoestand'' is. We dienen dus een ontsnappingsroute te voorzien naar elke toestand die bereikbaar is vanuit $q$ (het karakter maakt niet uit). In dat laatste geval wedden we dus op ``alle'' karakters tegelijk. Eenmaal we in een toestand $\tupl{q,1}$ terecht komen, volgen we opnieuw de originele overgangsregels. Omdat we geen tweede ontsnapping aanbieden, zal een NFA bij \'e\'en fout, dus zuinig met dit alternatief omspringen: immers moet er maar \'e\'en pad slagen, namelijk datgene waar de ``joker'' op de juiste plaats werd ingezet.
+\end{proof}
 \end{answer}
 \end{question}
 
 \begin{question}
 Geef voor elk van de volgende talen aan of ze regulier, context-vrij, beslisbaar, Turing-herkenbaar en/of co-Turing-herkenbaar zijn.
 \begin{enumerate}
-  \item $\{ x = y+z \  | \ \text{$x$, $y$ en $z$ zijn natuurlijke getallen in binaire notatie en $x$ is de som van $y$ en $z$.} \}$ over het alfabet $\{0,1,+,=\}$.
+  \item $\{ a = b+c \  | \ \text{$a$, $b$ en $c$ zijn natuurlijke getallen in binaire notatie en $a$ is de som van $b$ en $c$.} \}$ over het alfabet $\{0,1,+,=\}$.
   \item De taal van alle strings $w$ over het alfabet $\left\{ \twar{0}{0}, \twar{0}{1}, \twar{1}{0}, \twar{1}{1} \right\}$ zodanig dat het binair getal gevormd door de onderste rij van $w$ gelijk is aan drie maal het binair getal gevormd door de bovenste rij van $w$. 
   \item $\{ \langle M \rangle \ | \ \text{$M$ is een TM zodanig dat $L(M)$ precies 1234 strings bevat} \}$ % vraag: is deze taal co-Turing-herkenbaar?
   \item $\{ a^ib^jc^k \ | \ \text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$} \}$ 
 \end{enumerate}
-\begin{answer}
-
+\begin{answer}~~
+\defaulttable{c|ccccc}{Taal&Regulier&Context-vrij&Beslisbaar&Herkenbaar&Co-herkenbaar}{
+1.&         &         &$\bullet$&$\bullet$&$\bullet$\\
+2.&$\bullet$&$\bullet$&$\bullet$&$\bullet$&$\bullet$\\
+3.&         &         &         &         &         \\
+4.&         &$\bullet$&$\bullet$&$\bullet$&$\bullet$
+}
+\paragraph{}
+We argumenteren per taal de oplossing:
+\begin{enumerate}
+ \item Deze taal is evident beslisbaar: je zou in een derde fase in staat moeten zijn een Java-programma te schrijven die dit soort expressies kan parsen en controleren of de optelling inderdaad klopt, we gaan hier niet verder op in.
+ \paragraph{}De taal is verder niet context-vrij (of lager).
+ \begin{proof}
+  We bewijzen dit aan de hand van het pompend lemma. Stel volgende optelling: $1^{2p}=1^p+1^p0^p$, dit is duidelijk een element van de taal. Voor elke opdeling $s=uvxyz$ die aan de voorwaarden van het pompend lemma voldoen is het duidelijk dat $v$ en $y$ geen karakters uit $\accl{+,=}$ kunnen bevatten: anders zouden we door te ``pompen'' deze karakters meerdere malen introduceren.
+  \paragraph{}
+  Bijgevolg mappen $v$ en $y$ op (delen van) de getallen. Indien beide groepen op eenzelfde nummer zouden mappen, blazen we \'e\'en nummer op, terwijl ofwel de som, ofwel de operanden niet volgen. Vermits er geen $0$ vooraan in de getallen van een optelling staan, staat het opblazen van een getal gelijk met het groter worden van dat getal, bijgevolg moet de som de operand volgen. Het is dus onmogelijk dat $v$ en $y$ tot hetzelfde getal behoren.
+  \paragraph{}
+  Dan blijft enkel nog het geval over dat $v$ en $y$ tot een verschillend getal behoren. Dit kunnen niet de twee laatste getallen zijn: dit zou de operanden opblazen terwijl de som niet volgt, wat tot onjuiste sommen zou leiden. De som ($a$) en de tweede operand ($c$) gaat ook niet omdat er teveel karakters tussen $a$ en $c$ staan (meer dan $p$). Bijgevolg is de enige mogelijkheid dat $v$ tot de som ($a$) behoort en $y$ tot de eerste operand ($b$). Stel dat $b$ wordt ``gepompt'', dan komt er dus minstens \'e\'en $1$ bij, op plaatsen waar al een $1$ staat bij $c$, dit resulteert dus in minstens \'e\'en $0$ in de som, maar de som kan geen $0$ bevatten, omdat $a$ oorspronkelijk geen $0$ bevatte. Stel dat we de som pompen, dan komt er dus minstens \'e\'en $1$ bij. Dit impliceert dus dat $b$ gelijk zou worden aan $1^k0^p1^p$ (met $k$ het aantal $1$en die erbij komen), maar $b$ bevat geen $0$en, dus inconsistentie.
+ \end{proof}
+ \item Dit is een variant op een opgave in de eerste oefenzitting.
+ \item Dat de taal onbeslisbaar is volgt uit de \emph{Stelling van Rice}. Deze taal is noch herkenbaar noch onherkenbaar. We bewijzen beide.
+ \begin{proof}
+  Stel dat $L$ herkenbaar was, dan was $E_{\rm TM}$ ook herkenbaar. Indien $L$ herkenbaar was, bestond er een herkenner $H$ die $L$ herkent. In dat geval kunnen we een herkenner voor $E_{\rm TM}$ construeren:
+  \begin{quote}
+   Gegeven invoer $\tupl{M}$ dan passen we $M$ aan naar $M'$: we doen een alfabetuitbreiding en introduceren een nieuw karakter die we hier $\Game$ noemen. $M'$ accepteert onmiddellijk alle strings van de vorm $\Game^k$ met $0\leq k<1234$. Overige strings met het $\Game$ karakter worden meteen verworpen en voor strings zonder $\Game$ karakter laten we de originele machine $M$ lopen.
+  \end{quote}
+  We gebruiken vervolgens $M'$ als invoer voor $H$. Indien $H$ accepteert, accepteren we ook. Het gevolg is dus dat er $1234$ strings extra worden geaccepteerd. Als de taal $L_{M'}$ dus juist $1234$ strings bevat, betekent dit dat de originele taal $L_M$ leeg was. $E_{\rm TM}$ is echter niet herkenbaar, dus kan $L$ dat ook niet zijn.
+ \end{proof}
+ \begin{proof}
+  Stel dat $L$ co-herkenbaar was, dan was het acceptance probleem ook co-herkenbaar. Indien $L$ co-herkenbaar was, bestond er dus een co-herkenner $\overline{H}$ die de complementaire taal $\overline{L}$ herkent. In dat geval kunnen we een co-herkenner voor $A_{\rm TM}$ construeren:
+  \begin{quote}
+   Gegeven invoer $\tupl{M,s}$, eerst passen we $M$ naar $M'$. $M'$ kijkt eerst of de invoer van de vorm $sa^{k}$ is met $0\leq k<1234$. Indien niet, verwerpen we meteen, indien wel, verwijderen we de laatste $a$'s. 
+  \end{quote}
+  Het gevolg is dat indien $M$, $s$ zou aanvaarden, de taal bepaalt door $M'$ $1234$ strings zou bevatten, indien niet bevat de taal geen strings. Vervolgens laten we $\overline{H}$ op $M'$. Wanneer $\overline{H}$ zou accepteren (de taal bevat dus geen $1234$ strings), zal de co-herkenner voor $A_{\rm TM}$ ook accepteren. $A_{\rm TM}$ is echter niet co-herkenbaar, dus is $L$ dat ook niet.
+ \end{proof}
+ Vermits de taal niet eens beslisbaar/herkenbaar/co-herkenbaar is, kan ook een zwakker rekenparadigma zoals een DFA of PDA de taal al zeker niet beslissen. Uit de onbeslisbaarheid volgt dus dat $L$ ook niet regulier of context-vrij is.
+ \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1}. De taal is echter niet regulier. Dit kunnen we bewijzen door te bewijzen dat de taal $\overline{L}\cap a^{\star}b^{\star}c^{\star}=\condset{a^ib^ic^i}{i\in\NNN}$ niet regulier is:
+ \begin{proof}
+  Stel $s=a^pb^pc^p$. Voor elke opdeling $s=xyz$ weten we dat $y$ uit slechts \'e\'en soort karakters kan bestaan: anders zouden we door het ``pompen'' patronen als $a^{\star}b^{\star}a^{\star}b^{\star}$ kunnen genereren, dewelke niet in de taal zitten. Vermits $y$ uit slechts \'e\'en soort karakters bestaat en $\abs{y}>0$, zullen we door de string te ``pompen'' meer van dit soort karakters introduceren terwijl de andere groepen onmogelijk kunnen volgen.
+ \end{proof}
+\end{enumerate}
 \end{answer}
 \end{question}
 
 \begin{question}
 Defineer in zuivere lambda calculus de functie $sg$ zodanig dat $sg(c_n) = TRUE$ als $n = 0$ en $sg(c_n) = FALSE$ als $n \neq 0$.
 \begin{answer}
-
+\begin{equation}
+\lambdacal{n}{n\ \lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}}
+\end{equation}
 \end{answer}
 \end{question}
 
 \begin{question}
 Schrijf de volgende primitief recursieve functies met behulp van compositie, primitieve recursie en de basisfuncties.
 \begin{enumerate}
-  \item $sg : \mathbb{N} \to \mathbb{N} : x \mapsto 1 \text{ als $x = 0$ en $x \mapsto 0$ anders}$
-  \item $max : \mathbb{N} \times \mathbb{N} \to \mathbb{N} : (a,b) \mapsto \text{ het maximum van $a$ en $b$}$
+  \item $\mbox{sg}:\NNN\to\NNN:x\mapsto1\text{ als $x = 0$ en $x \mapsto 0$ anders}$
+  \item $max:\mathbb{N} \times \mathbb{N}\to\NNN:\tupl{a,b}\mapsto\text{ het maximum van $a$ en $b$}$
 \end{enumerate}
-\begin{answer}
-
+\begin{answer}~~
+\begin{enumerate}
+ \item $\prcn{\prpr{\prcn{\prsucc}{\prnul}}{\prcn{\prnul}{\prp31}}}{\prp11,\prp11}$
+ \item Hiervoor kunnen we gebruik maken van de in de vorige oefenzitting gedefinieerde functie $\mbox{min}$, het maximum is dan $\funm{min}{a,b}+b$. Immers indien $a\geq b$, is $\funm{min}{a,b}=a-b$, bijgevolg is het resultaat $a-b+b=a$. Indien $a\leq b$, dan is $\funm{min}{a,b}=0$, het resultaat wordt dan $0+b=b$. De resulterende functie is dan:
+ \begin{equation}
+  \prcn{\mbox{som}}{\prpr{\prp{1}{1}}{\prcn{\mbox{pred}}{\prp{3}{3}}},\prp21}
+ \end{equation}
+\end{enumerate}
 \end{answer}
 \end{question}
 \end{document}

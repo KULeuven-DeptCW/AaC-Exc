@@ -76,7 +76,7 @@ Geef voor elk van de volgende talen aan of ze regulier, context-vrij, beslisbaar
 3.&         &         &         &         &         \\
 4.&         &$\bullet$&$\bullet$&$\bullet$&$\bullet$
 }
-\end{answer}
+\paragraph{}
 We argumenteren per taal de oplossing:
 \begin{enumerate}
  \item Deze taal is evident beslisbaar: je zou in een derde fase in staat moeten zijn een Java-programma te schrijven die dit soort expressies kan parsen en controleren of de optelling inderdaad klopt, we gaan hier niet verder op in.
@@ -89,15 +89,36 @@ We argumenteren per taal de oplossing:
   Dan blijft enkel nog het geval over dat $v$ en $y$ tot een verschillend getal behoren. Dit kunnen niet de twee laatste getallen zijn: dit zou de operanden opblazen terwijl de som niet volgt, wat tot onjuiste sommen zou leiden. De som ($a$) en de tweede operand ($c$) gaat ook niet omdat er teveel karakters tussen $a$ en $c$ staan (meer dan $p$). Bijgevolg is de enige mogelijkheid dat $v$ tot de som ($a$) behoort en $y$ tot de eerste operand ($b$). Stel dat $b$ wordt ``gepompt'', dan komt er dus minstens \'e\'en $1$ bij, op plaatsen waar al een $1$ staat bij $c$, dit resulteert dus in minstens \'e\'en $0$ in de som, maar de som kan geen $0$ bevatten, omdat $a$ oorspronkelijk geen $0$ bevatte. Stel dat we de som pompen, dan komt er dus minstens \'e\'en $1$ bij. Dit impliceert dus dat $b$ gelijk zou worden aan $1^k0^p1^p$ (met $k$ het aantal $1$en die erbij komen), maar $b$ bevat geen $0$en, dus inconsistentie.
  \end{proof}
  \item Dit is een variant op een opgave in de eerste oefenzitting.
- \item 
- \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1}
+ \item Dat de taal onbeslisbaar is volgt uit de \emph{Stelling van Rice}. Deze taal is noch herkenbaar noch onherkenbaar. We bewijzen beide.
+ \begin{proof}
+  Stel dat $L$ herkenbaar was, dan was $E_{\rm TM}$ ook herkenbaar. Indien $L$ herkenbaar was, bestond er een herkenner $H$ die $L$ herkent. In dat geval kunnen we een herkenner voor $E_{\rm TM}$ construeren:
+  \begin{quote}
+   Gegeven invoer $\tupl{M}$ dan passen we $M$ aan naar $M'$: we doen een alfabetuitbreiding en introduceren een nieuw karakter die we hier $\Game$ noemen. $M'$ accepteert onmiddellijk alle strings van de vorm $\Game^k$ met $0\leq k<1234$. Overige strings met het $\Game$ karakter worden meteen verworpen en voor strings zonder $\Game$ karakter laten we de originele machine $M$ lopen.
+  \end{quote}
+  We gebruiken vervolgens $M'$ als invoer voor $H$. Indien $H$ accepteert, accepteren we ook. Het gevolg is dus dat er $1234$ strings extra worden geaccepteerd. Als de taal $L_{M'}$ dus juist $1234$ strings bevat, betekent dit dat de originele taal $L_M$ leeg was. $E_{\rm TM}$ is echter niet herkenbaar, dus kan $L$ dat ook niet zijn.
+ \end{proof}
+ \begin{proof}
+  Stel dat $L$ co-herkenbaar was, dan was het acceptance probleem ook co-herkenbaar. Indien $L$ co-herkenbaar was, bestond er dus een co-herkenner $\overline{H}$ die de complementaire taal $\overline{L}$ herkent. In dat geval kunnen we een co-herkenner voor $A_{\rm TM}$ construeren:
+  \begin{quote}
+   Gegeven invoer $\tupl{M,s}$, eerst passen we $M$ naar $M'$. $M'$ kijkt eerst of de invoer van de vorm $sa^{k}$ is met $0\leq k<1234$. Indien niet, verwerpen we meteen, indien wel, verwijderen we de laatste $a$'s. 
+  \end{quote}
+  Het gevolg is dat indien $M$, $s$ zou aanvaarden, de taal bepaalt door $M'$ $1234$ strings zou bevatten, indien niet bevat de taal geen strings. Vervolgens laten we $\overline{H}$ op $M'$. Wanneer $\overline{H}$ zou accepteren (de taal bevat dus geen $1234$ strings), zal de co-herkenner voor $A_{\rm TM}$ ook accepteren. $A_{\rm TM}$ is echter niet co-herkenbaar, dus is $L$ dat ook niet.
+ \end{proof}
+ Vermits de taal niet eens beslisbaar/herkenbaar/co-herkenbaar is, kan ook een zwakker rekenparadigma zoals een DFA of PDA de taal al zeker niet beslissen. Uit de onbeslisbaarheid volgt dus dat $L$ ook niet regulier of context-vrij is.
+ \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1}. De taal is echter niet regulier. Dit kunnen we bewijzen door te bewijzen dat de taal $\overline{L}\cap a^{\star}b^{\star}c^{\star}=\condset{a^ib^ic^i}{i\in\NNN}$ niet regulier is:
+ \begin{proof}
+  Stel $s=a^pb^pc^p$. Voor elke opdeling $s=xyz$ weten we dat $y$ uit slechts \'e\'en soort karakters kan bestaan: anders zouden we door het ``pompen'' patronen als $a^{\star}b^{\star}a^{\star}b^{\star}$ kunnen genereren, dewelke niet in de taal zitten. Vermits $y$ uit slechts \'e\'en soort karakters bestaat en $\abs{y}>0$, zullen we door de string te ``pompen'' meer van dit soort karakters introduceren terwijl de andere groepen onmogelijk kunnen volgen.
+ \end{proof}
 \end{enumerate}
+\end{answer}
 \end{question}
 
 \begin{question}
 Defineer in zuivere lambda calculus de functie $sg$ zodanig dat $sg(c_n) = TRUE$ als $n = 0$ en $sg(c_n) = FALSE$ als $n \neq 0$.
 \begin{answer}
-
+\begin{equation}
+\lambdacal{n}{n\ \lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}}
+\end{equation}
 \end{answer}
 \end{question}
 

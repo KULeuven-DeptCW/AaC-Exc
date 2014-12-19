@@ -1,11 +1,18 @@
 \begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto,scale=0.75]
 \def\sc{0.75}
 \node[state,initial,scale=\sc]   (q0) at (0,0) {$q_0$};
-\node[state,scale=\sc] (q1) at (0,-2) {$q_1$};
-\node[state,scale=\sc] (q2) at (3,-2) {$q_2$};
-\node[state,scale=\sc] (q3) at (0,-4) {$q_3$};
-\node[state,scale=\sc] (q4) at (3,-4) {$q_4$};
-\node[state,scale=\sc] (q5) at (0,-6) {$q_5$};
+\node[state,scale=\sc] (q1) at (-2,-2) {$q_1$};
+\node[state,scale=\sc] (q2) at (2,-2) {$q_2$};
+
+\node[state,scale=\sc] (q3) at (-2,-2) {$q_1$};
+\node[state,scale=\sc] (q4) at (2,-2) {$q_2$};
+
+\node[state,scale=\sc] (q5) at (-2,-2) {$q_1$};
+\node[state,scale=\sc] (q6) at (2,-2) {$q_2$};
+
+\node[state,scale=\sc] (q7) at (-2,-2) {$q_1$};
+\node[state,scale=\sc] (q8) at (2,-2) {$q_2$};
+
 \node[state,accepting,scale=\sc] (q6) at (3,-6) {$q_6$};
 
 \path[->] (q0) edge              node         {$\epsilon,\epsilon\rightarrow\$$}   (q1)

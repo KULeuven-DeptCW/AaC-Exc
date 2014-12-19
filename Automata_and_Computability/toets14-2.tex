@@ -1,0 +1,133 @@
+\documentclass{article}
+\title{Automaten en Berekenbaarheid:\\opgave 2}
+\author{Prof. B. Demoen (\url{Bart.Demoen@cs.kuleuven.be})\\ W. Van Onsem (\url{Willem.VanOnsem@cs.kuleuven.be})}
+\date{11 december 2014}
+\usepackage{../assignment-nl,../brackets}
+\newcommand{\lang}[1]{\textsc{#1}}
+\newcommand{\RegEx}[0]{\ensuremath{\mbox{RegEx}}}
+\begin{document}
+\maketitle
+\richtlijnen{}
+
+\begin{question}[Berekenbaarheid]
+Zijn volgende talen herkenbaar, co-herkenbaar en/of beslisbaar? Indien wel, beschrijf een beslisser/herkenner. Indien niet, toon dit aan (bijvoorbeeld aan de hand van een reductie). $\Sigma$ slaat altijd op het invoeralfabet van een machine. $L_M$ slaat op de taal die beslist wordt door $M$. De machines zijn allemaal Turing machines.
+\begin{enumerate}
+ \item $\condset{\tupl{M}}{\exists s_1,s_2\in L_M:\abs{s_1}\neq\abs{s_2}}$;
+ \item $\condset{\tupl{M,s}}{\mbox{$M$ stopt na hoogstens $2^{\abs{s}}$ stappen bij invoer $s$}}$;
+ \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$; en
+ \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$.
+\end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+ \item $\condset{\tupl{M}}{\exists s_1,s_2\in L_M:\abs{s_1}\neq\abs{s_2}}$
+ \begin{enumerate}
+  \item \textbf{niet beslisbaar}: dit volgt rechtstreeks uit de \emph{Stelling van Rice}. De taal is niet \emph{triviaal}: we kunnen een Turing machine construeren die de taal $\accl{a,aa}$ beslist en een Turing machine die de taal $\accl{a}$ beslist. De ene machine zit in de taal de andere niet. De taal is ook \emph{taal-invariant}: er zijn geen aspecten van de Turing machine opgenomen in de voorwaarde.
+  \item \label{itm:berekenexis}\textbf{herkenbaar}: We beschrijven een herkenner. Deze herkenner werkt in fases beginnend met fase $0$. In fase $i$ wordt er voor elke string $s\in\Sigma^i$ een Turing machine opgestart (gesimuleerd) en worden alle tot dusver begonnen Turing machines een stap verder gezet. Wanneer er twee Turing machines accepteren en de strings hebben een verschillende lengte, accepteren we ook.
+  \item \textbf{niet co-herkenbaar}: immers is de taal herkenbaar en niet beslisbaar.
+ \end{enumerate}
+ \item $\condset{\tupl{M,s}}{\mbox{$M$ stopt na hoogstens $2^{\abs{s}}$ stappen bij invoer $s$}}$
+ \begin{enumerate}
+  \item \textbf{beslisbaar}: We beschrijven een beslisser. Laat $M$ lopen op $s$ als na $2^{\abs{s}}$ stappen nog is afgelopen, verwerpen we $\tupl{M,s}$; indien de simulatie stopt voor of op $2^{\abs{s}}$ stappen, accepteren we.
+  \item \textbf{herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+  \item \textbf{co-herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+ \end{enumerate}
+ \item $\condset{\tupl{M}}{\mbox{$M$ stopt voor iedere invoer $s\in\Sigma^{\star}$ na hoogstens $2^{\abs{s}}$}}$
+ \begin{enumerate}
+  \item \textbf{niet-beslisbaar}: We tonen eerst aan dat $\mbox{\sc AllHalt}_{\rm TM}$ niet herkenbaar is.
+  \begin{proof}
+  Indien $\mbox{\sc AllHalt}_{\rm TM}$ herkenbaar zou zijn, zou ${\sc All}_{\rm TM}$ herkenbaar zijn. Stel een herkenner $H$ voor $\mbox{\sc AllHalt}_{\rm TM}$. Bij invoer $\tupl{M}$ passen we $M$ aan tot $M'$ zodat indien $M$ zou verwerpen, deze in een oneindige lus zou terecht komen. Dit betekent dus dat elke string $s$ die $M$ niet zou accepteren (het zij actief verwerpen of in een oneindige lus terecht komt), bij $M'$ sowieso in een oneindige lus terecht komen. $M'$ wordt herkent door $H$ wanneer $M'$ nooit in een oneindige lus terecht komt, en $M$ dus alle strings accepteert. ${\sc All}_{\rm TM}$ is echter noch herkenbaar noch co-herkenbaar, bijgevolg is $\mbox{\sc AllHalt}_{\rm TM}$ ook niet herkenbaar.
+  \end{proof}
+  Indien $L$ beslisbaar was met een beslisser $B$, dan konden we een herkenner bouwen voor $\mbox{\sc AllHalt}_{\rm TM}$.
+  \begin{quote}
+   Bij invoer $\tupl{M}$ geven we $\tupl{M}$ eerst mee aan de beslisser voor onze taal $B$. Wanneer $B$ accepteert is het evident dat $M$ op alle strings zou stoppen: het stopt immers binnen de $2^{\abs{s}}$ voor elke string $s$. Indien $B$ verwerpt wil dit natuurlijk niet zeggen dat $M$ niet uiteindelijk zou stoppen op alle invoer: misschien heeft de machine meer tijd nodig om sommige strings te beslissen. In dat geval passen we $M$ aan naar $M'$. Elke string moet worden vooraf gegaan door een speciaal karakter $\Game$: wanneer dit niet aanwezig is op de tape, verwerpen we meteen. In het andere geval verwijderen we dit teken en laten we $M$ lopen op de rest van de string. Door alle invoer dus te laten voorafgaan met \'e\'en karakter, geven we de machine $M'$ dubbel zoveel tijd om de string te beslissen. We draaien opnieuw $B$ op $M'$ als $B$ accepteert dan accepteren we, indien niet, passen we de machine opnieuw aan tot $B$ ooit accepteert.
+  \end{quote}
+  Door herhaaldelijk de machine aan te passen, kopen we extra tijd voor $M$ tot dat het uiteindelijk voldoende is om de machine $M$ alle strings te laten beslissen. We accepteren enkel wanneer dit het geval is.
+  \item \textbf{niet herkenbaar}: Volgt uit het feit dat we een co-herkenner kunnen beschrijven en de taal niet beslisbaar is.
+  \item \textbf{co-herkenbaar}: We beschrijven een co-herkenner. De co-herkenner laat zoals bij \ref{itm:berekenexis} in verschillende fases Turing machines lopen. Het verschil is echter dat we Turing machines laten stoppen na $2^{\abs{s}}$ stappen, ook indien de machine zelf nog niet zo stoppen. Wanneer zo'n machine echter meer tijd nodig heeft, accepteren we.
+ \end{enumerate}
+ \item $\condset{\tupl{M,y}}{\mbox{$M$ beweegt de lees/schrijf-kop ooit naar links bij invoer $y$}}$
+ \begin{enumerate}
+  \item \textbf{beslisbaar}: we beschrijven een beslisser. We simuleren de Turing machine $M$ met een soort debugger (een programma die $M$ een stap laat zetten, maar nadien het geheugen, etc. kan inspecteren). In eerste instantie draaien we de Turing machine tot deze voorbij de invoer leest. Indien de Turing machine probeert naar links te bewegen, dan verwerpen we natuurlijk onmiddellijk. Verder kunnen we ook lusdetectie uitvoeren: wanneer de Turing machine blijft stilstaan houden we de combinaties van toestanden en karakters die onder de tape staan bij. Wanneer we eenzelfde koppel een tweede maal tegenkomen, weten we dat we in een oneindige lus zitten en accepteren we: immers leidt deze lus nooit tot het naar links bewegen van de kop.
+  \paragraph{}
+  Wanneer we het invoergedeelte voorbij gaan is er \'e\'en variant: rechts van de lees/schrijfkop staan altijd lege symbolen: immers mogen we niet naar links gaan. We weten verder ook in welke toestand we zitten bij het verlaten van het invoergedeelte. Met deze toestand en de invariant kunnen we bepalen welke toestanden we allemaal zullen aandoen: wanneer we naar rechts gaan, nemen we bij de volgende toestand uiteraard de overgang met het lege karakters als karakter onder de tape. Wanneer de tape blijft stilstaan, rekenen we door met het karakter dat we net hebben weggeschreven. Wanneer we zo een boog zullen bereiken die naar links gaat, verwerpen we; anders accepteren we. Merk op dat we dit gedeelte niet simuleren: we voeren een analyse uit op de toestandsgraaf.
+  \item \textbf{herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+  \item \textbf{co-herkenbaar}: volgt uit het feit dat de taal beslisbaar is.
+ \end{enumerate}
+\end{enumerate}
+\end{answer}
+\end{question}
+
+\begin{question}[Inwendige operaties]
+Stel twee verschillende niet-beslisbare talen $L_1$ en $L_2$, geef voor elke uitspraak hieronder aan:
+\begin{enumerate}
+ \item indien de uitspraak waar is voor elke $L_1$ en $L_2$, waarom (bewijs);
+ \item indien de uitspraak afhangt van de keuze voor $L_1$ en $L_2$: twee voorbeelden (voor het geval waar de uitspraak klopt en voor het geval waar de uitspraak niet klopt); en
+ \item indien de uitspraak niet klopt, een tegenvoorbeeld of reden.
+\end{enumerate}
+Uitspraken:
+\begin{enumerate}
+ \item $L_1\setminus L_2$ is herkenbaar;
+ \item $L_1\cap L_2$ is beslisbaar; en
+ \item $L_1\cup L_2$ is herkenbaar.
+\end{enumerate}
+\begin{answer}~~
+\begin{enumerate}
+ \item Dit hangt af van de talen:
+ \begin{enumerate}
+  \item Stel $L_1=A_{\rm TM}$ en $L_2=H_{\rm TM}$: het is zo dat $A_{\rm TM}\subsetneq H_{\rm TM}$ immers moet voor elk koppel $\tupl{M,s}$ $M$ stoppen bij invoer $s$ om $s$ te accepteren. Bijgevolg is $L_1\setminus L_2$ leeg, dus beslisbaar en herkenbaar.
+  \item Stel $L_1=\overline{A_{\rm TM}}$ en $L_2=A_{\rm TM}$, dan is $L=L_1\setminus L_2=\overline{A_{\rm TM}}$, deze taal is niet herkenbaar, maar co-herkenbaar.
+ \end{enumerate}
+ \item Dit hangt af van de talen:
+  \begin{enumerate}
+   \item Stel $L_2=\overline{L_1}$. In dat geval is $L_1\cap L_2=\emptyset$ en dit is beslisbaar.
+   \item Stel $L_1=A_{\rm TM}$ en $L_2=H_{\rm TM}$ dan is $L_1\cap L_2=A_{\rm TM}$ en dit is niet beslisbaar.
+  \end{enumerate}
+ \item Dit hangt af van de talen:
+  \begin{enumerate}
+    \item Stel $L_2=\overline{L_1}$. In dat geval is $L_1\cup L_2=\Sigma^{\star}$ en dit is beslisbaar en dus herkenbaar.
+    \item Stel $L_1=\overline{A_{\rm TM}}$ en $L_2=\overline{H_{\rm TM}}$, dan is $L_1\cup L_2=\overline{H_{\rm TM}}$ en dit is niet herkenbaar.
+  \end{enumerate}
+\end{enumerate}
+\end{answer}
+\end{question}
+
+\begin{question}[synchrone PDA]
+Een sPDA is een PDA met $2$ stapels, maar waarbij stapels synchroon moeten bewegen: beide stapels ``pushen'' en ``poppen'' op hetzelfde ogenblik. Het is met andere woorden niet toegelaten dat \'e\'en stapel groeit terwijl de andere wordt afgebouwd. Is een sPDA strikt\footnote{Met ``strikt'' bedoelen we dat een sPDA minstens \'e\'en taal meer kan beslissen dan een gewone PDA.} sterker dan een gewone PDA? Bewijs je antwoord.
+\begin{answer}
+Een sPDA is niet sterker dan een PDA. We bewijzen dat beide automaten even krachtig zijn door constructies tussen een sPDA en PDA te geven in beide richtingen.
+\begin{enumerate}
+ \item Een PDA naar een sPDA.
+ \begin{construction}
+  Gegeven een PDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$, we beschouwen een PDA $\tupl{Q,\Sigma,\Gamma,\delta',q_s,F}$ die dezelfde taal beslist met volgende overgangsregels:
+  \begin{equation}
+  \forall q\in Q,\sigma\in\Sigma,\gamma,\gamma_2\in\Gamma_{\epsilon}:\fun{\delta'}{q,\sigma,\gamma,\gamma_2}=\condset{\tupl{q',\gamma',\gamma'}}{\tupl{q',\gamma'}\in\fun{\delta}{q,\sigma,\gamma}}
+  \end{equation}
+  We hebben hier gekozen om dezelfde inhoud te ``pushen'' op de tweede stapel (maar men zou bijvoorbeeld ook altijd hetzelfde karakter kunnen pushen). Er wordt verder nooit gekeken naar het karakter op de tweede stapel: het is eender wat daar staat, al weten we dat dit altijd hetzelfde is als de eerste stapel.
+ \end{construction}
+ \item Een sPDA naar een PDA.
+ \begin{construction}
+  Gegeven een sPDA $\tupl{Q,\Sigma,\Gamma,\delta,q_s,F}$ we beschouwen een PDA $\tupl{Q,\Sigma,\Gamma\times\Gamma,\delta',q_s,F}$
+ \end{construction}
+\end{enumerate}
+\end{answer}
+\end{question}
+
+\begin{question}[Bezige bever]
+Stel dat de bezige bever functie $\fun{S}{n}$ toch berekenbaar is. Beschrijf een Turing machine op hoog niveau die $A_{\rm TM}$ kan beslissen.
+\begin{answer}
+De bezige bever beschrijft het maximale aantal stappen dat een Turing machine met alfabet $\accl{0,1}$ kan zetten, zonder in een oneindige lus te geraken. We kunnen dus een (gemodificeerde) Turing machine laten lopen en het aantal tot dusver gezette stappen bijhouden. Wanneer dit aantal over dat van de bezige bever gaat, 
+
+\paragraph{}
+Er zijn echter enkele problemen: de Turing machine kan een willekeurig alfabet hebben, en de invoer staat aanvankelijk op de tape, de tape is dus niet leeg.
+
+
+Het eerste probleem kunnen we oplossen door het alfabet $\Sigma$ om te zetten naar $\Sigma'=\accl{0,1}$. We kunnen dit doen door een \emph{encodering} af te spreken, ASCII bijvoorbeeld schrijft $a$ als $0011\ 1101$. Het impliceert verder dat we de Turing machine wat aanpassen: waar we vroeger een karakter inlazen met \'e\'en operatie, zullen we nu verschillende bits moeten inlezen, en aan de hand van toestanden bijhouden wat we al gezien hebben, ook zullen we dus de lees/schrijf-kop meer naar links/rechts moeten bewegen. Dit introduceert extra toestanden.
+
+
+Het tweede probleem kunnen we oplossen door de Turing machine verder aan te passen: we laten de Turing machine zelf eerst de invoer-string op de tape schrijven en terugkeren naar het begin. Daarna pas laten we ``originele'' machine lopen.
+
+
+Beide oplossingen introduceren extra toestanden, maar dat is geen probleem met betrekking tot de beslisbaarheid. We kunnen vervolgens het aantal toestanden van de resulterende Turing machine tellen, de bezige bever $\fun{S}{n}$ uitrekenen, en de Turing-machine voor dat aantal stappen simuleren.
+\end{answer}
+\end{question}
+\end{document}

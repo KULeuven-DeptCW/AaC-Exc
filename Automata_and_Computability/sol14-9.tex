@@ -67,7 +67,7 @@ Geef voor elk van de volgende talen aan of ze regulier, context-vrij, beslisbaar
   \item $\{ a = b+c \  | \ \text{$a$, $b$ en $c$ zijn natuurlijke getallen in binaire notatie en $a$ is de som van $b$ en $c$.} \}$ over het alfabet $\{0,1,+,=\}$.
   \item De taal van alle strings $w$ over het alfabet $\left\{ \twar{0}{0}, \twar{0}{1}, \twar{1}{0}, \twar{1}{1} \right\}$ zodanig dat het binair getal gevormd door de onderste rij van $w$ gelijk is aan drie maal het binair getal gevormd door de bovenste rij van $w$. 
   \item $\{ \langle M \rangle \ | \ \text{$M$ is een TM zodanig dat $L(M)$ precies 1234 strings bevat} \}$ % vraag: is deze taal co-Turing-herkenbaar?
-  \item $\{ a^ib^jc^k \ | \ \text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$} \}$ 
+  \item $\condset{a^ib^jc^k}{\text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$}}$ 
 \end{enumerate}
 \begin{answer}~~
 \defaulttable{c|ccccc}{Taal&Regulier&Context-vrij&Beslisbaar&Herkenbaar&Co-herkenbaar}{
@@ -113,6 +113,7 @@ We argumenteren per taal de oplossing:
   Het gevolg is dat indien $M$, $s$ zou aanvaarden, de taal bepaalt door $M'$ $1234$ strings zou bevatten, indien niet bevat de taal geen strings. Vervolgens laten we $\overline{H}$ op $M'$. Wanneer $\overline{H}$ zou accepteren (de taal bevat dus geen $1234$ strings), zal de co-herkenner voor $A_{\rm TM}$ ook accepteren. $A_{\rm TM}$ is echter niet co-herkenbaar, dus is $L$ dat ook niet.
  \end{proof}
  Vermits de taal niet eens beslisbaar/herkenbaar/co-herkenbaar is, kan ook een zwakker rekenparadigma zoals een DFA of PDA de taal al zeker niet beslissen. Uit de onbeslisbaarheid volgt dus dat $L$ ook niet regulier of context-vrij is.
+ \importtikzfigure{exc9-pda1}{PDA die de taal $\condset{a^ib^jc^k}{\text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$}}$ beslist.}
  \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1} stelt een PDA voor die deze taal beslist. De taal is echter niet regulier. Dit kunnen we bewijzen door te bewijzen dat de taal $\overline{L}\cap a^{\star}b^{\star}c^{\star}=\condset{a^ib^ic^i}{i\in\NNN}$ niet regulier is:
  \begin{proof}
   Stel $s=a^pb^pc^p$. Voor elke opdeling $s=xyz$ weten we dat $y$ uit slechts \'e\'en soort karakters kan bestaan: anders zouden we door het ``pompen'' patronen als $a^{\star}b^{\star}a^{\star}b^{\star}$ kunnen genereren, dewelke niet in de taal zitten. Vermits $y$ uit slechts \'e\'en soort karakters bestaat en $\abs{y}>0$, zullen we door de string te ``pompen'' meer van dit soort karakters introduceren terwijl de andere groepen onmogelijk kunnen volgen.

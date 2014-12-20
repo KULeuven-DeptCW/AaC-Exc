@@ -67,7 +67,7 @@ Geef voor elk van de volgende talen aan of ze regulier, context-vrij, beslisbaar
   \item $\{ a = b+c \  | \ \text{$a$, $b$ en $c$ zijn natuurlijke getallen in binaire notatie en $a$ is de som van $b$ en $c$.} \}$ over het alfabet $\{0,1,+,=\}$.
   \item De taal van alle strings $w$ over het alfabet $\left\{ \twar{0}{0}, \twar{0}{1}, \twar{1}{0}, \twar{1}{1} \right\}$ zodanig dat het binair getal gevormd door de onderste rij van $w$ gelijk is aan drie maal het binair getal gevormd door de bovenste rij van $w$. 
   \item $\{ \langle M \rangle \ | \ \text{$M$ is een TM zodanig dat $L(M)$ precies 1234 strings bevat} \}$ % vraag: is deze taal co-Turing-herkenbaar?
-  \item $\{ a^ib^jc^k \ | \ \text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$} \}$ 
+  \item $\condset{a^ib^jc^k}{\text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$}}$ 
 \end{enumerate}
 \begin{answer}~~
 \defaulttable{c|ccccc}{Taal&Regulier&Context-vrij&Beslisbaar&Herkenbaar&Co-herkenbaar}{
@@ -88,12 +88,20 @@ We argumenteren per taal de oplossing:
   \paragraph{}
   Dan blijft enkel nog het geval over dat $v$ en $y$ tot een verschillend getal behoren. Dit kunnen niet de twee laatste getallen zijn: dit zou de operanden opblazen terwijl de som niet volgt, wat tot onjuiste sommen zou leiden. De som ($a$) en de tweede operand ($c$) gaat ook niet omdat er teveel karakters tussen $a$ en $c$ staan (meer dan $p$). Bijgevolg is de enige mogelijkheid dat $v$ tot de som ($a$) behoort en $y$ tot de eerste operand ($b$). Stel dat $b$ wordt ``gepompt'', dan komt er dus minstens \'e\'en $1$ bij, op plaatsen waar al een $1$ staat bij $c$, dit resulteert dus in minstens \'e\'en $0$ in de som, maar de som kan geen $0$ bevatten, omdat $a$ oorspronkelijk geen $0$ bevatte. Stel dat we de som pompen, dan komt er dus minstens \'e\'en $1$ bij. Dit impliceert dus dat $b$ gelijk zou worden aan $1^k0^p1^p$ (met $k$ het aantal $1$en die erbij komen), maar $b$ bevat geen $0$en, dus inconsistentie.
  \end{proof}
- \item Dit is een variant op een opgave in de eerste oefenzitting.
+ \item Dit is een variant op een opgave in de eerste oefenzitting. \figref{exc9-dfa1} beschrijft een DFA die de \emph{big-endian} versie beslist. We hebben in de eerste oefenzitting besproken hoe we een DFA kunnen construeren die de omgekeerde taal kan beslissen: de \emph{little-endian} variant dus.
+ \importtikzfigure{exc9-dfa1}{Een DFA die de taal beslist.}
+ De toestanden van de DFA houden houden het verschil tussen het getal bovenaan en onderaan bij, en dit gedeeld door de de positie waar we ons op dat moment bevinden. Er zijn slechts drie mogelijkheden: $\condset{q_r}{r\in\accl{0,1,2}}$. We voorzien een boog met bovenste bit $i\in\accl{0,1}$ vanuit toestand $q_r$ zodat:
+ \begin{eqnarray}
+  j&=&r+3\cdot i\mod 2\\
+  s&=&\displaystyle\frac{r+3\cdot i-j}{2}\\
+  \fun{\delta}{q_r,\twar{i}{j}}&=&q_s
+ \end{eqnarray}
+
  \item Dat de taal onbeslisbaar is volgt uit de \emph{Stelling van Rice}. Deze taal is noch herkenbaar noch onherkenbaar. We bewijzen beide.
  \begin{proof}
   Stel dat $L$ herkenbaar was, dan was $E_{\rm TM}$ ook herkenbaar. Indien $L$ herkenbaar was, bestond er een herkenner $H$ die $L$ herkent. In dat geval kunnen we een herkenner voor $E_{\rm TM}$ construeren:
   \begin{quote}
-   Gegeven invoer $\tupl{M}$ dan passen we $M$ aan naar $M'$: we doen een alfabetuitbreiding en introduceren een nieuw karakter die we hier $\Game$ noemen. $M'$ accepteert onmiddellijk alle strings van de vorm $\Game^k$ met $0\leq k<1234$. Overige strings met het $\Game$ karakter worden meteen verworpen en voor strings zonder $\Game$ karakter laten we de originele machine $M$ lopen.
+   Gegeven invoer $\tupl{M}$ dan passen we $M$ aan naar $M'$: we doen een alfabetuitbreiding en introduceren een nieuw karakter die we hier $\Game$ noemen. $M'$ accepteert onmiddellijk alle strings van de vorm $\Game^k$ met $1\leq k\leq1234$. Overige strings met het $\Game$ karakter worden meteen verworpen en voor strings zonder $\Game$ karakter laten we de originele machine $M$ lopen.
   \end{quote}
   We gebruiken vervolgens $M'$ als invoer voor $H$. Indien $H$ accepteert, accepteren we ook. Het gevolg is dus dat er $1234$ strings extra worden geaccepteerd. Als de taal $L_{M'}$ dus juist $1234$ strings bevat, betekent dit dat de originele taal $L_M$ leeg was. $E_{\rm TM}$ is echter niet herkenbaar, dus kan $L$ dat ook niet zijn.
  \end{proof}
@@ -105,7 +113,8 @@ We argumenteren per taal de oplossing:
   Het gevolg is dat indien $M$, $s$ zou aanvaarden, de taal bepaalt door $M'$ $1234$ strings zou bevatten, indien niet bevat de taal geen strings. Vervolgens laten we $\overline{H}$ op $M'$. Wanneer $\overline{H}$ zou accepteren (de taal bevat dus geen $1234$ strings), zal de co-herkenner voor $A_{\rm TM}$ ook accepteren. $A_{\rm TM}$ is echter niet co-herkenbaar, dus is $L$ dat ook niet.
  \end{proof}
  Vermits de taal niet eens beslisbaar/herkenbaar/co-herkenbaar is, kan ook een zwakker rekenparadigma zoals een DFA of PDA de taal al zeker niet beslissen. Uit de onbeslisbaarheid volgt dus dat $L$ ook niet regulier of context-vrij is.
- \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1}. De taal is echter niet regulier. Dit kunnen we bewijzen door te bewijzen dat de taal $\overline{L}\cap a^{\star}b^{\star}c^{\star}=\condset{a^ib^ic^i}{i\in\NNN}$ niet regulier is:
+ \importtikzfigure{exc9-pda1}{PDA die de taal $\condset{a^ib^jc^k}{\text{$i,j,k \geq 0$ en $i \neq j$ of $j \neq k$}}$ beslist.}
+ \item Deze taal is context-vrij maar niet regulier: \figref{exc9-pda1} stelt een PDA voor die deze taal beslist. De taal is echter niet regulier. Dit kunnen we bewijzen door te bewijzen dat de taal $\overline{L}\cap a^{\star}b^{\star}c^{\star}=\condset{a^ib^ic^i}{i\in\NNN}$ niet regulier is:
  \begin{proof}
   Stel $s=a^pb^pc^p$. Voor elke opdeling $s=xyz$ weten we dat $y$ uit slechts \'e\'en soort karakters kan bestaan: anders zouden we door het ``pompen'' patronen als $a^{\star}b^{\star}a^{\star}b^{\star}$ kunnen genereren, dewelke niet in de taal zitten. Vermits $y$ uit slechts \'e\'en soort karakters bestaat en $\abs{y}>0$, zullen we door de string te ``pompen'' meer van dit soort karakters introduceren terwijl de andere groepen onmogelijk kunnen volgen.
  \end{proof}
@@ -119,6 +128,27 @@ Defineer in zuivere lambda calculus de functie $sg$ zodanig dat $sg(c_n) = TRUE$
 \begin{equation}
 \lambdacal{n}{n\ \lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}}
 \end{equation}
+De expressie werkt als volgt. Een getal wordt voorgesteld als $\lambdacal{f\ x}{f^n x}$. Dus is $c_0=\lambdacal{f\ x}{x}$. In dat geval zal een eerste stap in de evaluatie dus leiden tot:
+\begin{equation}
+\lambdacal{f\ x}{x}\ \lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}
+\end{equation}
+Wanneer we dit evalueren, bekomen we dus de tweede expressie wat de TRUE functie is:
+\begin{equation}
+\lambdacal{x\ y}{x}
+\end{equation}
+In het geval we een getal beschouwen dat groter is dan $0$, bijvoorbeeld $2$ is het getal: $c_2=\lambdacal{f\ x}{f\ \brak{f\ x}}$; na de eerste expressie bekomen we dus:
+\begin{equation}
+\lambdacal{f\ x}{f\ \brak{f\ x}}\ \lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}
+\end{equation}
+Door substitutie met $f$ en $x$ herschrijven we dit naar:
+\begin{equation}
+\lambdacal{x\ y\ z}{z}\ \brak{\lambdacal{x\ y\ z}{z}\ \lambdacal{x\ y}{x}}
+\end{equation}
+We substitueren $x$ in de linkse lambda-expressie: vermits dit argument niet voorkomt achter het punt, komt dit er op neer dat we het argument schrappen (alsook $x$ in het lambda-hoofd).
+\begin{equation}
+\lambdacal{y\ z}{z}
+\end{equation}
+Wat de FALSE functie is.
 \end{answer}
 \end{question}
 
